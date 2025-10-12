@@ -56,7 +56,44 @@ export default function Navbar() {
                         {profileOpen && (
                             <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg py-2 z-50 ">
                                 <Link href="/profile" className="block px-4 py-2 text-sm hover:bg-gray-100">Your Profile</Link>
-                                {!localStorage.getItem('user').role === 'traveler' ? (<Link href="/provider-dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">ViewTrip</Link>) : <Link href="/traveler-dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">Book Trip</Link>}
+
+                                {(() => {
+                                    // Parse user safely
+                                    let user = null;
+                                    if (typeof window !== "undefined") {
+                                        try {
+                                            user = JSON.parse(localStorage.getItem("user"));
+                                        } catch (error) {
+                                            console.error("Invalid user data in localStorage");
+                                        }
+                                    }
+
+                                    // Check if user exists and role is NOT traveler
+                                    if (user && user.role !== "traveler") {
+                                        return (
+                                            <>
+                                                <Link href="/provider-dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">
+                                                    Provider Dashboard
+                                                </Link>
+                                                <Link href="/providertrips" className="block px-4 py-2 text-sm hover:bg-gray-100">
+                                                    View Trip
+                                                </Link>
+                                            </>
+                                        );
+                                    } else {
+                                        return (
+                                            <>
+                                                <Link href="/traveler-dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">
+                                                    Book Trip
+                                                </Link>
+                                                <Link href="/travelertrips" className="block px-4 py-2 text-sm hover:bg-gray-100">
+                                                    View Trip
+                                                </Link>
+                                            </>
+                                        );
+                                    }
+                                })()}
+
                                 <button onClick={() => { localStorage.removeItem('user'); router.push('/login'); }} className="w-full flex text-left px-4 py-2 text-sm hover:bg-gray-100">
                                     Secure Logout <span className="mx-2"><LogOut size={20} /></span></button>
                             </div>
