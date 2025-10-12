@@ -42,11 +42,23 @@ export default function Navbar() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    {!localStorage.getItem('user') && !localStorage.getItem('token') && (
+                    {(!localStorage.getItem('user') || !localStorage.getItem('token')) && (
                         <>
-                            <Link href="/register" className="hidden md:inline-block border border-black/10 px-3 py-1 rounded-md text-sm hover:bg-black/5">Sign up</Link>
-                            <Link href="/login" className="hidden md:inline-block bg-black text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-900">Login</Link>
-                        </>)}
+                            <Link
+                                href="/register"
+                                className="hidden md:inline-block border border-black/10 px-3 py-1 rounded-md text-sm hover:bg-black/5"
+                            >
+                                Sign up
+                            </Link>
+                            <Link
+                                href="/login"
+                                className="hidden md:inline-block bg-black text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-900"
+                            >
+                                Login
+                            </Link>
+                        </>
+                    )}
+
 
                     <div ref={profileRef} className="relative">
                         <button onClick={() => setProfileOpen((s) => !s)} aria-haspopup="true" aria-expanded={profileOpen} className="w-10 h-10 rounded-full overflow-hidden border-2 border-black/10 shadow-sm focus:outline-none focus:ring-2 focus:ring-black/10">

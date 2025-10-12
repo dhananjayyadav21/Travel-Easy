@@ -46,7 +46,7 @@ export default function ProviderTrips() {
     }
 
     return (
-        <div className="min-h-screen p-6 bg-gray-50">
+        <div className="min-h-screen p-6">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {trips.map((trip) => (
                     <TripCard key={trip._id} trip={trip} />

@@ -133,14 +133,6 @@ export default function AddTrip() {
         }
     };
 
-    if (loading) {
-        return (
-            <div className="min-h-screen flex justify-center items-center">
-                <span className="w-12 h-12 border-4 border-t-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></span>
-            </div>
-        );
-    }
-
     return (
         // Modern Background: Light gray background
         <div className="min-h-screen flex items-center justify-center p-4 sm:p-8 font-inter">
