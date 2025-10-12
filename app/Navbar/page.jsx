@@ -56,7 +56,7 @@ export default function Navbar() {
                         {profileOpen && (
                             <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg py-2 z-50 ">
                                 <Link href="/profile" className="block px-4 py-2 text-sm hover:bg-gray-100">Your Profile</Link>
-                                {!localStorage.getItem('user').role === 'traveler' ? (<Link href="/provider-dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">Bookings</Link>) : <Link href="/traveler-dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">Book Vehicle</Link>}
+                                {!localStorage.getItem('user').role === 'traveler' ? (<Link href="/provider-dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">ViewTrip</Link>) : <Link href="/traveler-dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">Book Trip</Link>}
                                 <button onClick={() => { localStorage.removeItem('user'); router.push('/login'); }} className="w-full flex text-left px-4 py-2 text-sm hover:bg-gray-100">
                                     Secure Logout <span className="mx-2"><LogOut size={20} /></span></button>
                             </div>
