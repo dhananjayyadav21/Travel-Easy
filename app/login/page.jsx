@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
@@ -9,9 +9,10 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [remember, setRemember] = useState(false);
+    const [pageLoading, setPageLoading] = useState(true);
     const [error, setError] = useState("");
 
+    // ---------------- VALIDATION ----------------
     const validate = () => {
         if (!email) return "Email is required";
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Enter a valid email";
@@ -19,6 +20,20 @@ export default function Login() {
         return "";
     };
 
+    // page loader (hide after window load or fallback)
+    useEffect(() => {
+        const onLoad = () => setPageLoading(false);
+        if (typeof window !== 'undefined') {
+            if (document.readyState === 'complete') setPageLoading(false);
+            else {
+                window.addEventListener('load', onLoad);
+                const t = setTimeout(() => setPageLoading(false), 1200);
+                return () => { window.removeEventListener('load', onLoad); clearTimeout(t); };
+            }
+        }
+    }, []);
+
+    // ---------------- SUBMIT HANDLER ----------------
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
@@ -42,8 +57,8 @@ export default function Login() {
             localStorage.setItem("user", JSON.stringify(data.user));
 
             // Dynamic redirect based on role
-            if (data.user.role === "traveler") router.push("/traveler/dashboard");
-            else if (data.user.role === "provider") router.push("/provider/dashboard");
+            if (data.user.role === "traveler") router.push("/traveler-dashboard");
+            else if (data.user.role === "provider") router.push("/provider-dashboard");
             else router.push("/");
 
         } catch (err) {
@@ -55,6 +70,16 @@ export default function Login() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-50 to-red-50 px-4">
+
+            {pageLoading && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur">
+                    <div className="flex flex-col items-center gap-3">
+                        <div className="w-14 h-14 border-4 border-t-transparent border-gray-900 rounded-full animate-spin" />
+                        <div className="text-sm text-gray-700">Loading...</div>
+                    </div>
+                </div>
+            )}
+
             <div className="w-full max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
                 {/* Left: form */}
                 <div className="p-6 sm:p-8">

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { useRouter, usePathname } from 'next/navigation';
+import { LogOut } from 'lucide-react';
 
 export default function Navbar() {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -41,19 +42,23 @@ export default function Navbar() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <Link href="/register" className="hidden md:inline-block border border-black/10 px-3 py-1 rounded-md text-sm hover:bg-black/5">Sign up</Link>
-                    <Link href="/login" className="hidden md:inline-block bg-black text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-900">Login</Link>
+                    {!localStorage.getItem('user') && !localStorage.getItem('token') && (
+                        <>
+                            <Link href="/register" className="hidden md:inline-block border border-black/10 px-3 py-1 rounded-md text-sm hover:bg-black/5">Sign up</Link>
+                            <Link href="/login" className="hidden md:inline-block bg-black text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-900">Login</Link>
+                        </>)}
 
                     <div ref={profileRef} className="relative">
                         <button onClick={() => setProfileOpen((s) => !s)} aria-haspopup="true" aria-expanded={profileOpen} className="w-10 h-10 rounded-full overflow-hidden border-2 border-black/10 shadow-sm focus:outline-none focus:ring-2 focus:ring-black/10">
-                            <img src="/images/profile.png" alt="Profile" className="w-full h-full object-cover" />
+                            <img src="/images/profile.png" alt="Profile" className="w-full h-full object-cover cursor-pointer" />
                         </button>
 
                         {profileOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg py-2 z-50">
+                            <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg py-2 z-50 ">
                                 <Link href="/profile" className="block px-4 py-2 text-sm hover:bg-gray-100">Your Profile</Link>
-                                <Link href="/bookings" className="block px-4 py-2 text-sm hover:bg-gray-100">Bookings</Link>
-                                <button onClick={() => { localStorage.removeItem('user'); router.push('/login'); }} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100">Logout</button>
+                                {!localStorage.getItem('user').role === 'traveler' ? (<Link href="/provider-dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">Bookings</Link>) : <Link href="/traveler-dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">Book Vehicle</Link>}
+                                <button onClick={() => { localStorage.removeItem('user'); router.push('/login'); }} className="w-full flex text-left px-4 py-2 text-sm hover:bg-gray-100">
+                                    Secure Logout <span className="mx-2"><LogOut size={20} /></span></button>
                             </div>
                         )}
                     </div>
@@ -64,7 +69,9 @@ export default function Navbar() {
             {mobileOpen && (
                 <div className="md:hidden bg-white">
                     <div className="px-4 py-3 space-y-2">
-                        <Link href="/login" className="block px-2 py-2 rounded bg-black text-white text-center">Login</Link>
+                        {!localStorage.getItem('user') && !localStorage.getItem('token') && (
+                            <Link href="/login" className="block px-2 py-2 rounded bg-black text-white text-center">Login</Link>
+                        )}
                     </div>
                 </div>
             )}

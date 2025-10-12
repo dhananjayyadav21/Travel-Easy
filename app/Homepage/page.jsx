@@ -11,6 +11,7 @@ const page = () => {
     ];
 
     const [current, setCurrent] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -19,8 +20,33 @@ const page = () => {
         return () => clearInterval(timer);
     }, []);
 
+    useEffect(() => {
+        // hide loader after window load or after 1.2s fallback
+        const onLoad = () => setLoading(false);
+        if (typeof window !== 'undefined') {
+            if (document.readyState === 'complete') {
+                setLoading(false);
+            } else {
+                window.addEventListener('load', onLoad);
+                const t = setTimeout(() => setLoading(false), 1200);
+                return () => {
+                    window.removeEventListener('load', onLoad);
+                    clearTimeout(t);
+                };
+            }
+        }
+    }, []);
+
     return (
         <>
+            {loading && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur">
+                    <div className="flex flex-col items-center gap-3">
+                        <div className="w-14 h-14 border-4 border-t-transparent border-gray-900 rounded-full animate-spin" />
+                        <div className="text-sm text-gray-700">Loading...</div>
+                    </div>
+                </div>
+            )}
 
 
             {/* crousal */}
