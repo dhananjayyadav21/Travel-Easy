@@ -20,6 +20,7 @@ export default function Navbar() {
         return () => document.removeEventListener('click', onDoc);
     }, []);
 
+
     // Close menus on route change
     useEffect(() => {
         setMobileOpen(false);
