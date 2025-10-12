@@ -36,6 +36,7 @@ export async function POST(req) {
             "meetPlace",
             "source",
             "destination",
+            "kilometer",
             "contact",
             "vehicle",
             "vehicleType",
@@ -47,6 +48,13 @@ export async function POST(req) {
                 return NextResponse.json({ message: `${field} is required.` }, { status: 400 });
             }
         }
+
+
+        // Validate kilometers (must be positive number)
+        if (isNaN(body.kilometer) || body.kilometer <= 0) {
+            return NextResponse.json({ message: "Invalid kilometer value." }, { status: 400 });
+        }
+
 
         // Validate contact number (10-15 digits)
         if (!/^\d{10,15}$/.test(body.contact)) {
@@ -78,6 +86,7 @@ export async function POST(req) {
             meetPlace: body.meetPlace,
             source: body.source,
             destination: body.destination,
+            kilometer: body.kilometer,
             contact: body.contact,
             vehicle: body.vehicle.toUpperCase(),
             vehicleType: body.vehicleType,

@@ -12,7 +12,8 @@ import {
     ChevronLeft,
     Tag,
     Navigation,
-    Home
+    Home,
+    Ruler,
 } from 'lucide-react';
 
 // Custom Input Component with Icon and Label (Light Theme Adjusted)
@@ -47,11 +48,13 @@ export default function AddTrip() {
         seats: "",
         source: "",
         destination: "",
+        kilometer: "",
         meetPlace: "",
         contact: "",
         vehicle: "",
         vehicleType: "",
         panCard: "",
+
     });
 
     const handleChange = (e) => {
@@ -63,7 +66,7 @@ export default function AddTrip() {
     const handleReset = () => {
         setTrip({
             name: "", date: "", time: "", seats: "",
-            source: "", destination: "", meetPlace: "",
+            source: "", destination: "", kilometer: "", meetPlace: "",
             contact: "", vehicle: "", vehicleType: "", panCard: "",
         });
         setMessage({ type: "info", text: "Form fields have been successfully reset." });
@@ -92,7 +95,6 @@ export default function AddTrip() {
         try {
             // NOTE: Using localStorage for token management as per previous code
             const token = localStorage.getItem("token");
-
             const res = await fetch("/api/addtrip", {
                 method: "POST",
                 headers: {
@@ -117,6 +119,7 @@ export default function AddTrip() {
                 seats: "",
                 source: "",
                 destination: "",
+                kilometer: "",
                 meetPlace: "",
                 contact: "",
                 vehicle: "",
@@ -195,7 +198,7 @@ export default function AddTrip() {
                                     <InputField
                                         icon={Users}
                                         label="Available Seats"
-                                        type="number"
+                                        type="tel"
                                         name="seats"
                                         placeholder="Number of available seats"
                                         value={trip.seats}
@@ -254,6 +257,16 @@ export default function AddTrip() {
                                         placeholder="End point (e.g., Pune)"
                                         value={trip.destination}
                                         onChange={handleChange}
+                                    />
+                                    <InputField
+                                        icon={Ruler}
+                                        label="Distance (Kilometers)"
+                                        type="number"
+                                        name="kilometer"
+                                        placeholder="e.g., 180"
+                                        value={trip.kilometers}
+                                        onChange={handleChange}
+                                        min="1"
                                     />
                                 </div>
                             </div>

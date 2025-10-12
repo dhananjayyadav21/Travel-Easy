@@ -52,6 +52,11 @@ const TripSchema = new mongoose.Schema({
         required: [true, 'Destination location is required.'],
         trim: true,
     },
+    kilometer: {
+        type: Number,
+        required: [true, 'Kilometer distance is required.'],
+        min: [1, 'Distance must be at least 1 kilometer.']
+    },
 
     // 3. Provider and Vehicle Details (Sensitive Data)
     contact: {
