@@ -12,7 +12,7 @@ export default function ProviderTrips() {
             try {
                 const token = localStorage.getItem("token");
 
-                const res = await fetch("/api/providertrips/my?status=Pending", {
+                const res = await fetch("/api/providertrips/my?status=Active", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

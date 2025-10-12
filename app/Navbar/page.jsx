@@ -11,6 +11,30 @@ export default function Navbar() {
     const router = useRouter();
     const pathname = usePathname();
 
+    const [isClient, setIsClient] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        // This confirms the component has mounted in the browser
+        setIsClient(true);
+
+        // Safely access localStorage here
+        try {
+            const user = localStorage.getItem('user');
+            const token = localStorage.getItem('token');
+
+            if (user && token) {
+                setIsAuthenticated(true);
+            } else {
+                setIsAuthenticated(false);
+            }
+        } catch (error) {
+            console.error("Could not access localStorage:", error);
+            setIsAuthenticated(false);
+        }
+    }, []);
+
+    // loding when page load
     useEffect(() => {
         function onDoc(e) {
             if (profileRef.current && !profileRef.current.contains(e.target)) {
@@ -42,7 +66,7 @@ export default function Navbar() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    {(!localStorage.getItem('user') || !localStorage.getItem('token')) && (
+                    {!isAuthenticated && (
                         <>
                             <Link
                                 href="/register"
@@ -85,10 +109,10 @@ export default function Navbar() {
                                         return (
                                             <>
                                                 <Link href="/provider-dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">
-                                                    Provider Dashboard
+                                                    ADD NewTrip
                                                 </Link>
                                                 <Link href="/providertrips" className="block px-4 py-2 text-sm hover:bg-gray-100">
-                                                    View Trip
+                                                    MY Trip
                                                 </Link>
                                             </>
                                         );

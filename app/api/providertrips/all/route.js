@@ -19,7 +19,7 @@ export async function GET(req) {
         const status = searchParams.get("status");
 
         // 4. Build MongoDB query
-        const query = { creator: userId };
+        const query = {};
         if (status && ["Pending", "Active", "Completed", "Cancelled"].includes(status)) {
             query.status = status;
         }

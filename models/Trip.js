@@ -8,8 +8,8 @@ const TripSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Active', 'Completed', 'Cancelled'],
-        default: 'Pending',
+        enum: ['Active', 'Completed', 'Cancelled'],
+        default: 'Active',
         required: [true, 'Trip status is required.']
     },
 
