@@ -9,9 +9,8 @@ const PRICE_PER_KM = 26;
 
 const BookTripPage = () => {
     const router = useRouter();
-    // Added tripId and tripName state for API use and display
+
     const [tripId, setTripId] = useState(null);
-    const [tripName, setTripName] = useState("Trip");
 
     const [source, setSource] = useState("");
     const [destination, setDestination] = useState("");
@@ -30,7 +29,6 @@ const BookTripPage = () => {
         const selectedTrip = JSON.parse(localStorage.getItem('selectedTrip') || '{}');
         if (selectedTrip && selectedTrip._id) {
             setTripId(selectedTrip._id);
-            setTripName(selectedTrip.name || "Trip");
             setSource(selectedTrip.source || "");
             setDestination(selectedTrip.destination || "");
             // NOTE: Corrected property access from `kilometers` to `kilometer` based on common trip object structure
@@ -51,7 +49,7 @@ const BookTripPage = () => {
 
             setSeats(availableSeats);
         } else {
-            // Optional: Handle case where no trip is selected
+            // Handle case where no trip is selected
             if (typeof window !== 'undefined') {
                 toast.error("No trip selected. Redirecting.");
                 router.push("/");
@@ -83,7 +81,7 @@ const BookTripPage = () => {
         e.preventDefault();
 
         if (
-            !tripId || // Ensure trip ID exists
+            !tripId ||
             !source ||
             !destination ||
             !date ||
@@ -137,9 +135,6 @@ const BookTripPage = () => {
             toast.error("Something went wrong while booking.");
         }
     };
-
-    // 2. Removed the incorrect early return based on seats.length < 0
-    // The check is now correctly done in the JSX below.
 
     return (
         <div className="min-h-screen p-4 sm:p-8 font-inter">

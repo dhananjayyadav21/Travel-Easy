@@ -100,6 +100,7 @@ export async function POST(req) {
             date,
             totalPrice,
             ratePerKm,
+            bookedBy: userId,
         });
         await newBooking.save();
 
