@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState, useEffect } from 'react';
 import TopTravelProviders from '@/components/TopTravelProviders';
 import TravelInfo from '@/components/TravelInfo';
