@@ -94,7 +94,6 @@ export default function AddTrip() {
         }
 
         try {
-            // NOTE: Using localStorage for token management as per previous code
             const token = localStorage.getItem("token");
             const res = await fetch("/api/addtrip", {
                 method: "POST",

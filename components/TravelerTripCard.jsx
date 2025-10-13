@@ -35,7 +35,7 @@ const DetailItem = ({ icon: Icon, label, value }) => (
 );
 
 export default function TripCard({ booking }) {
-    const { trip, seatsBooked, status } = booking;
+    const { trip, status } = booking;
     const statusClasses = getStatusClasses(status);
     const router = useRouter();
 
@@ -81,7 +81,7 @@ export default function TripCard({ booking }) {
                             Booked
                         </span>
                         <span className="text-2xl font-extrabold text-indigo-600 flex items-center gap-1">
-                            {seatsBooked} <Users size={20} />
+                            {trip.bookedseats} <Users size={20} />
                         </span>
                     </div>
                     <div className="flex flex-col text-right">

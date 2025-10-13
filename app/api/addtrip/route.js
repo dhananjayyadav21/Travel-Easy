@@ -10,7 +10,7 @@ export async function POST(req) {
 
     // Verify JWT token
     const authResult = verifyAuth(req);
-    if (authResult.response) return authResult.response; // Unauthorized
+    if (authResult.response) return authResult.response;
 
     const userId = authResult.userId;
 
@@ -49,12 +49,10 @@ export async function POST(req) {
             }
         }
 
-
         // Validate kilometers (must be positive number)
         if (isNaN(body.kilometer) || body.kilometer <= 0) {
             return NextResponse.json({ message: "Invalid kilometer value." }, { status: 400 });
         }
-
 
         // Validate contact number (10-15 digits)
         if (!/^\d{10,15}$/.test(body.contact)) {

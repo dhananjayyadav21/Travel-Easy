@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const TripSchema = new mongoose.Schema({
     creator: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to the User model
+        ref: 'User',
         required: [true, 'Trip must be linked to a creator.']
     },
     status: {
@@ -24,6 +24,9 @@ const TripSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Available seats are required.'],
         min: [1, 'Must offer at least 1 seat.'],
+    },
+    bookedseats: {
+        type: Number,
     },
     date: {
 
