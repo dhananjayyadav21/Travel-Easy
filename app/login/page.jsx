@@ -120,14 +120,6 @@ export default function Login() {
                             </div>
                         </div>
 
-                        {/* <div className="flex items-center justify-between">
-                            <label className="inline-flex items-center gap-2">
-                                <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="w-4 h-4" />
-                                <span className="text-sm">Remember me</span>
-                            </label>
-                            <Link href="/forgot-password" className="text-sm text-black hover:underline">Forgot password?</Link>
-                        </div> */}
-
                         <button
                             disabled={loading}
                             type="submit"

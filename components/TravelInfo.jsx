@@ -54,6 +54,12 @@ export default function TravelInfo() {
                             <Link href="/provider-dashboard">Start Your Journey</Link>
                         </button>
                     }
+
+                    {userRole !== 'provider' && userRole !== 'traveler' &&
+                        <button className="bg-black hover:bg-gray-950 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 cursor-pointer">
+                            <Link href="/provider-dashboard">Start Your Journey</Link>
+                        </button>
+                    }
                 </div>
             </div>
         </div>
