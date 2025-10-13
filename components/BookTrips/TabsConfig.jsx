@@ -1,3 +1,4 @@
+"use client";
 import { Car, CheckCircle, XCircle } from 'lucide-react';
 
 // Centralized tab configuration for consistency and reuse
