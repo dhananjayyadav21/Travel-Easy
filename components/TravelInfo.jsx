@@ -3,6 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function TravelInfo() {
+    const userDataString = localStorage.getItem('user');
+    let userRole = null;
+
+    if (userDataString) {
+        try {
+            const userData = JSON.parse(userDataString);
+            userRole = userData.role;
+        } catch (e) {
+            console.error("Error parsing user data from localStorage:", e);
+        }
+    }
     return (
         <div className="px-4 py-16 bg-gradient-to-r from-green-50 to-red-50">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8">
@@ -26,10 +37,16 @@ export default function TravelInfo() {
                     <p className="text-gray-700 mb-6">
                         TravelEasy connects you with trusted travel providers, ensures safe journeys, and lets you book your trips hassle-free. Discover destinations, check vehicles, and plan your perfect travel experience—all in one place.
                     </p>
-                    <button className="bg-black hover:bg-gray-950 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 cursor-pointer">
-                        <Link href="/profile">Start Your Journey</Link>
-
+                    {userRole === 'traveler' && <button className="bg-black hover:bg-gray-950 text-white font-semibold px-6 py-3  rounded-lg shadow-md transition duration-300 cursor-pointer">
+                        <Link href="/traveler-dashboard">Start Your Journey</Link>
                     </button>
+                    }
+
+                    {userRole === 'provider' && <button className="bg-black hover:bg-gray-950 text-white font-semibold px-6 py-3  rounded-lg shadow-md transition duration-300 cursor-pointer">
+                        <Link href="/provider-dashboard">Start Your Journey</Link>
+                    </button>
+                    }
+
                 </div>
             </div>
         </div>

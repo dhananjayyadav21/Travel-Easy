@@ -64,7 +64,7 @@ export default function Navbar() {
 
                     {isAuthenticated && (
                         <div ref={profileRef} className="relative">
-                            <button onClick={() => setProfileOpen(!profileOpen)} className="w-10 h-10 rounded-full overflow-hidden border-2 border-black/10 shadow-sm">
+                            <button onClick={() => setProfileOpen(!profileOpen)} className="w-10 h-10 rounded-full overflow-hidden border-2 border-black/10 shadow-sm cursor-pointer">
                                 <img src="/images/profile.png" alt="Profile" className="w-full h-full object-cover" />
                             </button>
 

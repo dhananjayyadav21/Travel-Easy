@@ -21,7 +21,6 @@ const page = () => {
     }, []);
 
     useEffect(() => {
-        // hide loader after window load or after 1.2s fallback
         const onLoad = () => setLoading(false);
         if (typeof window !== 'undefined') {
             if (document.readyState === 'complete') {
