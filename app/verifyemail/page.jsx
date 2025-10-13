@@ -1,12 +1,12 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function VerifyEmail() {
+function VerifyEmailForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const email = searchParams.get("email"); // get email dynamically from query
+    const email = searchParams.get("email");
 
     const length = 6;
     const [code, setCode] = useState(Array(length).fill(""));
@@ -132,5 +132,29 @@ export default function VerifyEmail() {
                 </p>
             </div>
         </div>
+    );
+}
+
+// Loading fallback component
+function LoadingFallback() {
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-50 to-red-50 px-4">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md text-center">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-8 h-8 border-4 border-t-transparent border-gray-900 rounded-full animate-spin"></div>
+                    <h2 className="text-xl font-semibold text-gray-700">Loading...</h2>
+                    <p className="text-gray-500 text-sm">Preparing email verification</p>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// Main component with Suspense boundary
+export default function VerifyEmail() {
+    return (
+        <Suspense fallback={<LoadingFallback />}>
+            <VerifyEmailForm />
+        </Suspense>
     );
 }
