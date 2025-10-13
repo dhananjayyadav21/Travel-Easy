@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaStar } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
 
 const providers = [
     {
@@ -43,20 +44,24 @@ const providers = [
 ];
 
 export default function TopTravelProviders() {
-    const userDataString = localStorage.getItem('user');
-    let userRole = null;
+    const [userRole, setUserRole] = useState(null);
 
-    if (userDataString) {
-        try {
-            const userData = JSON.parse(userDataString);
-            userRole = userData.role;
-        } catch (e) {
-            console.error("Error parsing user data from localStorage:", e);
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const userDataString = localStorage.getItem('user');
+            if (userDataString) {
+                try {
+                    const userData = JSON.parse(userDataString);
+                    setUserRole(userData.role);
+                } catch (e) {
+                    console.error("Error parsing user data from localStorage:", e);
+                }
+            }
         }
-    }
+    }, []);
+
     return (
         <div className="px-4 py-10 max-w-7xl mx-auto">
-
             <div className="flex justify-center mb-10">
                 <span className="inline-block w-5/6 h-0.5 rounded bg-gray-700/80"></span>
             </div>
@@ -92,10 +97,14 @@ export default function TopTravelProviders() {
 
                                 <div className="flex items-center gap-2">
                                     {userRole === 'traveler' &&
-                                        <button className="ml-2 bg-black text-white text-sm px-3 py-1 rounded-md hover:bg-gray-900"><Link href="/traveler-dashboard">Book</Link></button>}
+                                        <button className="ml-2 bg-black text-white text-sm px-3 py-1 rounded-md hover:bg-gray-900">
+                                            <Link href="/traveler-dashboard">Book</Link>
+                                        </button>}
 
                                     {userRole === 'provider' &&
-                                        <button className="ml-2 bg-black text-white text-sm px-3 py-1 rounded-md hover:bg-gray-900"><Link href="/provider-dashboard">Add</Link></button>}
+                                        <button className="ml-2 bg-black text-white text-sm px-3 py-1 rounded-md hover:bg-gray-900">
+                                            <Link href="/provider-dashboard">Add</Link>
+                                        </button>}
                                 </div>
                             </div>
                         </div>
