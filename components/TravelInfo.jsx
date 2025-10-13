@@ -23,7 +23,7 @@ export default function TravelInfo() {
     return (
         <div className="px-4 py-16 bg-gradient-to-r from-green-50 to-red-50">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8">
-                {/* Image on left */}
+                {/* Image  */}
                 <div className="md:w-1/2 flex justify-center">
                     <Image
                         src="/images/main.jpg"
