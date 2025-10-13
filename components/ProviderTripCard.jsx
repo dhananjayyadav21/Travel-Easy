@@ -1,5 +1,4 @@
 "use client";
-
 import { Car, Calendar, Clock, Users, MapPin, ArrowRight, DollarSign, Tag, Info } from 'lucide-react';
 import Link from 'next/link';
 
