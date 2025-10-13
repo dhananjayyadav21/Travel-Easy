@@ -111,7 +111,7 @@ export default function TravelerDashboard() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {filteredBookings.map((trip) => (
-                            <TripCard key={trip._id} booking={{ trip }} /> // wrap trip inside booking prop for TripCard
+                            <TripCard key={trip._id} booking={{ trip }} />
                         ))}
                     </div>
                 )}

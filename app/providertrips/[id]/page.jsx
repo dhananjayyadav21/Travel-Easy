@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import ProtectedRoute from "@/utils/ProtectedRoute";
 import {
     MapPin,
     Calendar,
@@ -168,150 +169,151 @@ export default function TripDetailsPage() {
     } = trip;
 
     return (
-        // min-h-screen ensures full height. Use larger padding for big screens (lg:px-12)
-        <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-12">
+        <ProtectedRoute>
+            <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-12">
 
-            {/* max-w-6xl allows the content to spread out more horizontally */}
-            <div className="max-w-8xl mx-auto bg-white shadow-sm rounded-lg p-6 sm:p-8 border border-gray-200">
+                {/* max-w-6xl allows the content to spread out more horizontally */}
+                <div className="max-w-8xl mx-auto bg-white shadow-sm rounded-lg p-6 sm:p-8 border border-gray-200">
 
-                {/* Header Section */}
-                <header className="mb-8 pb-4 border-b flex justify-between items-start">
-                    <div>
+                    {/* Header Section */}
+                    <header className="mb-8 pb-4 border-b flex justify-between items-start">
+                        <div>
+                            <button
+                                onClick={() => router.back()}
+                                className="flex items-center text-indigo-600 hover:text-indigo-800 transition text-sm mb-2"
+                            >
+                                <ArrowLeft className="w-4 h-4 mr-1" /> Back to List
+                            </button>
+                            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight">
+                                Trip Summary
+                            </h1>
+                        </div>
+                        <div className="text-right">
+                            <p className="text-base text-gray-500">
+                                Booking Reference:
+                            </p>
+                            <p className="font-mono text-lg font-semibold text-gray-700">{bookingId}</p>
+                        </div>
+                    </header>
+
+                    {/* Main Content Layout for Horizontal Screen */}
+                    <div className="flex flex-col lg:flex-row gap-8">
+
+                        {/* LEFT COLUMN: Route, Schedule, Description (Takes 2/3 width on large screens) */}
+                        <div className="lg:w-2/3 space-y-8">
+
+                            {/* Route & Schedule Section */}
+                            <section>
+                                <h2 className="text-xl font-bold text-indigo-700 mb-4 flex items-center">
+                                    <MapPin className="w-5 h-5 mr-2" /> Route & Schedule
+                                </h2>
+                                {/* lg:grid-cols-4 spreads the 4 items out horizontally */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <DetailItem
+                                        icon={MapPin}
+                                        label="Departure"
+                                        value={source}
+                                        colorClass="text-red-500"
+                                    />
+                                    <DetailItem
+                                        icon={MapPin}
+                                        label="Arrival"
+                                        value={destination}
+                                        colorClass="text-green-500"
+                                    />
+                                    <DetailItem
+                                        icon={Calendar}
+                                        label="Travel Date"
+                                        value={formatDate(date)}
+                                        colorClass="text-blue-500"
+                                    />
+                                    <DetailItem
+                                        icon={Clock}
+                                        label="Departure Time"
+                                        value={time}
+                                        colorClass="text-blue-500"
+                                    />
+                                </div>
+                            </section>
+
+                            {/* Description Section */}
+                            <section>
+                                <h2 className="text-xl font-bold text-indigo-700 mb-4 flex items-center">
+                                    <ClipboardCheck className="w-5 h-5 mr-2" /> Additional Notes
+                                </h2>
+                                <div className="p-4 bg-gray-50 border border-gray-300 rounded-lg min-h-[100px] shadow-inner">
+                                    <p className="text-gray-700 leading-relaxed italic text-base">
+                                        {description || "No specific instructions or details were added by the trip creator."}
+                                    </p>
+                                </div>
+                            </section>
+
+                        </div>
+
+                        {/* RIGHT COLUMN: Metrics & Pricing (Takes 1/3 width on large screens) */}
+                        <div className="lg:w-1/3 space-y-8">
+
+                            {/* Metrics Section */}
+                            <section>
+                                <h2 className="text-xl font-bold text-indigo-700 mb-4">Metrics & Vehicle</h2>
+                                {/* Uses a simple 2-column grid that collapses to 1 column on mobile */}
+                                <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
+                                    <DetailItem
+                                        icon={Users}
+                                        label="Seats Booked"
+                                        value={`${seats} Seats`}
+                                        colorClass="text-purple-600"
+                                    />
+                                    <DetailItem
+                                        icon={Car}
+                                        label="Vehicle Type"
+                                        value={vehicleType}
+                                        colorClass="text-teal-600"
+                                    />
+                                    <DetailItem
+                                        icon={Ruler}
+                                        label="Distance"
+                                        value={`${kilometer} km`}
+                                        colorClass="text-orange-600"
+                                    />
+                                    <DetailItem
+                                        icon={IndianRupee}
+                                        label="Price Rate"
+                                        value={`${formatCurrency(pricePerKm)} / km`}
+                                        colorClass="text-gray-600"
+                                    />
+                                </div>
+                            </section>
+
+                            {/* Total Price Block - Stands out */}
+                            <section>
+                                <h2 className="text-xl font-bold text-indigo-700 mb-4">Pricing Summary</h2>
+                                <div className="p-6 bg-indigo-600 rounded-xl shadow-xl text-white">
+                                    <div className="flex flex-col justify-center items-center text-center">
+                                        <span className="text-base font-light uppercase opacity-90 mb-1">Estimated Final Cost</span>
+                                        <span className="text-5xl font-extrabold">{formatCurrency(computedPrice)}</span>
+                                        <span className="text-sm font-light opacity-80 mt-3 flex items-center">
+                                            <DollarSign className="w-4 h-4 inline-block mr-1" />
+                                            Calculated from {kilometer} km @ {formatCurrency(pricePerKm)}/km
+                                        </span>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    {/* Footer/Action Button */}
+                    <footer className="mt-10 pt-4 border-t flex justify-end">
                         <button
                             onClick={() => router.back()}
-                            className="flex items-center text-indigo-600 hover:text-indigo-800 transition text-sm mb-2"
+                            className="bg-gray-800 hover:bg-gray-900 text-white font-semibold px-6 py-3 rounded-md transition duration-300 shadow-lg text-base"
                         >
-                            <ArrowLeft className="w-4 h-4 mr-1" /> Back to List
+                            <ArrowLeft className="w-5 h-5 inline-block mr-2" />
+                            Go Back
                         </button>
-                        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight">
-                            Trip Summary
-                        </h1>
-                    </div>
-                    <div className="text-right">
-                        <p className="text-base text-gray-500">
-                            Booking Reference:
-                        </p>
-                        <p className="font-mono text-lg font-semibold text-gray-700">{bookingId}</p>
-                    </div>
-                </header>
-
-                {/* Main Content Layout for Horizontal Screen */}
-                <div className="flex flex-col lg:flex-row gap-8">
-
-                    {/* LEFT COLUMN: Route, Schedule, Description (Takes 2/3 width on large screens) */}
-                    <div className="lg:w-2/3 space-y-8">
-
-                        {/* Route & Schedule Section */}
-                        <section>
-                            <h2 className="text-xl font-bold text-indigo-700 mb-4 flex items-center">
-                                <MapPin className="w-5 h-5 mr-2" /> Route & Schedule
-                            </h2>
-                            {/* lg:grid-cols-4 spreads the 4 items out horizontally */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                <DetailItem
-                                    icon={MapPin}
-                                    label="Departure"
-                                    value={source}
-                                    colorClass="text-red-500"
-                                />
-                                <DetailItem
-                                    icon={MapPin}
-                                    label="Arrival"
-                                    value={destination}
-                                    colorClass="text-green-500"
-                                />
-                                <DetailItem
-                                    icon={Calendar}
-                                    label="Travel Date"
-                                    value={formatDate(date)}
-                                    colorClass="text-blue-500"
-                                />
-                                <DetailItem
-                                    icon={Clock}
-                                    label="Departure Time"
-                                    value={time}
-                                    colorClass="text-blue-500"
-                                />
-                            </div>
-                        </section>
-
-                        {/* Description Section */}
-                        <section>
-                            <h2 className="text-xl font-bold text-indigo-700 mb-4 flex items-center">
-                                <ClipboardCheck className="w-5 h-5 mr-2" /> Additional Notes
-                            </h2>
-                            <div className="p-4 bg-gray-50 border border-gray-300 rounded-lg min-h-[100px] shadow-inner">
-                                <p className="text-gray-700 leading-relaxed italic text-base">
-                                    {description || "No specific instructions or details were added by the trip creator."}
-                                </p>
-                            </div>
-                        </section>
-
-                    </div>
-
-                    {/* RIGHT COLUMN: Metrics & Pricing (Takes 1/3 width on large screens) */}
-                    <div className="lg:w-1/3 space-y-8">
-
-                        {/* Metrics Section */}
-                        <section>
-                            <h2 className="text-xl font-bold text-indigo-700 mb-4">Metrics & Vehicle</h2>
-                            {/* Uses a simple 2-column grid that collapses to 1 column on mobile */}
-                            <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
-                                <DetailItem
-                                    icon={Users}
-                                    label="Seats Booked"
-                                    value={`${seats} Seats`}
-                                    colorClass="text-purple-600"
-                                />
-                                <DetailItem
-                                    icon={Car}
-                                    label="Vehicle Type"
-                                    value={vehicleType}
-                                    colorClass="text-teal-600"
-                                />
-                                <DetailItem
-                                    icon={Ruler}
-                                    label="Distance"
-                                    value={`${kilometer} km`}
-                                    colorClass="text-orange-600"
-                                />
-                                <DetailItem
-                                    icon={IndianRupee}
-                                    label="Price Rate"
-                                    value={`${formatCurrency(pricePerKm)} / km`}
-                                    colorClass="text-gray-600"
-                                />
-                            </div>
-                        </section>
-
-                        {/* Total Price Block - Stands out */}
-                        <section>
-                            <h2 className="text-xl font-bold text-indigo-700 mb-4">Pricing Summary</h2>
-                            <div className="p-6 bg-indigo-600 rounded-xl shadow-xl text-white">
-                                <div className="flex flex-col justify-center items-center text-center">
-                                    <span className="text-base font-light uppercase opacity-90 mb-1">Estimated Final Cost</span>
-                                    <span className="text-5xl font-extrabold">{formatCurrency(computedPrice)}</span>
-                                    <span className="text-sm font-light opacity-80 mt-3 flex items-center">
-                                        <DollarSign className="w-4 h-4 inline-block mr-1" />
-                                        Calculated from {kilometer} km @ {formatCurrency(pricePerKm)}/km
-                                    </span>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
+                    </footer>
                 </div>
-
-                {/* Footer/Action Button */}
-                <footer className="mt-10 pt-4 border-t flex justify-end">
-                    <button
-                        onClick={() => router.back()}
-                        className="bg-gray-800 hover:bg-gray-900 text-white font-semibold px-6 py-3 rounded-md transition duration-300 shadow-lg text-base"
-                    >
-                        <ArrowLeft className="w-5 h-5 inline-block mr-2" />
-                        Go Back
-                    </button>
-                </footer>
             </div>
-        </div>
+        </ProtectedRoute>
     );
 }
