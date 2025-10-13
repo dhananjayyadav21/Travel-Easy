@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import ProtectedRoute from "@/utils/ProtectedRoute";
+import TripTraveler from "@/components/TripTravelers/TripTraveler"
 import {
     MapPin,
     Calendar,
@@ -116,7 +117,7 @@ const DetailItem = ({ icon: Icon, label, value, colorClass = "text-gray-700" }) 
         <Icon className={`w-5 h-5 flex-shrink-0 ${colorClass}`} />
         <div className="flex flex-col min-w-0">
             <span className="text-xs font-medium text-gray-500 uppercase">{label}</span>
-            <span className="text-base font-semibold text-gray-800 break-words truncate">{value}</span>
+            <span className="text-xs md:text-base font-semibold text-gray-800 break-words truncate">{value}</span>
         </div>
     </div>
 );
@@ -173,7 +174,7 @@ export default function TripDetailsPage() {
             <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-12">
 
                 {/* max-w-6xl allows the content to spread out more horizontally */}
-                <div className="max-w-8xl mx-auto bg-white shadow-sm rounded-lg p-6 sm:p-8 border border-gray-200">
+                <div className="max-w-8xl mx-auto shadow-sm rounded-lg p-6 sm:p-8 border border-gray-200">
 
                     {/* Header Section */}
                     <header className="mb-8 pb-4 border-b flex justify-between items-start">
@@ -187,12 +188,6 @@ export default function TripDetailsPage() {
                             <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight">
                                 Trip Summary
                             </h1>
-                        </div>
-                        <div className="text-right">
-                            <p className="text-base text-gray-500">
-                                Booking Reference:
-                            </p>
-                            <p className="font-mono text-lg font-semibold text-gray-700">{bookingId}</p>
                         </div>
                     </header>
 
@@ -241,10 +236,9 @@ export default function TripDetailsPage() {
                                 <h2 className="text-xl font-bold text-indigo-700 mb-4 flex items-center">
                                     <ClipboardCheck className="w-5 h-5 mr-2" /> Additional Notes
                                 </h2>
-                                <div className="p-4 bg-gray-50 border border-gray-300 rounded-lg min-h-[100px] shadow-inner">
-                                    <p className="text-gray-700 leading-relaxed italic text-base">
-                                        {description || "No specific instructions or details were added by the trip creator."}
-                                    </p>
+
+                                <div className=" bg-gray-50 border border-gray-300 rounded-lg min-h-[100px] shadow-inner">
+                                    <TripTraveler tripId={trip._id} />
                                 </div>
                             </section>
 
