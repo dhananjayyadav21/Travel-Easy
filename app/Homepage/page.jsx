@@ -113,10 +113,10 @@ const page = () => {
             </div>
 
             {/* Top travel info section */}
-            <TravelInfo />
+            {/* <TravelInfo /> */}
 
             {/* Top travel providers section */}
-            <TopTravelProviders />
+            {/* <TopTravelProviders /> */}
 
         </>
     )
