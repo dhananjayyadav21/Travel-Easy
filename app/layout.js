@@ -22,10 +22,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-red-600`}
       >
         <Navbar />
-        <main className="min-h-screen pt-14 bg-gradient-to-r from-green-50 to-red-50">
+        <main className="min-h-screen pt-14 bg-amber-600">
           {children}
           <Toaster
             position="bottom-right"
