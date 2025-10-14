@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
       {/* <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-gradient-to-r from-green-50 to-red-50`}
       > */}
-      <body className="bg-red-50 min-h-screen flex flex-col">
+      <body className="bg-gradient-to-r from-green-50 to-red-50 min-h-screen flex flex-col">
         <Navbar />
 
         <main className="flex-grow max-w-7xl mx-auto w-full py-10 px-4 sm:px-6 lg:px-8">
