@@ -20,15 +20,21 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="bg-gradient-to-r from-green-50 to-red-50">
-      <body
+    // <html lang="en" className="bg-gradient-to-r from-green-50 to-red-50">
+    <html lang="en">
+      {/* <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-gradient-to-r from-green-50 to-red-50`}
-      >
+      > */}
+      <body className="bg-red-50 min-h-screen flex flex-col">
         <Navbar />
 
-        <main className="flex-1 pt-14">
+        <main className="flex-grow max-w-7xl mx-auto w-full py-10 px-4 sm:px-6 lg:px-8">
           {children}
         </main>
+
+        {/* <main className="flex-1 pt-14">
+          {children}
+        </main> */}
 
         <Toaster
           position="bottom-right"
