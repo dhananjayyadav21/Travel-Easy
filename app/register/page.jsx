@@ -91,7 +91,7 @@ export default function Register() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-50 to-red-50 px-4 py-8">
+        <div className="min-h-[80vh] flex items-center justify-center bg-gradient-to-r from-green-50 to-red-50 px-4 py-2">
             <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
 
                 {pageLoading && (

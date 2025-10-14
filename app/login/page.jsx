@@ -69,7 +69,7 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-50 to-red-50 px-4">
+        <div className="min-h-[80vh] flex items-center justify-center bg-gradient-to-r from-green-50 to-red-50 px-4">
 
             {pageLoading && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur">

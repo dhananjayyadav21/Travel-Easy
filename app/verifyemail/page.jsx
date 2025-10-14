@@ -82,7 +82,7 @@ function VerifyEmailForm() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-50 to-red-50 px-4">
+        <div className="min-h-[80vh] flex items-center justify-center bg-gradient-to-r from-green-50 to-red-50 px-4">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md text-center">
                 <h2 className="text-2xl font-bold mb-2">Verify Your Email</h2>
                 <p className="text-gray-700 mb-6">
