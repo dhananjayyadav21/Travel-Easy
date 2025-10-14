@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-red-600`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-r from-green-50 to-red-50`}
       >
         <Navbar />
 
