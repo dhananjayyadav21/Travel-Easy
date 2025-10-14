@@ -14,7 +14,7 @@ export async function GET(req) {
     const userId = authResult.userId;
 
     try {
-        // Step 1: Connect to MongoDB
+        // Connect to MongoDB
         await connectDB();
 
         // Check if user exists
@@ -23,10 +23,10 @@ export async function GET(req) {
             return NextResponse.json({ message: "User not found." }, { status: 404 });
         }
 
-        //  Step 2: Retrieve all bookings, sorted by newest first
+        // Retrieve all bookings, sorted by newest first
         const bookings = await Booking.find({}).sort({ createdAt: -1 });
 
-        //  Step 3: Format bookings for frontend readability
+        // Format bookings for frontend readability
         const formattedBookings = bookings.map((booking) => ({
             id: booking._id.toString(),
             source: booking.source,
@@ -37,7 +37,7 @@ export async function GET(req) {
             contact: booking.contact,
         }));
 
-        //  Step 4: Return success response
+        // Return success response
         return NextResponse.json({
             success: true,
             message: 'Bookings fetched successfully.',
@@ -47,7 +47,7 @@ export async function GET(req) {
     } catch (error) {
         console.error(' Error while fetching bookings:', error);
 
-        // Step 5: Handle any database or server error
+        // Handle any database or server error
         return NextResponse.json(
             {
                 success: false,

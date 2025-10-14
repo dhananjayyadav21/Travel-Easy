@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 
-// POST /api/auth/verify
 export async function POST(req) {
     try {
 
@@ -37,7 +35,7 @@ export async function POST(req) {
             );
         }
 
-        // Compare verification code (if hashed)
+        // Compare verification code 
         const isCodeValid = code === user.verificationCode
         if (!isCodeValid) {
             return NextResponse.json(

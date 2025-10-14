@@ -17,7 +17,7 @@ export async function POST(req) {
             vehicle,
         } = await req.json();
 
-        // ✅ 1. Basic field validation
+        // field validation
         if (!name || !email || !password) {
             return NextResponse.json(
                 { error: "Name, email, and password are required" },
@@ -25,7 +25,7 @@ export async function POST(req) {
             );
         }
 
-        // ✅ 2. Role-based validation
+        //  Role-based validation
         if (role === "provider" && (!travelName || !contact || !vehicle)) {
             return NextResponse.json(
                 { error: "Provider must include travelName, contact, and vehicle" },
@@ -33,10 +33,10 @@ export async function POST(req) {
             );
         }
 
-        // ✅ 3. Connect to DB
+        // Connect to DB
         await connectDB();
 
-        // ✅ 4. Check if user already exists
+        // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return NextResponse.json(
@@ -45,14 +45,14 @@ export async function POST(req) {
             );
         }
 
-        // ✅ 5. Hash password with salt
+        // Hash password with salt
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // ✅ 6. Generate a 6-digit numeric email verification code
+        //  Generate a 6-digit numeric email verification code
         const verificationCode = String(crypto.randomInt(0, 1000000)).padStart(6, '0');
 
-        // ✅ 7. Create user (provider-only fields set conditionally)
+        //  Create user 
         const newUser = new User({
             name,
             email,
@@ -67,7 +67,7 @@ export async function POST(req) {
 
         await newUser.save();
 
-        // send verification email (non-blocking)
+        // send verification email
         let result = null;
         try {
             result = await sendVerificationEmail(newUser.email, verificationCode, name);
@@ -76,18 +76,17 @@ export async function POST(req) {
             throw e;
         }
 
-        // ✅ 8. Return success response
+        // Return success response
         return NextResponse.json(
             {
                 message: "User registered successfully. Please verify your email.",
                 userId: newUser._id,
                 verificationCode,
-                result: result
             },
             { status: 201 }
         );
     } catch (error) {
-        console.error("❌ Register API error:", error);
+        console.error(" Register API error:", error);
         return NextResponse.json(
             { error: error },
             { status: 500 }
