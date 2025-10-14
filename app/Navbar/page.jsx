@@ -18,7 +18,7 @@ export default function Navbar() {
         <div className={`${w} ${h} ${rounded} bg-gray-200 animate-pulse`}></div>
     );
 
-    // ✅ Auth check + listen for login/logout events
+    // Auth check + listen for login/logout events
     useEffect(() => {
         const checkAuth = () => {
             const token = localStorage.getItem("token");
@@ -37,7 +37,7 @@ export default function Navbar() {
         };
     }, []);
 
-    // ✅ Close menus on route change
+    // Close menus on route change
     useEffect(() => {
         setMobileOpen(false);
         setProfileOpen(false);
@@ -47,7 +47,7 @@ export default function Navbar() {
         setIsAuthenticated(!!token);
     }, [pathname]);
 
-    // ✅ Close profile dropdown on outside click
+    // Close profile dropdown on outside click
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (profileRef.current && !profileRef.current.contains(e.target)) {
@@ -62,7 +62,7 @@ export default function Navbar() {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         setIsAuthenticated(false);
-        window.dispatchEvent(new Event("authChanged")); // notify navbar to update
+        window.dispatchEvent(new Event("authChanged"));
         router.push("/login");
     };
 
