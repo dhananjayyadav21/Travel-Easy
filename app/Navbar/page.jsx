@@ -102,7 +102,7 @@ export default function Navbar() {
                             {/* Logout button visible on large screens */}
                             <button
                                 onClick={handleLogout}
-                                className="hidden sm:flex items-center bg-gray-100 text-red-600 font-semibold px-4 py-1 rounded-md hover:bg-gray-200 transition"
+                                className="hidden sm:flex items-center bg-gray-100 text-red-600 font-semibold px-4 py-1 rounded-md hover:bg-gray-200 transition cursor-pointer"
                             >
                                 Logout  <LogOut size={16} className="ml-2" />
                             </button>
