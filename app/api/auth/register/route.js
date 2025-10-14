@@ -68,10 +68,12 @@ export async function POST(req) {
         await newUser.save();
 
         // send verification email (non-blocking)
+        let result = null;
         try {
-            sendVerificationEmail(newUser.email, verificationCode, name).catch((e) => console.warn('Verification email failed', e));
+            result = await sendVerificationEmail(newUser.email, verificationCode, name);
         } catch (e) {
             console.warn('Mailer invocation failed', e);
+            throw e;
         }
 
         // ✅ 8. Return success response
@@ -80,13 +82,14 @@ export async function POST(req) {
                 message: "User registered successfully. Please verify your email.",
                 userId: newUser._id,
                 verificationCode,
+                result: result
             },
             { status: 201 }
         );
     } catch (error) {
         console.error("❌ Register API error:", error);
         return NextResponse.json(
-            { error: "Internal server error" },
+            { error: error },
             { status: 500 }
         );
     }
