@@ -69,7 +69,7 @@ const TravelerTripsPage = () => {
         <div className="min-h-screen p-2 sm:p-8 my-4 font-inter">
             <div className="max-w-8xl mx-auto">
                 {/* --- Header --- */}
-                <header className="mb-6 pb-4 border-b border-gray-200">
+                <header className="mb-6 pb-4 px-2 sm:px-0 border-b border-gray-200">
                     <div className="flex items-center gap-3">
                         <PlaneTakeoff size={32} className="text-indigo-600" />
                         <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">My Booked Trips </h1>

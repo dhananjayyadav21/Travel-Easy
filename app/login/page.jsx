@@ -142,7 +142,7 @@ export default function Login() {
 
                 {/* Right: image */}
                 <div className="hidden md:block relative">
-                    <img src="/images/main.jpg" alt="Travel" className="w-full h-full object-cover" />
+                    <img src="/main.jpg" alt="Travel" className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/30" />
                     <div className="absolute inset-0 flex items-center justify-center p-6">
                         <div className="text-white max-w-xs">

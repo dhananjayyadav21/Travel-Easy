@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
-        <main className="pt-14 bg-gradient-to-r from-green-50 to-red-50">
+        <main className="min-h-screen pt-14 bg-gradient-to-r from-green-50 to-red-50">
           {children}
           <Toaster
             position="bottom-right"
