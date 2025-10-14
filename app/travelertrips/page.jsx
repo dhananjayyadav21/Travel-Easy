@@ -66,19 +66,19 @@ const TravelerTripsPage = () => {
     const tripsToDisplay = groupedTrips[activeTab] || [];
 
     return (
-        <div className="min-h-screen p-4 sm:p-8 my-4 font-inter">
+        <div className="min-h-screen p-2 sm:p-8 my-4 font-inter">
             <div className="max-w-8xl mx-auto">
                 {/* --- Header --- */}
                 <header className="mb-6 pb-4 border-b border-gray-200">
                     <div className="flex items-center gap-3">
                         <PlaneTakeoff size={32} className="text-indigo-600" />
-                        <h1 className="text-3xl font-extrabold text-gray-900">My Booked Trips </h1>
+                        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">My Booked Trips </h1>
                     </div>
-                    <p className="text-xl font-medium text-gray-700 mt-4">View Your Trips</p>
+                    <p className="text-md sm:text-xl font-medium text-gray-700 mt-4">View Your Trips</p>
                 </header>
 
                 {/* --- Tabs --- */}
-                <div className="flex bg-white border border-gray-200 rounded-lg overflow-hidden mb-6">
+                <div className="flex bg-white border border-gray-200 rounded-lg overflow-auto mb-6">
                     {Object.keys(TABS_CONFIG).map(status => (
                         <TabButton
                             key={status}

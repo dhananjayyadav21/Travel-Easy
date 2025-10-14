@@ -26,7 +26,7 @@ export default function TravelInfo() {
                 {/* Image  */}
                 <div className="md:w-1/2 flex justify-center">
                     <Image
-                        src="/images/main.jpg"
+                        src="/main.jpg"
                         alt="Travel App"
                         width={400}
                         height={300}

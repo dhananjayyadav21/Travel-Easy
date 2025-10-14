@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Travel Book App",
+  title: "Travel Easy",
   description: "Generated for afortable travel",
 };
 

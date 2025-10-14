@@ -67,7 +67,7 @@ export default function ProfilePage() {
 
     return (
         <ProtectedRoute>
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+            <div className="min-h-screen flex items-center justify-center p-4">
 
                 {/* Profile Card: White background, elevated shadow, light border */}
                 <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm border border-gray-200">

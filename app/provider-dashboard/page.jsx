@@ -139,10 +139,10 @@ export default function AddTrip() {
     return (
         <ProtectedRoute>
             {/* Modern Background: Light gray background */}
-            <div className="min-h-screen flex items-center justify-center p-4 sm:p-8 font-inter">
+            <div className="min-h-screen flex items-center justify-center sm:p-8 font-inter">
 
                 {/* Main Card: White background, light shadow, increased max width */}
-                <div className="bg-white w-full max-w-7xl p-6 sm:p-10 rounded-xl shadow-xl border border-gray-200 space-y-8">
+                <div className=" w-full max-w-7xl p-4 sm:p-10 rounded-xl shadow-xl border border-gray-200 space-y-8">
 
                     {/* Header and Reset Button */}
                     <div className="flex items-center justify-between border-b border-gray-300 pb-4">

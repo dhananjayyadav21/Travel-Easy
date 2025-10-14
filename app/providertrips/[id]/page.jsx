@@ -171,10 +171,10 @@ export default function TripDetailsPage() {
 
     return (
         <ProtectedRoute>
-            <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-12">
+            <div className="min-h-screen py-2 sm:py-12 sm:px-6 lg:px-12">
 
                 {/* max-w-6xl allows the content to spread out more horizontally */}
-                <div className="max-w-8xl mx-auto shadow-sm rounded-lg p-6 sm:p-8 border border-gray-200">
+                <div className="max-w-8xl mx-auto sm:shadow-sm rounded-lg p-4 sm:p-8 sm:border border-gray-200">
 
                     {/* Header Section */}
                     <header className="mb-8 pb-4 border-b flex justify-between items-start">

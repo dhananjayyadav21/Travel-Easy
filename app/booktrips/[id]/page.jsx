@@ -137,14 +137,14 @@ const BookTripPage = () => {
     };
 
     return (
-        <div className="min-h-screen p-4 sm:p-8 font-inter">
-            <div className="max-w-8xl mx-auto bg-white rounded-lg shadow-lg p-6 md:p-10 my-4 md:my-1 border border-indigo-100">
+        <div className="min-h-screen sm:p-8 font-inter">
+            <div className="max-w-8xl mx-auto sm:bg-white rounded-lg sm:shadow-lg p-6 md:p-10 my-4 md:my-1 sm:border border-indigo-100">
 
                 <div className="text-center mb-2 border-b pb-4">
-                    <h1 className="text-4xl font-extrabold text-indigo-700 flex items-center justify-center gap-3">
+                    <h1 className="text-2xl sm:text-4xl font-extrabold text-indigo-700 flex items-center justify-center gap-3">
                         <Car size={32} /> Book Your Ride
                     </h1>
-                    <p className="text-gray-600 mt-2 text-lg">
+                    <p className="text-gray-600 mt-2 text-sm sm:text-lg">
                         Fill in your trip details and select your preferred seats.
                     </p>
                 </div>
@@ -219,7 +219,7 @@ const BookTripPage = () => {
 
                             {/* Seat Selection */}
                             <div className="space-y-6">
-                                <h2 className="text-2xl font-bold text-gray-800 border-l-4 border-indigo-500 pl-3 flex items-center gap-2">
+                                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 border-l-4 border-indigo-500 pl-3 flex items-center gap-2">
                                     <Users size={20} className="text-indigo-500" /> Select Seats Available
                                 </h2>
 
@@ -249,20 +249,20 @@ const BookTripPage = () => {
                         {/* RIGHT COLUMN */}
                         <div className="lg:col-span-1">
                             <div className="bg-indigo-50 p-6 rounded-lg shadow-md border border-indigo-200 space-y-4 lg:sticky lg:top-8 mt-8">
-                                <h2 className="text-2xl font-bold text-indigo-800 flex items-center gap-2">
+                                <h2 className="text-xl sm:text-2xl font-bold text-indigo-800 flex items-center gap-2">
                                     <IndianRupee size={24} /> Total Cost Summary
                                 </h2>
-                                <div className="flex justify-between text-lg font-medium text-gray-700 border-b border-indigo-200 pb-2">
+                                <div className="flex justify-between text-sm sm:text-lg font-medium text-gray-700 border-b border-indigo-200 pb-2">
                                     <span>Rate / Seat / KM:</span>
                                     <span className="font-bold text-indigo-700">₹{PRICE_PER_KM}</span>
                                 </div>
-                                <div className="flex justify-between text-lg font-medium text-gray-700">
+                                <div className="flex justify-between text-sm sm:text-lg font-medium text-gray-700">
                                     <span>Trip Calculation:</span>
                                     <span className="font-bold">({kilometers} km × {PRICE_PER_KM}) × {seatCount} seats</span>
                                 </div>
                                 <div className="flex justify-between items-center pt-3 border-t-2 border-indigo-400">
-                                    <span className="text-xl font-bold text-gray-900">Final Price:</span>
-                                    <span className="text-4xl font-extrabold text-indigo-600">₹{totalPrice.toLocaleString('en-IN')}</span>
+                                    <span className="text-lg sm:text-xl font-bold text-gray-900">Final Price:</span>
+                                    <span className="text-3xl sm:text-4xl font-extrabold text-indigo-600">₹{totalPrice.toLocaleString('en-IN')}</span>
                                 </div>
                                 <button
                                     type="submit"
