@@ -146,7 +146,7 @@ export default function AddTrip() {
 
                     {/* Header and Reset Button */}
                     <div className="flex items-center justify-between border-b border-gray-300 pb-4">
-                        <h2 className="text-3xl font-extrabold text-gray-900 flex items-center gap-3">
+                        <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 flex items-center gap-3">
                             <Car size={32} className="text-indigo-600" />
                             Offer a New Ride
                         </h2>

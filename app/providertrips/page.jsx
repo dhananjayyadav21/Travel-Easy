@@ -116,8 +116,8 @@ export default function ProviderTrips() {
 
                     {/* Header Section */}
                     <header className="mb-8">
-                        <h1 className="text-4xl font-extrabold text-gray-900 mb-2">My Offered Rides</h1>
-                        <p className="text-gray-500 text-lg">Manage all trips you've published for ride-sharing.</p>
+                        <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 mb-2">My Offered Rides</h1>
+                        <p className="text-gray-500 text-md sm:text-lg">Manage all trips you've published for ride-sharing.</p>
                     </header>
 
                     {/* Status Tabs/Filters */}
