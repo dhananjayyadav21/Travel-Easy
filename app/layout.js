@@ -15,40 +15,29 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "Travel Easy",
-  description: "Generated for afortable travel",
+  description: "Generated for affordable travel",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-r from-green-50 to-red-50`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-[100dvh] bg-gradient-to-r from-green-50 to-red-50 overflow-x-hidden`}
       >
         <Navbar />
-        <main className="min-h-screen pt-14 bg-gradient-to-r from-green-50 to-red-50">
+
+        <main className="flex-1 pt-14">
           {children}
-          <Toaster
-            position="bottom-right"
-            toastOptions={{
-              style: {
-                background: "#000000",
-                color: "#fff",
-              },
-              success: {
-                iconTheme: {
-                  primary: "#4ade80",
-                  secondary: "#fff",
-                },
-              },
-              error: {
-                iconTheme: {
-                  primary: "#ef4444",
-                  secondary: "#fff",
-                },
-              },
-            }}
-          />
         </main>
+
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            style: { background: "#000000", color: "#fff" },
+            success: { iconTheme: { primary: "#4ade80", secondary: "#fff" } },
+            error: { iconTheme: { primary: "#ef4444", secondary: "#fff" } },
+          }}
+        />
       </body>
     </html>
   );
