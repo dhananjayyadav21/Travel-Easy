@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
         <Navbar />
         <main className="min-h-screen pt-14 bg-gradient-to-r from-green-50 to-red-50">
           {children}
-          <Toaster
+          {/* <Toaster
             position="bottom-right"
             toastOptions={{
               style: {
@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
                 },
               },
             }}
-          />
+          /> */}
         </main>
       </body>
     </html>
