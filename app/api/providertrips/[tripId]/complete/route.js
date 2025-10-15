@@ -45,9 +45,9 @@ export async function PUT(req, { params }) {
         trip.status = "Completed";
         await trip.save();
 
-        // Update all related Bookings
+        // Update only bookings that are Active
         await Booking.updateMany(
-            { trip: tripId },
+            { trip: tripId, status: "Active" },
             { $set: { status: "Completed" } }
         );
 
