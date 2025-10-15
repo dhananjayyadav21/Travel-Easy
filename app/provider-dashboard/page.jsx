@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import ProtectedRoute from "@/utils/ProtectedRoute";
+import toast from "react-hot-toast";
 
 import {
     Car,
@@ -71,6 +72,7 @@ export default function AddTrip() {
             contact: "", vehicle: "", vehicleType: "", panCard: "",
         });
         setMessage({ type: "info", text: "Form fields have been successfully reset." });
+        toast.success("Form fields have been successfully reset.");
 
         // Clear the info message after a few seconds
         setTimeout(() => setMessage(null), 3000);
@@ -88,6 +90,7 @@ export default function AddTrip() {
 
                 // error message
                 setMessage({ type: "error", text: `${key.charAt(0).toUpperCase() + key.slice(1)} is required.` });
+                toast.error(`${key.charAt(0).toUpperCase() + key.slice(1)} is required.`);
                 setLoading(false);
                 return;
             }
@@ -109,7 +112,9 @@ export default function AddTrip() {
                 throw new Error(data.message || "Failed to add trip.");
             }
 
-            setMessage({ type: "success", text: "Trip successfully published. The form has been reset for a new entry." }); // 
+            setMessage({ type: "success", text: "Trip successfully published. The form has been reset for a new entry." });
+            toast.success("Trip successfully published. The form has been reset for a new entry.");
+
 
             // Clear form fields after successful submission
             setTrip({
@@ -127,10 +132,10 @@ export default function AddTrip() {
                 panCard: "",
             });
 
-            // Redirect logic is removed
-
         } catch (err) {
             setMessage({ type: "error", text: err.message });
+            toast.error(err.message);
+
         } finally {
             setLoading(false);
         }

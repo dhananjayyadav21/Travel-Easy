@@ -15,7 +15,7 @@ const bookingSchema = new mongoose.Schema(
         numberOfSeats: { type: Number, required: true },
 
         kilometers: { type: Number, required: true },
-        ratePerKm: { type: Number, required: true, default: 26 },
+        ratePerKm: { type: Number, required: true, default: 8 },
         totalPrice: { type: Number, required: true },
         date: { type: String, required: true },
 
@@ -29,6 +29,9 @@ const bookingSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true,
+        },
+        cancelledBy: {
+            type: String,
         },
     },
     { timestamps: true }

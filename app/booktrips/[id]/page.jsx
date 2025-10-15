@@ -1,7 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-
-// Import AlertTriangle
 import { MapPin, Calendar, Users, Phone, Ruler, IndianRupee, Waypoints, CheckCircle, Car, X, AlertTriangle } from 'lucide-react';
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";

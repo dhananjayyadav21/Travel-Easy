@@ -80,6 +80,12 @@ const TripCard = ({ trip, onCancelTrip }) => {
                             View Receipt
                         </button>
                     )}
+
+                    {trip.status === "Cancelled" && (
+                        <button className="w-full py-2.5 text-sm font-medium rounded-xl text-gray-700 border border-gray-300 hover:bg-gray-50 transition-all shadow-sm">
+                            <DetailRow icon={<Users size={15} />} label="Contact" value={trip.cancelledBy} />
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

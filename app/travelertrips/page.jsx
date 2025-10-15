@@ -25,7 +25,8 @@ const TravelerTripsPage = () => {
             if (data.success) setAllTrips(data.data);
             else throw new Error(data.error || "Failed to fetch trips");
         } catch (err) {
-            setError(err.message);
+            setError("Connection Problem");
+            throw (err.message)
         } finally {
             setIsLoading(false);
         }
