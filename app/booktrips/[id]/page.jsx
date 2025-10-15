@@ -6,8 +6,7 @@ import { MapPin, Calendar, Users, Phone, Ruler, IndianRupee, Waypoints, CheckCir
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-const PRICE_PER_KM = 26;
-
+const PRICE_PER_KM = process.env.NEXT_PUBLIC_PRICE_PER_KM_SINGLESEAT;
 const BookTripPage = () => {
     const router = useRouter();
 

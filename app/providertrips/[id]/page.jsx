@@ -80,7 +80,10 @@ const useTripData = (id) => {
             const foundTrip = tripsArray.find((t) => String(t._id) === String(tripId));
 
             if (foundTrip) {
-                const pricePerKm = 26;
+
+
+                const pricePerKm = process.env.NEXT_PUBLIC_PRICE_PER_KM_SINGLESEAT;
+
                 setTrip({
                     ...foundTrip,
                     computedPrice: foundTrip.kilometer * pricePerKm,
@@ -273,7 +276,7 @@ export default function TripDetailsPage() {
                                     <DetailItem
                                         icon={IndianRupee}
                                         label="Price Rate"
-                                        value={`${formatCurrency(pricePerKm)} / km`}
+                                        value={`${pricePerKm} / km`}
                                         colorClass="text-gray-600"
                                     />
                                 </div>

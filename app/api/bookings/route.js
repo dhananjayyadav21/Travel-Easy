@@ -24,7 +24,7 @@ export async function GET(req) {
         }
 
         // Retrieve all bookings, sorted by newest first
-        const bookings = await Booking.find({}).sort({ createdAt: -1 });
+        const bookings = await Booking.find({ bookedBy: userId }).sort({ createdAt: -1 });
 
         // Format bookings for frontend readability
         const formattedBookings = bookings.map((booking) => ({

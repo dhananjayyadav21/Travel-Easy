@@ -9,7 +9,6 @@ export default function ProtectedRoute({ children }) {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        console.log(token)
         if (!token) {
             toast.error(" Please login");
             router.push("/login");

@@ -48,7 +48,8 @@ export default function TripCard({ trip }) {
     const { text: statusText, classes: statusClasses } = getStatusBadge(trip.status);
 
     const isPriceAvailable = trip.kilometer && !isNaN(trip.kilometer);
-    const estimatedPrice = isPriceAvailable ? trip.kilometer * 26 : null;
+    const pricePerKm = process.env.NEXT_PUBLIC_PRICE_PER_KM_SINGLESEAT;
+    const estimatedPrice = isPriceAvailable ? trip.kilometer * pricePerKm : null;
     const detailsLink = `/providertrips/${trip._id}`;
 
     return (
