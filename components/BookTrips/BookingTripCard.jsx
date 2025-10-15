@@ -1,18 +1,27 @@
 "use client";
 import React, { useState } from "react";
-import { Calendar, IndianRupee, Users, ChevronRight, Loader2, MapPin } from "lucide-react";
+import {
+    Calendar,
+    IndianRupee,
+    Users,
+    ChevronRight,
+    Loader2,
+    MapPin,
+    ReceiptText,
+} from "lucide-react";
 import { TABS_CONFIG } from "./TabsConfig";
 
 const TripCard = ({ trip, onCancelTrip }) => {
     const config = TABS_CONFIG[trip.status];
     const [isCancelling, setIsCancelling] = useState(false);
+    const [showReceipt, setShowReceipt] = useState(false);
 
     const handleCancel = async () => {
         setIsCancelling(true);
         try {
             await onCancelTrip(trip.id);
         } catch (error) {
-            console.error(" Cancellation failed:", error);
+            console.error("Cancellation failed:", error);
         } finally {
             setIsCancelling(false);
         }
@@ -23,7 +32,9 @@ const TripCard = ({ trip, onCancelTrip }) => {
             className={`relative bg-white rounded-2xl shadow-md hover:shadow-lg hover:scale-[1.01] transition-all duration-300 overflow-hidden group`}
         >
             {/* Left border gradient indicator */}
-            <div className={`absolute left-0 top-0 h-full w-1 ${config.border} rounded-l-2xl`} />
+            <div
+                className={`absolute left-0 top-0 h-full w-1 ${config.border} rounded-l-2xl`}
+            />
 
             <div className="p-5 flex flex-col h-full">
                 {/* --- Header --- */}
@@ -36,9 +47,12 @@ const TripCard = ({ trip, onCancelTrip }) => {
                     </h3>
 
                     <div
-                        className={`flex items-center font-semibold px-3 py-1 rounded-full text-xs ${config.color} ${config.pillBg} shadow-sm`}
+                        className={`hidden sm:flex items-center font-semibold px-3 py-1 rounded-full text-xs ${config.color} ${config.pillBg} shadow-sm`}
                     >
-                        {React.createElement(config.icon, { size: 14, className: "mr-1" })}
+                        {React.createElement(config.icon, {
+                            size: 14,
+                            className: "mr-1",
+                        })}
                         {trip.status}
                     </div>
                 </div>
@@ -55,7 +69,12 @@ const TripCard = ({ trip, onCancelTrip }) => {
                     />
                     <DetailRow icon={<Users size={15} />} label="Contact" value={trip.contact} />
                     {trip.status === "Cancelled" && (
-                        <DetailRow icon={<Users size={15} />} label="Cancelled By" value={trip.cancelledBy} />)}
+                        <DetailRow
+                            icon={<Users size={15} />}
+                            label="Cancelled By"
+                            value={trip.cancelledBy}
+                        />
+                    )}
                 </div>
 
                 {/* --- Footer Buttons --- */}
@@ -64,7 +83,7 @@ const TripCard = ({ trip, onCancelTrip }) => {
                         <button
                             onClick={handleCancel}
                             disabled={isCancelling}
-                            className={`cursor-pointer w-full py-2.5 text-sm font-medium rounded-xl text-white bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 transition-all shadow-md flex items-center justify-center`}
+                            className="cursor-pointer w-full py-2.5 text-sm font-medium rounded-xl text-white bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 transition-all shadow-md flex items-center justify-center"
                         >
                             {isCancelling ? (
                                 <>
@@ -78,11 +97,40 @@ const TripCard = ({ trip, onCancelTrip }) => {
                     )}
 
                     {trip.status === "Completed" && (
-                        <button className="w-full py-2.5 text-sm font-medium rounded-xl text-gray-700 border border-gray-300 hover:bg-gray-50 transition-all shadow-sm">
-                            View Receipt
+                        <button
+                            onClick={() => setShowReceipt(!showReceipt)}
+                            className="w-full py-2.5 text-sm font-medium rounded-xl text-gray-700 border border-gray-300 hover:bg-gray-50 transition-all shadow-sm flex items-center justify-center gap-2"
+                        >
+                            <ReceiptText size={16} />
+                            {showReceipt ? "Hide Receipt" : "View Receipt"}
                         </button>
                     )}
                 </div>
+
+                {/* --- Inline Receipt (expands inside card) --- */}
+                {trip.status === "Completed" && showReceipt && (
+                    <div className="mt-5 border-t pt-4 bg-gray-50 rounded-xl p-4 animate-fadeIn">
+                        <h4 className="text-lg font-semibold text-indigo-700 mb-2 text-center">
+                            Trip Receipt
+                        </h4>
+                        <div className="space-y-2 text-sm text-gray-700">
+                            <DetailRow label="From" value={trip.source} />
+                            <DetailRow label="To" value={trip.destination} />
+                            <DetailRow label="Date" value={trip.date} />
+                            <DetailRow label="Contact" value={trip.contact} />
+                            <DetailRow
+                                label="Total Fare"
+                                value={`₹${trip.price.toLocaleString("en-IN")}`}
+                                strong
+                                highlight
+                            />
+                            <DetailRow label="Trip ID" value={trip.id} />
+                        </div>
+                        <p className="text-xs text-center text-gray-500 mt-3">
+                            Generated on {new Date().toLocaleString()}
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     );
