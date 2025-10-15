@@ -54,6 +54,8 @@ const TripCard = ({ trip, onCancelTrip }) => {
                         highlight
                     />
                     <DetailRow icon={<Users size={15} />} label="Contact" value={trip.contact} />
+                    {trip.status === "Cancelled" && (
+                        <DetailRow icon={<Users size={15} />} label="Cancelled By" value={trip.cancelledBy} />)}
                 </div>
 
                 {/* --- Footer Buttons --- */}
@@ -78,12 +80,6 @@ const TripCard = ({ trip, onCancelTrip }) => {
                     {trip.status === "Completed" && (
                         <button className="w-full py-2.5 text-sm font-medium rounded-xl text-gray-700 border border-gray-300 hover:bg-gray-50 transition-all shadow-sm">
                             View Receipt
-                        </button>
-                    )}
-
-                    {trip.status === "Cancelled" && (
-                        <button className="w-full py-2.5 text-sm font-medium rounded-xl text-gray-700 border border-gray-300 hover:bg-gray-50 transition-all shadow-sm">
-                            <DetailRow icon={<Users size={15} />} label="Contact" value={trip.cancelledBy} />
                         </button>
                     )}
                 </div>

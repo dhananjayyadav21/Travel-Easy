@@ -27,7 +27,7 @@ export async function PUT(req, { params }) {
             return NextResponse.json({ message: "Only providers can complete trips." }, { status: 403 });
         }
 
-        const { tripId } = params;
+        const { tripId } = await params;
 
         const trip = await Trip.findOne({ _id: tripId, creator: userId });
         if (!trip) {

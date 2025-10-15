@@ -35,6 +35,7 @@ export async function GET(req) {
             price: booking.totalPrice,
             status: booking.status,
             contact: booking.contact,
+            cancelledBy: booking.cancelledBy,
         }));
 
         // Return success response

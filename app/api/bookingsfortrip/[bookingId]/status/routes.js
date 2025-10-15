@@ -7,7 +7,7 @@ import Trip from "@/models/Trip";
 import User from "@/models/User";
 
 export async function PUT(req, { params }) {
-    const { bookingId } = params;
+    const { bookingId } = await params;
     const { status } = await req.json();
 
     if (!bookingId || !status) {

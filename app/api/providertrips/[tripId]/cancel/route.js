@@ -27,7 +27,7 @@ export async function PUT(req, { params }) {
             return NextResponse.json({ message: "Only providers can cancel trips." }, { status: 403 });
         }
 
-        const { tripId } = params;
+        const { tripId } = await params;
 
         const trip = await Trip.findOne({ _id: tripId, creator: userId });
         if (!trip) {
@@ -47,7 +47,7 @@ export async function PUT(req, { params }) {
 
         // Update all related Bookings
         await Booking.updateMany(
-            { trip: tripId },
+            { trip: tripId, cancelledBy: "Provider" },
             { $set: { status: "Cancelled" } }
         );
 

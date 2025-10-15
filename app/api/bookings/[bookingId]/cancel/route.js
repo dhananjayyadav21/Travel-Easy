@@ -7,7 +7,7 @@ import User from "@/models/User";
 
 export async function PUT(req, { params }) {
 
-    const { bookingId } = params;
+    const { bookingId } = await params;
 
     if (!bookingId) {
         return NextResponse.json({ success: false, message: "Booking ID is required in params." }, { status: 400 });
@@ -46,6 +46,7 @@ export async function PUT(req, { params }) {
 
         // Update booking status
         booking.status = "Cancelled";
+        booking.cancelledBy = "Me"
         await booking.save();
 
         // Update Trip's booked seats
