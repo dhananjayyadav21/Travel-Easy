@@ -47,8 +47,13 @@ export async function PUT(req, { params }) {
 
         // Update all related Bookings
         await Booking.updateMany(
-            { trip: tripId, cancelledBy: "Provider" },
-            { $set: { status: "Cancelled" } }
+            { trip: tripId },
+            {
+                $set: {
+                    status: "Cancelled",
+                    cancelledBy: "Provider"
+                }
+            }
         );
 
         return NextResponse.json({
