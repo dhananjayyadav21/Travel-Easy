@@ -1,14 +1,20 @@
-# TravelEasy
+# TravelEasyHai – Seat Sharing Platform ( Next.js )
 
-**TravelEasy** is a modern web application for searching, booking, and managing trips. It provides user authentication, trip creation and management, bookings, payments, and role-based access for Admins, Creators (drivers/operators), and Customers.
+## 📌 Project Overview
+
+TravelEasyHai is a **Next.js-based seat-sharing web application** focused on helping users share available seats for a trip. Instead of booking a full vehicle, passengers can **join only the seats that are free**, making travel more affordable and efficient.
+
+This platform connects travelers going on the same route and makes transportation more convenient through **community-based seat sharing**.
 
 ---
 
-## Demo
+### Demo
 
 🌐 Live Demo: https://traveleasyhai.vercel.app
 
-## Features
+---
+
+### 👤 User Features
 
 - User registration & JWT authentication.
 - Role-based access (Provider, Traveler).
@@ -17,13 +23,24 @@
 - Search trips by route.
 - Server-side validation and error handling.
 
-## Tech Stack
+### 👨‍✈️ Ride Owner Features
+
+* Create a ride
+* Edit ride details
+* Update available seats
+* Close or delete ride
+
+---
+
+## 🛠️ Tech Stack
 
 - **Frontend:** Next.js (App Router), React, Tailwind CSS
 - **Backend:** Next.js API routes / Node.js
 - **Database:** MongoDB with Mongoose
 - **Authentication:** JWT
 - **Other:** Vercel (deploy), Postman (API testing)
+
+---
 
 ## Prerequisites
 
@@ -51,9 +68,23 @@ Open `http://localhost:3000`
 - `lint` — run ESLint
 - `test` — run test suite (if configured)
 
+---
+
+## 🚀 Future Enhancements
+
+* Live chat between ride owner & passengers
+* Women-only rides
+* SOS safety button
+* Live location tracking (Google Maps API)
+* Route recommendations
+
+---
+
 ## License
 
-MIT © Dhananjay Yadav
+**👨‍💻 Developer:**Dhananjay Yadav
+  
+This project is developed for portfolio and learning.
 
 ## Contact
 
