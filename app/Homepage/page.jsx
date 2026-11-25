@@ -22,7 +22,7 @@ export default function Homepage() {
 
     return (
         <div className="flex flex-col bg-[#EDE9FE]" style={{ minHeight: 'calc(100vh - 56px)' }}>
-            <div className="flex-1 flex flex-col max-w-2xl mx-auto w-full px-4 pt-5 pb-24">
+            <div className="flex-1 flex flex-col w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pt-5 pb-24">
 
                 {/* ── TOP BAR ── */}
                 <div className="flex items-center justify-between mb-4">

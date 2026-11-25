@@ -107,7 +107,7 @@ function VerifyEmailForm() {
 
     return (
         <div className="min-h-[calc(100vh-56px)] bg-white flex items-center justify-center px-4">
-            <div className="w-full max-w-sm border border-gray-100 rounded-2xl p-8 text-center">
+            <div className="w-full max-w-sm md:max-w-md lg:max-w-lg border border-gray-100 rounded-2xl p-8 text-center">
 
                 {/* Icon */}
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-sky-50 rounded-xl mb-5">

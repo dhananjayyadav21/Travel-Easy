@@ -116,7 +116,7 @@ export default function AdminReports() {
 
                 {/* ── HEADER ── */}
                 <div className="bg-white border-b border-gray-100 sticky top-14 z-20">
-                    <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+                    <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 h-14 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={() => router.back()}
@@ -133,7 +133,7 @@ export default function AdminReports() {
                     </div>
                 </div>
 
-                <div className="max-w-2xl mx-auto px-4 pt-4 pb-6 space-y-4">
+                <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pt-4 pb-6 space-y-4">
 
                     {/* ── PILL DATE SELECTOR ── */}
                     <div className="relative inline-block w-full max-w-[180px]">

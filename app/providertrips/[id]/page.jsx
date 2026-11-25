@@ -126,7 +126,7 @@ export default function TripDetailsPage() {
 
                 {/* ── WHITE STICKY HEADER ── */}
                 <div className="bg-white sticky top-14 z-30 border-b border-gray-100 shadow-sm">
-                    <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+                    <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 h-14 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={() => router.back()}
@@ -143,7 +143,7 @@ export default function TripDetailsPage() {
                     </div>
                 </div>
 
-                <div className="max-w-2xl mx-auto px-4 pt-4 pb-10 space-y-3">
+                <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pt-4 pb-10 space-y-3">
 
                 {/* ── ROUTE CARD ── */}
                 <div className="bg-white rounded-2xl shadow-sm p-4">

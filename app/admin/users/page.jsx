@@ -116,7 +116,7 @@ export default function AdminUsers() {
 
                 {/* ── HEADER ── */}
                 <div className="bg-white border-b border-gray-100 sticky top-14 z-20">
-                    <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+                    <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 h-14 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={() => router.back()}
@@ -141,7 +141,7 @@ export default function AdminUsers() {
                     </div>
 
                     {/* ── UNDERLINE TABS ── */}
-                    <div className="max-w-2xl mx-auto px-4 flex">
+                    <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 flex">
                         {TABS.map(tab => (
                             <button
                                 key={tab}
@@ -158,7 +158,7 @@ export default function AdminUsers() {
                     </div>
                 </div>
 
-                <div className="max-w-2xl mx-auto px-4 pt-4 space-y-3">
+                <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pt-4 space-y-3">
 
                     {/* Search */}
                     <div className="relative">

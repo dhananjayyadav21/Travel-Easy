@@ -90,7 +90,7 @@ export default function Register() {
             ))}
 
             {/* Header */}
-            <div className="relative z-10 w-full flex items-center justify-between max-w-sm mb-6">
+            <div className="relative z-10 w-full flex items-center justify-between max-w-sm md:max-w-md lg:max-w-lg mb-6">
                 <button
                     onClick={() => router.push("/")}
                     className="w-9 h-9 rounded-xl bg-white/15 border border-white/25 flex items-center justify-center hover:bg-white/25 transition"
@@ -104,7 +104,7 @@ export default function Register() {
             </div>
 
             {/* Form card */}
-            <div className="relative z-10 w-full max-w-sm">
+            <div className="relative z-10 w-full max-w-sm md:max-w-md lg:max-w-lg">
                 <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-2xl">
 
                     <h1 className="text-2xl font-extrabold text-white mb-1">Join TravelEasyHai</h1>

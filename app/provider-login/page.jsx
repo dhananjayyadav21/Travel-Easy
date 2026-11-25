@@ -216,7 +216,7 @@ export default function DriverLogin() {
             ))}
 
             {/* Header */}
-            <div className="relative z-10 w-full flex items-center justify-between max-w-sm">
+            <div className="relative z-10 w-full flex items-center justify-between max-w-sm md:max-w-md lg:max-w-lg">
                 <button
                     onClick={handleBack}
                     className="w-9 h-9 rounded-xl bg-white/15 border border-white/25 flex items-center justify-center hover:bg-white/25 transition"
@@ -235,7 +235,7 @@ export default function DriverLogin() {
             </div>
 
             {/* Form card */}
-            <div className="relative z-10 w-full max-w-sm">
+            <div className="relative z-10 w-full max-w-sm md:max-w-md lg:max-w-lg">
 
                 {/* ══ OTP: STEP 1 ══ */}
                 {mode === "otp" && step === 1 && (

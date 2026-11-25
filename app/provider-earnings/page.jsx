@@ -96,7 +96,7 @@ export default function ProviderEarningsPage() {
 
                 {/* Header */}
                 <div className="bg-white border-b border-violet-100 sticky top-14 z-20">
-                    <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+                    <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 h-14 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={() => router.back()}
@@ -112,7 +112,7 @@ export default function ProviderEarningsPage() {
                     </div>
                 </div>
 
-                <div className="max-w-2xl mx-auto px-4 pt-5 pb-28 space-y-4">
+                <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pt-5 pb-28 space-y-4">
 
                     {/* Tab switcher */}
                     <div className="bg-white rounded-2xl border border-violet-100 shadow-sm p-1.5 flex gap-1">

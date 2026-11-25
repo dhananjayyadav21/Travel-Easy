@@ -188,7 +188,7 @@ export default function Onboarding() {
                 )}
 
                 {/* Illustration */}
-                <div className="w-full max-w-sm mx-auto px-6 pb-0">
+                <div className="w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto px-6 pb-0">
                     <Illustration />
                 </div>
 
@@ -229,7 +229,7 @@ export default function Onboarding() {
                 {/* Next button */}
                 <button
                     onClick={handleNext}
-                    className="w-full max-w-xs mx-auto h-10 bg-[#7C3AED] hover:bg-[#6D28D9] active:scale-[0.98] text-white font-extrabold rounded-lg text-base transition-all shadow-lg shadow-violet-200"
+                    className="w-full max-w-xs md:max-w-sm lg:max-w-md mx-auto h-10 bg-[#7C3AED] hover:bg-[#6D28D9] active:scale-[0.98] text-white font-extrabold rounded-lg text-base transition-all shadow-lg shadow-violet-200"
                 >
                     {slide < SLIDES.length - 1 ? "Next" : "Get Started"}
                 </button>

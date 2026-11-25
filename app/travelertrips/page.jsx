@@ -78,7 +78,7 @@ const TravelerTripsPage = () => {
 
                 {/* ── Header ── */}
                 <div className="bg-white sticky top-14 z-20" style={{ borderBottom: '1px solid #f3f4f6' }}>
-                    <div className="max-w-2xl mx-auto px-4">
+                    <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4">
 
                         {/* Title row */}
                         <div className="flex items-center gap-3 py-4">
@@ -118,7 +118,7 @@ const TravelerTripsPage = () => {
                 </div>
 
                 {/* ── Content ── */}
-                <div className="max-w-2xl mx-auto px-4 py-4 space-y-3 pb-24">
+                <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 py-4 space-y-3 pb-24">
 
                     {isLoading && [1, 2, 3].map(i => <SkeletonCard key={i} />)}
 

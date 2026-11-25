@@ -161,7 +161,7 @@ export default function ProfilePage() {
                     <h1 className="text-lg font-extrabold text-gray-900">Profile</h1>
                 </div>
 
-                <div className="max-w-2xl mx-auto px-4 pb-28">
+                <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pb-28">
 
                     {/* Avatar + name + phone */}
                     <div className="flex flex-col items-center text-center pt-4 pb-6">

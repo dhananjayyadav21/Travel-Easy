@@ -48,7 +48,7 @@ export default function AdminProfile() {
 
                 {/* ── HEADER ── */}
                 <div className="bg-white border-b border-gray-100 shadow-sm sticky top-14 z-20">
-                    <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+                    <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 h-14 flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
                             <div className="w-8 h-8 rounded-xl bg-[#7C3AED] flex items-center justify-center">
                                 <Shield size={16} className="text-white" />
@@ -64,7 +64,7 @@ export default function AdminProfile() {
                     </div>
                 </div>
 
-                <div className="max-w-2xl mx-auto px-4 pt-5 space-y-4">
+                <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pt-5 space-y-4">
 
                     {/* ── PROFILE CARD ── */}
                     <div className="bg-white rounded-3xl shadow-sm p-6 flex flex-col items-center text-center">

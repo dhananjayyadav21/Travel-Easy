@@ -214,7 +214,7 @@ function AvailableRidesContent() {
 
                 {/* ── HEADER ── */}
                 <div className="w-full bg-white border-b border-gray-100 sticky top-14 z-20 shadow-sm overflow-hidden">
-                    <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
+                    <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 py-3 flex items-center gap-3">
                         <button
                             onClick={() => router.push("/traveler-dashboard")}
                             className="w-9 h-9 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center hover:bg-violet-50 hover:border-violet-200 transition flex-shrink-0"
@@ -230,7 +230,7 @@ function AvailableRidesContent() {
                     </div>
 
                     {/* Inline search bar */}
-                    <div className="max-w-2xl mx-auto px-4 pb-3 flex gap-2 w-full">
+                    <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pb-3 flex gap-2 w-full">
                         <div className="flex-1 min-w-0 flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 h-10 focus-within:border-[#7C3AED] focus-within:ring-2 focus-within:ring-violet-100 transition-all">
                             <div className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
                             <input
@@ -270,7 +270,7 @@ function AvailableRidesContent() {
                     </div>
 
                     {/* Sort bar */}
-                    <div className="max-w-2xl mx-auto px-4 pb-3 flex items-center justify-between">
+                    <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pb-3 flex items-center justify-between">
                         <div className="relative">
                             <button
                                 onClick={() => setShowSort(v => !v)}
@@ -300,7 +300,7 @@ function AvailableRidesContent() {
                 </div>
 
                 {/* ── RIDE LIST ── */}
-                <div className="max-w-2xl mx-auto w-full px-4 pt-4 pb-24 flex flex-col gap-3">
+                <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pt-4 pb-24 flex flex-col gap-3">
                     {loading ? (
                         /* skeleton */
                         Array.from({ length: 4 }).map((_, i) => (

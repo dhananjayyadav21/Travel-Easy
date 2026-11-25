@@ -95,7 +95,7 @@ export default function ProviderTrips() {
 
                 {/* ── Header ── */}
                 <div className="bg-white sticky top-14 z-30 border-b border-gray-100 shadow-sm">
-                    <div className="max-w-2xl mx-auto px-4">
+                    <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4">
 
                         {/* Title row */}
                         <div className="flex items-center justify-between py-3.5">
@@ -152,7 +152,7 @@ export default function ProviderTrips() {
                 </div>
 
                 {/* ── Content ── */}
-                <div className="max-w-2xl mx-auto px-4 py-4 space-y-3 pb-24">
+                <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 py-4 space-y-3 pb-24">
 
                     {isLoading && (
                         <div className="space-y-3">
