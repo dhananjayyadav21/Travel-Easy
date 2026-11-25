@@ -71,7 +71,7 @@ export default function Navbar() {
         : isProvider
         ? [
             { href: "/provider-dashboard",  label: "Dashboard", icon: Home },
-            { href: "/providertrips",        label: "My Trips",  icon: List },
+            { href: "/providertrips",        label: "My Rides",  icon: List },
             { href: "/provider-earnings",    label: "Earnings",  icon: TrendingUp },
         ]
         : [
@@ -131,7 +131,7 @@ export default function Navbar() {
                                     href="/login"
                                     className="hidden md:inline-flex items-center text-gray-600 hover:text-violet-700 px-3 py-1.5 text-sm font-medium transition-colors"
                                 >
-                                    Login
+                                    Sign In
                                 </Link>
                                 <Link
                                     href="/register"
@@ -192,7 +192,7 @@ export default function Navbar() {
                         {!loading && !isAuthenticated && (
                             <div className="flex flex-col gap-2 mb-4">
                                 <Link href="/login" onClick={() => setMobileOpen(false)} className="block w-full text-center text-gray-700 border border-gray-200 py-2.5 rounded-xl font-medium transition hover:bg-gray-50 text-sm">
-                                    Login
+                                    Sign In
                                 </Link>
                                 <Link href="/register" onClick={() => setMobileOpen(false)} className="block w-full text-center bg-[#7C3AED] hover:bg-[#6D28D9] text-white py-2.5 rounded-xl font-semibold transition text-sm shadow-sm shadow-violet-200">
                                     Get Started
@@ -230,7 +230,7 @@ export default function Navbar() {
                                 onClick={handleLogout}
                                 className="flex items-center gap-3 w-full px-3 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors"
                             >
-                                <LogOut size={16} /> Logout
+                                <LogOut size={16} /> Sign Out
                             </button>
                         </div>
                     )}

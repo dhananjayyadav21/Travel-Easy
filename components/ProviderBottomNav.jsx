@@ -5,7 +5,7 @@ import { Home, Car, TrendingUp, User, Bell } from "lucide-react";
 
 const NAV = [
     { label: "Home",     icon: Home,       href: "/provider-dashboard" },
-    { label: "Rides",    icon: Car,        href: "/providertrips" },
+    { label: "My Rides", icon: Car,        href: "/providertrips" },
     { label: "Requests", icon: Bell,       href: "/provider-booking-requests" },
     { label: "Earnings", icon: TrendingUp, href: "/provider-earnings" },
     { label: "Profile",  icon: User,       href: "/profile" },
@@ -14,15 +14,24 @@ const NAV = [
 export default function ProviderBottomNav() {
     const pathname = usePathname();
 
-    const isActive = (href) => {
-        if (href === "/provider-dashboard") return pathname === "/provider-dashboard" || pathname.startsWith("/provider-dashboard");
-        return pathname.startsWith(href);
-    };
+    // Last-match-wins: prevents dual highlight when paths overlap (e.g. /profile matching both Earnings and Profile)
+    const activeLabel = (() => {
+        for (let i = NAV.length - 1; i >= 0; i--) {
+            const { href, label } = NAV[i];
+            const match = href === "/provider-dashboard"
+                ? pathname === href || pathname.startsWith(href + "/")
+                : pathname.startsWith(href);
+            if (match) return label;
+        }
+        return null;
+    })();
+
+    const isActive = (label) => label === activeLabel;
 
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 h-[60px] flex items-center justify-around shadow-[0_-4px_20px_rgba(0,0,0,0.07)]">
             {NAV.map(({ label, icon: Icon, href }) => {
-                const active = isActive(href);
+                const active = isActive(label);
                 return (
                     <Link
                         key={label}

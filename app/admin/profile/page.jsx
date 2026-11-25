@@ -59,7 +59,7 @@ export default function AdminProfile() {
                             onClick={() => setShowLogout(true)}
                             className="flex items-center gap-1.5 px-3 h-8 rounded-xl bg-red-50 border border-red-100 text-red-500 text-xs font-bold hover:bg-red-100 transition"
                         >
-                            <LogOut size={13} /> Logout
+                            <LogOut size={13} /> Sign Out
                         </button>
                     </div>
                 </div>
@@ -141,7 +141,7 @@ export default function AdminProfile() {
                             <div className="w-14 h-14 rounded-2xl bg-red-50 flex items-center justify-center mb-3">
                                 <AlertTriangle size={26} className="text-red-500" />
                             </div>
-                            <h3 className="text-lg font-extrabold text-gray-900">Logout?</h3>
+                            <h3 className="text-lg font-extrabold text-gray-900">Sign Out?</h3>
                             <p className="text-sm text-gray-500 mt-1">You will be signed out of the Admin Panel.</p>
                         </div>
                         <div className="flex gap-3">
@@ -155,7 +155,7 @@ export default function AdminProfile() {
                                 onClick={handleLogout}
                                 className="flex-1 h-12 rounded-2xl bg-red-500 hover:bg-red-600 text-white text-sm font-bold transition shadow-lg shadow-red-100"
                             >
-                                Yes, Logout
+                                Yes, Sign Out
                             </button>
                         </div>
                     </div>

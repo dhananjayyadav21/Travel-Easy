@@ -183,7 +183,7 @@ function VerifyEmailForm() {
                 <p className="mt-3 text-xs text-gray-400">
                     Back to{" "}
                     <Link href="/login" className="text-sky-600 hover:underline font-medium">
-                        Login
+                        Sign In
                     </Link>
                 </p>
             </div>

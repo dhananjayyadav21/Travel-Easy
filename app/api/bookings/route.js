@@ -3,7 +3,6 @@ import { connectDB } from '@/lib/mongodb';
 import Booking from '@/models/Booking';
 import { verifyAuth } from "@/utils/verifyAuth";
 import User from "@/models/User";
-import { Contact } from 'lucide-react';
 
 export async function GET(req) {
 

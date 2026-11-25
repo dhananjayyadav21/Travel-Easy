@@ -1,27 +1,35 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Ticket, Wallet, User } from "lucide-react";
+import { Home, Search, Ticket, User } from "lucide-react";
 
 const NAV = [
     { label: "Home",     icon: Home,   href: "/traveler-dashboard" },
+    { label: "Rides",    icon: Search, href: "/available-rides" },
     { label: "Bookings", icon: Ticket, href: "/travelertrips" },
-    { label: "Wallet",   icon: Wallet, href: "/profile" },
     { label: "Profile",  icon: User,   href: "/profile" },
 ];
 
 export default function TravelerBottomNav() {
     const pathname = usePathname();
 
-    const isActive = (href) => {
-        if (href === "/traveler-dashboard") return pathname === "/traveler-dashboard";
-        return pathname.startsWith(href);
-    };
+    // Only the last matching nav item is considered active to avoid dual highlighting
+    const activeLabel = (() => {
+        for (let i = NAV.length - 1; i >= 0; i--) {
+            const { href, label } = NAV[i];
+            if (href === "/traveler-dashboard" ? pathname === href : pathname.startsWith(href)) {
+                return label;
+            }
+        }
+        return null;
+    })();
+
+    const isActive = (label) => label === activeLabel;
 
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 h-[60px] flex items-center justify-around shadow-[0_-4px_20px_rgba(0,0,0,0.07)]">
             {NAV.map(({ label, icon: Icon, href }) => {
-                const active = isActive(href);
+                const active = isActive(label);
                 return (
                     <Link
                         key={label}

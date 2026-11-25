@@ -3,15 +3,27 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
+function isTokenExpired(token) {
+    try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        return payload.exp * 1000 < Date.now();
+    } catch {
+        return true;
+    }
+}
+
 export default function ProtectedRoute({ children }) {
     const router = useRouter();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if (!token) {
-            toast.error(" Please login");
-            router.push("/login");
+        if (!token || isTokenExpired(token)) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            window.dispatchEvent(new Event("authChanged"));
+            toast.error("Please login");
+            router.replace("/login");
         } else {
             setIsAuthenticated(true);
         }

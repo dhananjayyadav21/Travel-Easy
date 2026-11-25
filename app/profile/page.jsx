@@ -110,10 +110,10 @@ export default function ProfilePage() {
                             <User size={24} className="text-[#7C3AED]" />
                         </div>
                         <h2 className="text-base font-bold text-gray-900 mb-1">Not signed in</h2>
-                        <p className="text-xs text-gray-500 mb-5">Please login to view your profile.</p>
+                        <p className="text-xs text-gray-500 mb-5">Please sign in to view your profile.</p>
                         <div className="flex gap-2 justify-center">
-                            <Link href="/login" className="px-4 py-2 bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-sm font-bold rounded-xl transition">Login</Link>
-                            <Link href="/register" className="px-4 py-2 border border-gray-200 text-gray-700 text-sm font-medium rounded-xl hover:border-violet-400 transition">Register</Link>
+                            <Link href="/login" className="px-4 py-2 bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-sm font-bold rounded-xl transition">Sign In</Link>
+                            <Link href="/register" className="px-4 py-2 border border-gray-200 text-gray-700 text-sm font-medium rounded-xl hover:border-violet-400 transition">Sign Up</Link>
                         </div>
                     </div>
                 </div>
@@ -141,7 +141,7 @@ export default function ProfilePage() {
 
     const providerMenuItems = [
         { icon: <Wallet size={19} className="text-[#7C3AED]" />, label: "Earnings", href: "/provider-earnings", value: "₹0", bg: "bg-violet-100" },
-        { icon: <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2"><rect x="2" y="8" width="20" height="10" rx="2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><path d="M2 11l3-5h14l3 5"/></svg>, label: "My Trips", href: "/providertrips", bg: "bg-violet-100" },
+        { icon: <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2"><rect x="2" y="8" width="20" height="10" rx="2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><path d="M2 11l3-5h14l3 5"/></svg>, label: "My Rides", href: "/providertrips", bg: "bg-violet-100" },
         { icon: <Bell size={19} className="text-[#7C3AED]" />, label: "Notifications", href: "#", bg: "bg-violet-100" },
         { icon: <HelpCircle size={19} className="text-[#7C3AED]" />, label: "Help & Support", href: "#", bg: "bg-violet-100" },
         { icon: <Settings size={19} className="text-[#7C3AED]" />, label: "Settings", href: "#", bg: "bg-violet-100" },
@@ -226,7 +226,7 @@ export default function ProfilePage() {
                             <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
                                 <LogOut size={19} className="text-red-500" />
                             </div>
-                            <span className="flex-1 text-sm font-semibold text-red-500 text-left">Logout</span>
+                            <span className="flex-1 text-sm font-semibold text-red-500 text-left">Sign Out</span>
                             <ChevronRight size={16} className="text-gray-300 flex-shrink-0" />
                         </button>
                     </div>

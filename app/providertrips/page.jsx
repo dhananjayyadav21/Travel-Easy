@@ -24,7 +24,7 @@ const useFetchProviderTrips = (status) => {
         try {
             const token = localStorage.getItem("token");
             if (!token) {
-                setError("Authentication required. Please log in.");
+                setError("Authentication required. Please sign in.");
                 setIsLoading(false);
                 return;
             }
@@ -106,7 +106,7 @@ export default function ProviderTrips() {
                                 >
                                     <ArrowLeft size={16} className="text-gray-600" />
                                 </button>
-                                <h1 className="text-base font-extrabold text-gray-900">My Trips</h1>
+                                <h1 className="text-base font-extrabold text-gray-900">My Rides</h1>
                             </div>
                             <div className="flex items-center gap-2">
                                 <button
@@ -182,9 +182,9 @@ export default function ProviderTrips() {
                             <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center mb-4">
                                 <BusFront size={26} className="text-violet-500" />
                             </div>
-                            <p className="text-sm font-bold text-gray-700 mb-1">No {activeStatus.toLowerCase()} trips</p>
+                            <p className="text-sm font-bold text-gray-700 mb-1">No {activeStatus.toLowerCase()} rides</p>
                             <p className="text-xs text-gray-400 mb-5">
-                                {activeStatus === "Active" ? "Post a ride to start earning" : `No ${activeStatus.toLowerCase()} trips found`}
+                                {activeStatus === "Active" ? "Post a ride to start earning" : `No ${activeStatus.toLowerCase()} rides found`}
                             </p>
                             {activeStatus === "Active" && (
                                 <Link
@@ -200,7 +200,7 @@ export default function ProviderTrips() {
                     {!isLoading && !error && trips.length > 0 && (
                         <>
                             <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-3">
-                                {trips.length} {activeStatus.toLowerCase()} {trips.length === 1 ? "trip" : "trips"}
+                                {trips.length} {activeStatus.toLowerCase()} {trips.length === 1 ? "ride" : "rides"}
                             </p>
                             <div className="space-y-3">
                                 {trips.map((trip) => (

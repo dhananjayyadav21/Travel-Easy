@@ -286,7 +286,7 @@ function BookingRequestCard({ booking, processing, onAccept, onReject, past }) {
                             <div className="w-2 h-2 rounded-full bg-white" />
                         </div>
                         <p className="text-sm text-gray-600">
-                            <span className="text-gray-400 font-medium">Drop: </span>
+                            <span className="text-gray-400 font-medium">Drop-off: </span>
                             <span className="font-semibold text-gray-800">{booking.tripDestination?.split(",")[0] || "—"}</span>
                         </p>
                     </div>

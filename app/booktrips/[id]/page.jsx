@@ -302,7 +302,7 @@ export default function BookTripPage() {
                                     onToggle={toggleSeat}
                                 />
                             ) : (
-                                <p className="text-sm text-red-500 font-medium">This trip is fully booked.</p>
+                                <p className="text-sm text-red-500 font-medium">This ride is fully booked.</p>
                             )}
                         </div>
 

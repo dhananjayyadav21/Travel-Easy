@@ -175,7 +175,7 @@ export default function DriverLogin() {
                 body: JSON.stringify({ email: email.trim(), password }),
             });
             const data = await res.json();
-            if (!res.ok) throw new Error(data.message || "Login failed");
+            if (!res.ok) throw new Error(data.message || "Sign in failed");
             saveAndRedirect(data);
         } catch (err) { setError(err.message); }
         finally { setLoading(false); }
@@ -240,7 +240,7 @@ export default function DriverLogin() {
                 {/* ══ OTP: STEP 1 ══ */}
                 {mode === "otp" && step === 1 && (
                     <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-2xl">
-                        <h1 className="text-2xl font-extrabold text-white mb-1">Driver Login</h1>
+                        <h1 className="text-2xl font-extrabold text-white mb-1">Driver Sign In</h1>
                         <p className="text-violet-200 text-sm mb-6">Enter your mobile number</p>
 
                         {/* Phone input */}
@@ -286,14 +286,14 @@ export default function DriverLogin() {
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                             </svg>
-                            Login with Password
+                            Sign In with Password
                         </button>
 
                         <div className="text-center">
                             <p className="text-xs text-white/50">
                                 Not a driver?{" "}
                                 <Link href="/login" className="text-white font-semibold hover:underline">
-                                    Passenger Login
+                                    Passenger Sign In
                                 </Link>
                             </p>
                         </div>
@@ -359,7 +359,7 @@ export default function DriverLogin() {
                             disabled={loading || otp.join("").length < 6}
                             className="w-full h-14 bg-white hover:bg-gray-50 disabled:opacity-50 text-[#7C3AED] font-extrabold rounded-2xl text-base transition-all shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
                         >
-                            {loading ? <><Loader2 size={18} className="animate-spin text-[#7C3AED]" /> Verifying...</> : "Verify & Login →"}
+                            {loading ? <><Loader2 size={18} className="animate-spin text-[#7C3AED]" /> Verifying...</> : "Verify & Sign In →"}
                         </button>
                     </div>
                 )}
@@ -367,7 +367,7 @@ export default function DriverLogin() {
                 {mode === "password" && (
                     <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-2xl">
                         <h1 className="text-2xl font-extrabold text-white mb-1">Sign In</h1>
-                        <p className="text-violet-200 text-sm mb-5">Login with email &amp; password</p>
+                        <p className="text-violet-200 text-sm mb-5">Sign in with email &amp; password</p>
 
                         <div className="flex items-center h-14 bg-white/15 border border-white/25 rounded-2xl overflow-hidden focus-within:border-white focus-within:bg-white/20 transition-all mb-3">
                             <div className="pl-4 pr-3 border-r border-white/25 h-full flex items-center flex-shrink-0">
@@ -413,7 +413,7 @@ export default function DriverLogin() {
 
                         <button onClick={() => switchMode("otp")}
                             className="w-full h-11 bg-white/15 border border-white/25 rounded-2xl flex items-center justify-center gap-2 text-sm font-semibold text-white hover:bg-white/25 transition">
-                            Login with OTP instead
+                            Sign In with OTP instead
                         </button>
                     </div>
                 )}

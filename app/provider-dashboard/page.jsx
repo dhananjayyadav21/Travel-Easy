@@ -202,7 +202,7 @@ export default function ProviderDashboard() {
                                 }}
                                 className="text-xs text-gray-400 hover:text-[#7C3AED] font-medium flex items-center gap-1.5 transition"
                             >
-                                <FlaskConical size={13} /> Load sample trips for testing
+                                <FlaskConical size={13} /> Load sample rides for testing
                             </button>
                         </div>
                     )}

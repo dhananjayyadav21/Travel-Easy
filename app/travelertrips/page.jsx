@@ -59,7 +59,7 @@ const TravelerTripsPage = () => {
             },
         });
         if (!response.ok) toast.error("Failed to cancel trip.");
-        else toast.success("Trip cancelled successfully.");
+        else toast.success("Ride cancelled successfully.");
         setAllTrips(prev => prev.map(t => t.id === bookingId ? { ...t, status: "Cancelled" } : t));
     };
 

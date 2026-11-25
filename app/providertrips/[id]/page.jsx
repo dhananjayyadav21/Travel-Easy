@@ -104,8 +104,8 @@ export default function TripDetailsPage() {
             <div className="flex flex-col justify-center items-center min-h-[calc(100vh-56px)] bg-[#F5F3FF] p-6 text-center">
                 <div className="bg-white rounded-3xl border border-violet-100 p-8 max-w-sm w-full shadow-xl shadow-violet-100">
                     <AlertTriangle size={36} className="text-red-500 mx-auto mb-3" />
-                    <h2 className="text-lg font-bold text-gray-900 mb-2">Trip Not Found</h2>
-                    <p className="text-sm text-gray-500 mb-5">{error || "The requested trip could not be loaded."}</p>
+                    <h2 className="text-lg font-bold text-gray-900 mb-2">Ride Not Found</h2>
+                    <p className="text-sm text-gray-500 mb-5">{error || "The requested ride could not be loaded."}</p>
                     <button
                         onClick={() => router.back()}
                         className="flex items-center gap-2 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold px-5 py-2.5 rounded-xl transition shadow-md shadow-violet-200 mx-auto"
@@ -134,7 +134,7 @@ export default function TripDetailsPage() {
                             >
                                 <ArrowLeft size={16} className="text-gray-600" />
                             </button>
-                            <h1 className="text-base font-extrabold text-gray-900">Trip Details</h1>
+                            <h1 className="text-base font-extrabold text-gray-900">Ride Details</h1>
                         </div>
                         <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${sc.pill}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${sc.dot} ${status === "Active" ? "animate-pulse" : ""}`} />
@@ -218,7 +218,7 @@ export default function TripDetailsPage() {
                         onClick={openNavigator}
                         className="w-full h-12 bg-[#7C3AED] hover:bg-[#6D28D9] active:scale-[0.98] text-white rounded-full font-extrabold text-sm flex items-center justify-center gap-2 transition-all shadow-lg shadow-violet-200"
                     >
-                        <Radio size={16} /> Start Trip
+                        <Radio size={16} /> Start Ride
                     </button>
                 </div>
                 )}
@@ -262,7 +262,7 @@ export default function TripDetailsPage() {
                 {/* ── TRIP ACTIONS ── */}
                 {status === "Active" && (
                     <div className="bg-white rounded-2xl shadow-sm p-4">
-                        <h3 className="font-bold text-gray-900 text-sm mb-3">Trip Actions</h3>
+                        <h3 className="font-bold text-gray-900 text-sm mb-3">Ride Actions</h3>
                         <div className="flex flex-col sm:flex-row gap-3">
                             <button
                                 disabled={isProcessing}
@@ -278,7 +278,7 @@ export default function TripDetailsPage() {
                                 className="flex-1 flex items-center justify-center gap-2 border-2 border-red-400 text-red-600 rounded-xl font-bold py-3 hover:bg-red-50 transition disabled:opacity-60 disabled:cursor-not-allowed text-sm"
                             >
                                 {isProcessing ? <Loader2 size={16} className="animate-spin" /> : <XCircle size={16} />}
-                                Cancel Trip
+                                Cancel Ride
                             </button>
                         </div>
                     </div>

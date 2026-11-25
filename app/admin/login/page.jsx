@@ -126,7 +126,7 @@ export default function AdminLogin() {
                         <p className="text-xs text-slate-500">
                             Not an admin?{" "}
                             <a href="/login" className="text-violet-400 hover:text-violet-300 font-medium transition-colors">
-                                Go to main login
+                                Go to main sign in
                             </a>
                         </p>
                     </div>

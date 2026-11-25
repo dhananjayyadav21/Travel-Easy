@@ -79,14 +79,18 @@ export async function POST(req) {
             }, { status: 400 });
         }
 
-        // Check seat availability before updating
-        const currentBooked = tripExists.bookedseats || 0;
-        if (currentBooked + numberOfSeats > tripExists.seats) {
-            return NextResponse.json({ message: "All seats are already booked." }, { status: 400 });
+        // Atomically increment bookedseats only if enough seats remain (prevents race conditions)
+        const updatedTrip = await Trip.findOneAndUpdate(
+            {
+                _id: trip,
+                $expr: { $lte: [{ $add: [{ $ifNull: ["$bookedseats", 0] }, numberOfSeats] }, "$seats"] },
+            },
+            { $inc: { bookedseats: numberOfSeats } },
+            { new: true }
+        );
+        if (!updatedTrip) {
+            return NextResponse.json({ message: "Not enough seats available." }, { status: 400 });
         }
-
-        // Update only bookedseats — avoids full-document validation on save()
-        await Trip.findByIdAndUpdate(trip, { $inc: { bookedseats: numberOfSeats } });
 
         // Create new booking
         const newBooking = new Booking({
