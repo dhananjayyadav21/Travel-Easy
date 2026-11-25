@@ -1,8 +1,9 @@
 ﻿"use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { LogOut, Car, User, X, Menu, MapPin, Navigation, LayoutDashboard, Users, BarChart3, TrendingUp, Home, List } from "lucide-react";
+import { LogOut, User, X, Menu, MapPin, Navigation, LayoutDashboard, Users, BarChart3, TrendingUp, Home, List } from "lucide-react";
 
 export default function Navbar() {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -93,13 +94,15 @@ export default function Navbar() {
                         >
                             <Menu size={20} />
                         </button>
-                        <Link href="/" className="flex items-center gap-2.5 group">
-                            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#6C2BD9] to-[#8B5CF6] flex items-center justify-center shadow-md shadow-violet-200/60 group-hover:shadow-violet-300/60 transition-shadow">
-                                <Car size={15} className="text-white" />
-                            </div>
-                            <span className="text-sm font-bold text-gray-900 tracking-tight">
-                                TravelEasy<span className="text-[#7C3AED]">Hai</span>
-                            </span>
+                        <Link href="/" className="flex items-center group">
+                            <Image
+                                src="/images/logo.png"
+                                alt="TravelEasy"
+                                width={160}
+                                height={53}
+                                className="h-11 w-auto object-contain"
+                                priority
+                            />
                         </Link>
                     </div>
 
@@ -158,13 +161,14 @@ export default function Navbar() {
                 <div className="flex flex-col h-full">
                     {/* Drawer Header */}
                     <div className="flex items-center justify-between px-5 py-4 border-b border-violet-100 bg-gradient-to-r from-violet-50 to-purple-50">
-                        <Link href="/" className="flex items-center gap-2.5" onClick={() => setMobileOpen(false)}>
-                            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#6C2BD9] to-[#8B5CF6] flex items-center justify-center shadow-md shadow-violet-200">
-                                <Car size={15} className="text-white" />
-                            </div>
-                            <span className="text-sm font-bold text-gray-900">
-                                TravelEasy<span className="text-[#7C3AED]">Hai</span>
-                            </span>
+                        <Link href="/" className="flex items-center" onClick={() => setMobileOpen(false)}>
+                            <Image
+                                src="/images/logo.png"
+                                alt="TravelEasy"
+                                width={160}
+                                height={53}
+                                className="h-11 w-auto object-contain"
+                            />
                         </Link>
                         <button onClick={() => setMobileOpen(false)} className="p-1.5 rounded-xl hover:bg-white/80 text-gray-500 transition">
                             <X size={18} />
