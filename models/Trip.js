@@ -111,4 +111,10 @@ const TripSchema = new mongoose.Schema({
     }
 });
 
+// Indexes for common query patterns
+TripSchema.index({ status: 1, date: 1 });               // list active rides by date
+TripSchema.index({ creator: 1, status: 1 });            // provider's own rides
+TripSchema.index({ source: 1, destination: 1 });        // route search
+TripSchema.index({ source: "text", destination: "text" }); // text search
+
 module.exports = mongoose.models.Trip || mongoose.model('Trip', TripSchema);

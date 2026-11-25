@@ -48,6 +48,11 @@ const bookingSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+// Indexes for common query patterns
+bookingSchema.index({ bookedBy: 1, status: 1 });  // passenger's bookings by status
+bookingSchema.index({ trip: 1 });                  // all bookings for a ride
+bookingSchema.index({ createdAt: -1 });            // sort newest first
+
 // Delete cached model in dev so schema changes take effect without full restart
 if (process.env.NODE_ENV !== "production" && mongoose.models.Booking) {
     delete mongoose.models.Booking;

@@ -38,7 +38,7 @@ export async function GET(req) {
         // Return trips
         return NextResponse.json({ trips }, { status: 200 });
     } catch (err) {
-        console.error(" Fetch Trips Error:", err);
+        if (process.env.NODE_ENV !== "production") console.error("Fetch Trips Error:", err);
         return NextResponse.json({ message: "Server error." }, { status: 500 });
     }
 }

@@ -14,7 +14,7 @@ export function verifyAuth(req) {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        return { userId: decoded.id };
+        return { userId: decoded.id, role: decoded.role };
 
     } catch (err) {
         // If JWT is invalid return an error response
