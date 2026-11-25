@@ -146,7 +146,7 @@ export default function ProviderBookingRequestsPage() {
 
                 {/* Header */}
                 <div className="bg-white sticky top-14 z-20 border-b border-gray-100">
-                    <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
+                    <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <button onClick={() => router.back()} className="w-8 h-8 flex items-center justify-center">
                                 <ArrowLeft size={22} className="text-gray-800" />
@@ -159,7 +159,7 @@ export default function ProviderBookingRequestsPage() {
                     </div>
                 </div>
 
-                <div className="max-w-lg mx-auto px-4 pt-5 pb-28 space-y-4">
+                <div className="max-w-2xl mx-auto px-4 pt-5 pb-28 space-y-4">
 
                     {loading && [1, 2].map(i => <SkeletonCard key={i} />)}
 

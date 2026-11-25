@@ -57,7 +57,7 @@ export default function ProviderDashboard() {
         <RoleRoute role="provider">
             <div className="min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
 
-                <div className="max-w-lg mx-auto px-5 pt-6 pb-28">
+                <div className="max-w-2xl mx-auto px-4 pt-6 pb-28">
 
                     {/* Greeting */}
                     <div className="flex items-start justify-between mb-6">

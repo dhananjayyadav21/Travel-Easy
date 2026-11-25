@@ -146,7 +146,7 @@ export default function CreateRidePage() {
                         <h1 className="text-base font-extrabold text-gray-900">Create New Ride</h1>
                     </div>
 
-                    <div className="max-w-lg mx-auto px-4 pt-5 pb-32">
+                    <div className="max-w-2xl mx-auto px-4 pt-5 pb-32">
 
                         <div className="space-y-3">
 
@@ -297,7 +297,7 @@ export default function CreateRidePage() {
 
                     {/* Fixed Publish button */}
                     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-5 py-4 z-30">
-                        <div className="max-w-lg mx-auto">
+                        <div className="max-w-2xl mx-auto">
                             <button
                                 onClick={handleSubmit}
                                 disabled={loading}
