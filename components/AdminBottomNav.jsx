@@ -1,12 +1,13 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, BarChart3 } from "lucide-react";
+import { LayoutDashboard, Users, BarChart3, UserCircle } from "lucide-react";
 
 const NAV = [
     { label: "Dashboard", icon: LayoutDashboard, href: "/admin" },
     { label: "Users",     icon: Users,           href: "/admin/users" },
     { label: "Reports",   icon: BarChart3,        href: "/admin/reports" },
+    { label: "Profile",   icon: UserCircle,       href: "/admin/profile" },
 ];
 
 export default function AdminBottomNav() {
