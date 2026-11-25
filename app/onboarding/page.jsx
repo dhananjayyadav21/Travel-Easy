@@ -27,11 +27,16 @@ export default function Onboarding() {
     const [slide, setSlide] = useState(0);
     const router = useRouter();
 
+    const finish = () => {
+        localStorage.setItem("onboardingSeen", "true");
+        router.push("/login");
+    };
+
     const handleNext = () => {
         if (slide < SLIDES.length - 1) setSlide(slide + 1);
-        else router.push("/login");
+        else finish();
     };
-    const handleSkip = () => router.push("/login");
+    const handleSkip = () => finish();
 
     return (
         <div className="min-h-screen h-screen bg-[#F5F3FF] flex flex-col max-w-sm mx-auto relative overflow-hidden">
