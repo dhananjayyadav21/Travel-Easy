@@ -1,157 +1,75 @@
-"use client";
+﻿"use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import ProtectedRoute from "@/utils/ProtectedRoute";
 import TripTraveler from "@/components/TripTravelers/TripTraveler";
 import toast from "react-hot-toast";
 import {
-    MapPin,
-    Calendar,
-    Users,
-    Clock,
-    Ruler,
-    IndianRupee,
-    Car,
-    AlertTriangle,
-    Loader2,
-    DollarSign,
-    ArrowLeft,
-    ClipboardCheck,
-    CheckCircle,
-    XCircle,
+    Calendar, Users, Clock, Ruler, IndianRupee, Car,
+    AlertTriangle, Loader2, ArrowLeft, CheckCircle, XCircle, Navigation, Radio,
 } from "lucide-react";
 
-// --- Utility Functions ---
 const formatCurrency = (amount) => {
     if (typeof amount !== "number" || isNaN(amount)) return "N/A";
-    return new Intl.NumberFormat("en-IN", {
-        style: "currency",
-        currency: "INR",
-        minimumFractionDigits: 0,
-    }).format(amount);
+    return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", minimumFractionDigits: 0 }).format(amount);
 };
 
 const formatDate = (dateString) => {
     try {
         if (!dateString) return "N/A";
-        const date = new Date(dateString);
-        return date.toLocaleDateString("en-IN", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-        });
-    } catch (e) {
-        return dateString || "N/A";
-    }
+        return new Date(dateString).toLocaleDateString("en-IN", { year: "numeric", month: "short", day: "numeric" });
+    } catch { return dateString || "N/A"; }
 };
 
-// --- Custom Hook for Data Fetching ---
-const useTripData = (id) => {
+const statusConfig = {
+    Active: { pill: "bg-green-100 text-green-700 border border-green-200", dot: "bg-green-500" },
+    Completed: { pill: "bg-violet-100 text-violet-700 border border-violet-200", dot: "bg-violet-500" },
+    Cancelled: { pill: "bg-red-100 text-red-600 border border-red-200", dot: "bg-red-500" },
+};
+
+export default function TripDetailsPage() {
+    const { id } = useParams();
+    const router = useRouter();
     const [trip, setTrip] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isProcessing, setIsProcessing] = useState(false);
 
-    useEffect(() => {
-        if (typeof window === "undefined" || !id) {
-            setIsLoading(false);
-            setError(!id ? "No Trip ID provided." : null);
-            return;
-        }
-
-        const tripId = Array.isArray(id) ? id[0] : id;
-
+    const fetchTrip = useCallback(async () => {
+        if (!id) return;
+        setIsLoading(true);
         try {
-            const storedTrips = localStorage.getItem("trips");
-
-            if (!storedTrips) {
-                setError("No trip data found in local storage.");
-                setIsLoading(false);
-                return;
-            }
-
-            const parsed = JSON.parse(storedTrips);
-            let tripsArray = [];
-
-            if (Array.isArray(parsed)) {
-                tripsArray = parsed;
-            } else if (parsed.trips && Array.isArray(parsed.trips)) {
-                tripsArray = parsed.trips;
-            }
-
-            const foundTrip = tripsArray.find((t) => String(t._id) === String(tripId));
-
-            if (foundTrip) {
-                const pricePerKm = process.env.NEXT_PUBLIC_PRICE_PER_KM_SINGLESEAT;
-
-                setTrip({
-                    ...foundTrip,
-                    computedPrice: foundTrip.kilometer * pricePerKm,
-                    pricePerKm: pricePerKm,
-                    source: foundTrip.source || "Unknown Source",
-                    destination: foundTrip.destination || "Unknown Destination",
-                    date: foundTrip.date || "N/A",
-                    time: foundTrip.time || "N/A",
-                    seats: foundTrip.seats || 0,
-                    kilometer: foundTrip.kilometer || 0,
-                    vehicleType: foundTrip.vehicleType || "N/A",
-                    description: foundTrip.description || "",
-                    bookingId: foundTrip._id || "N/A",
-                    status: foundTrip.status || "Active", // 🔹 added
-                });
-            } else {
-                setError(`Trip with ID "${tripId}" not found.`);
-            }
+            const token = localStorage.getItem("token");
+            const res = await fetch(`/api/providertrips/trip/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Failed to fetch trip");
+            const pricePerKm = Number(process.env.NEXT_PUBLIC_PRICE_PER_KM_SINGLESEAT) || 8;
+            setTrip({ ...data.trip, computedPrice: data.trip.kilometer * pricePerKm, pricePerKm });
         } catch (err) {
-            console.error("Error fetching trip data:", err);
-            setError("An error occurred while processing trip data.");
+            setError(err.message);
         } finally {
             setIsLoading(false);
         }
     }, [id]);
 
-    return { trip, isLoading, error, setTrip };
-};
+    useEffect(() => {
+        fetchTrip();
+    }, [fetchTrip]);
 
-// --- Detail Item Component ---
-const DetailItem = ({ icon: Icon, label, value, colorClass = "text-gray-700" }) => (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:shadow-md h-full transition duration-150">
-        <Icon className={`w-5 h-5 flex-shrink-0 ${colorClass}`} />
-        <div className="flex flex-col min-w-0">
-            <span className="text-xs font-medium text-gray-500 uppercase">{label}</span>
-            <span className="text-xs md:text-base font-semibold text-gray-800 break-words truncate">
-                {value}
-            </span>
-        </div>
-    </div>
-);
-
-// --- Main Component ---
-export default function TripDetailsPage() {
-    const { id } = useParams();
-    const router = useRouter();
-    const { trip, isLoading, error, setTrip } = useTripData(id);
-    const [isProcessing, setIsProcessing] = useState(false);
-
-    // --- Handle Trip Action ---
     const handleTripAction = async (action) => {
         if (!trip) return;
-
         const confirmed = confirm(`Are you sure you want to ${action} this trip?`);
         if (!confirmed) return;
-
         setIsProcessing(true);
         try {
-            const endpoint = `/api/providertrips/${trip._id}/${action}`;
             const token = localStorage.getItem("token");
-
-            const res = await fetch(endpoint, {
+            const res = await fetch(`/api/providertrips/${trip._id}/${action}`, {
                 method: "PUT",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
+                headers: { Authorization: `Bearer ${token}` },
             });
-
             const data = await res.json();
             if (data.success) {
                 toast.success(data.message);
@@ -159,180 +77,213 @@ export default function TripDetailsPage() {
             } else {
                 toast.error(data.message || "Something went wrong");
             }
-        } catch (error) {
-            console.error("Error performing action:", error);
+        } catch {
             toast.error("An error occurred. Please try again.");
         } finally {
             setIsProcessing(false);
         }
     };
 
-    // --- Loading State ---
+    const openNavigator = () => {
+        router.push(`/navigate/${id}`);
+    };
+
     if (isLoading) {
         return (
-            <div className="flex flex-col justify-center items-center min-h-screen bg-gray-50">
-                <Loader2 className="w-8 h-8 text-indigo-500 animate-spin mb-4" />
-                <p className="text-lg font-medium text-gray-600">Loading Trip Details...</p>
+            <div className="flex flex-col justify-center items-center min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#7C3AED] to-[#8B5CF6] flex items-center justify-center mb-4 shadow-lg shadow-violet-200 animate-pulse">
+                    <Car size={24} className="text-white" />
+                </div>
+                <p className="text-sm text-gray-500">Loading trip details…</p>
             </div>
         );
     }
 
     if (error || !trip) {
         return (
-            <div className="flex flex-col justify-center items-center min-h-screen bg-gray-50 p-6 text-center">
-                <AlertTriangle className="w-12 h-12 text-red-500 mb-4" />
-                <h1 className="text-2xl font-bold text-red-600 mb-2">Trip Not Found</h1>
-                <p className="text-gray-600 mb-6">{error || `The requested trip could not be loaded.`}</p>
-                <button
-                    onClick={() => router.back()}
-                    className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-full shadow-lg transition duration-300 transform hover:scale-105"
-                >
-                    <ArrowLeft className="w-5 h-5" />
-                    Go Back
-                </button>
+            <div className="flex flex-col justify-center items-center min-h-[calc(100vh-56px)] bg-[#F5F3FF] p-6 text-center">
+                <div className="bg-white rounded-3xl border border-violet-100 p-8 max-w-sm w-full shadow-xl shadow-violet-100">
+                    <AlertTriangle size={36} className="text-red-500 mx-auto mb-3" />
+                    <h2 className="text-lg font-bold text-gray-900 mb-2">Trip Not Found</h2>
+                    <p className="text-sm text-gray-500 mb-5">{error || "The requested trip could not be loaded."}</p>
+                    <button
+                        onClick={() => router.back()}
+                        className="flex items-center gap-2 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold px-5 py-2.5 rounded-xl transition shadow-md shadow-violet-200 mx-auto"
+                    >
+                        <ArrowLeft size={16} /> Go Back
+                    </button>
+                </div>
             </div>
         );
     }
 
-    const {
-        source,
-        destination,
-        date,
-        time,
-        seats,
-        kilometer,
-        vehicleType,
-        computedPrice,
-        pricePerKm,
-        status,
-    } = trip;
-
-    // --- Status Badge ---
-    const StatusBadge = () => {
-        const colorMap = {
-            Active: "bg-blue-100 text-blue-800 border-blue-300",
-            Completed: "bg-green-100 text-green-800 border-green-300",
-            Cancelled: "bg-red-100 text-red-800 border-red-300",
-        };
-        const iconMap = {
-            Active: Clock,
-            Completed: CheckCircle,
-            Cancelled: XCircle,
-        };
-        const Icon = iconMap[status] || Clock;
-        return (
-            <span
-                className={`inline-flex items-center gap-1 px-3 py-1 border text-sm font-semibold rounded-full ${colorMap[status]}`}
-            >
-                <Icon className="w-4 h-4" /> {status}
-            </span>
-        );
-    };
+    const { source, destination, date, time, seats, kilometer, vehicleType, vehicle, computedPrice, pricePerKm, status } = trip;
+    const sc = statusConfig[status] || statusConfig.Active;
 
     return (
         <ProtectedRoute>
-            <div className="min-h-screen py-2 sm:py-12 sm:px-6 lg:px-12">
-                <div className="max-w-7xl mx-auto sm:shadow-sm rounded-lg p-6 sm:p-8 sm:border border-gray-200 bg-white">
-                    {/* Header Section */}
-                    <header className="mb-8 pb-4 border-b flex justify-between items-start">
-                        <div>
+            <div className="min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
+
+                {/* ── WHITE STICKY HEADER ── */}
+                <div className="bg-white sticky top-14 z-30 border-b border-gray-100 shadow-sm">
+                    <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
                             <button
                                 onClick={() => router.back()}
-                                className="flex items-center text-indigo-600 hover:text-indigo-800 transition text-sm mb-2"
+                                className="w-9 h-9 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center hover:bg-violet-50 hover:border-violet-200 transition"
                             >
-                                <ArrowLeft className="w-4 h-4 mr-1" /> Back to List
+                                <ArrowLeft size={16} className="text-gray-600" />
                             </button>
-                            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight">
-                                Trip Summary
-                            </h1>
+                            <h1 className="text-base font-extrabold text-gray-900">Trip Details</h1>
                         </div>
-                        <StatusBadge />
-                    </header>
+                        <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${sc.pill}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${sc.dot} ${status === "Active" ? "animate-pulse" : ""}`} />
+                            {status}
+                        </span>
+                    </div>
+                </div>
 
-                    {/* Main Content */}
-                    <div className="flex flex-col lg:flex-row gap-8">
-                        {/* LEFT COLUMN */}
-                        <div className="lg:w-2/3 space-y-8">
-                            <section>
-                                <h2 className="text-xl font-bold text-indigo-700 mb-4 flex items-center">
-                                    <MapPin className="w-5 h-5 mr-2" /> Route & Schedule
-                                </h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                    <DetailItem icon={MapPin} label="Departure" value={source} colorClass="text-red-500" />
-                                    <DetailItem icon={MapPin} label="Arrival" value={destination} colorClass="text-green-500" />
-                                    <DetailItem icon={Calendar} label="Travel Date" value={formatDate(date)} colorClass="text-blue-500" />
-                                    <DetailItem icon={Clock} label="Time" value={time} colorClass="text-blue-500" />
-                                </div>
-                            </section>
+                <div className="max-w-2xl mx-auto px-4 pt-4 pb-10 space-y-3">
 
-                            <section>
-                                <h2 className="text-xl font-bold text-indigo-700 mb-4 flex items-center">
-                                    <ClipboardCheck className="w-5 h-5 mr-2" /> Travelers
-                                </h2>
-                                <div className="bg-gray-50 border border-gray-300 rounded-sm min-h-[100px] shadow-inner p-1">
-                                    <TripTraveler tripId={trip._id} />
-                                </div>
-                            </section>
+                {/* ── ROUTE CARD ── */}
+                <div className="bg-white rounded-2xl shadow-sm p-4">
+                    <div className="flex items-stretch gap-4">
+                        <div className="flex flex-col items-center pt-1 flex-shrink-0">
+                            <div className="w-3 h-3 rounded-full bg-green-500 ring-2 ring-green-200" />
+                            <div className="w-px flex-1 border-l-2 border-dashed border-gray-200 my-1 min-h-[24px]" />
+                            <div className="w-3 h-3 rounded-full bg-[#7C3AED] ring-2 ring-violet-200" />
                         </div>
-
-                        {/* RIGHT COLUMN */}
-                        <div className="lg:w-1/3 space-y-8">
-                            <section>
-                                <h2 className="text-xl font-bold text-indigo-700 mb-4">Metrics & Vehicle</h2>
-                                <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
-                                    <DetailItem icon={Users} label="Seats Booked" value={`${seats} Seats`} colorClass="text-purple-600" />
-                                    <DetailItem icon={Car} label="Vehicle Type" value={vehicleType} colorClass="text-teal-600" />
-                                    <DetailItem icon={Ruler} label="Distance" value={`${kilometer} km`} colorClass="text-orange-600" />
-                                    <DetailItem icon={IndianRupee} label="Price Rate" value={`${pricePerKm} / km`} colorClass="text-gray-600" />
-                                </div>
-                            </section>
-
-                            <section>
-                                <h2 className="text-xl font-bold text-indigo-700 mb-4">Pricing Summary</h2>
-                                <div className="p-6 bg-indigo-600 rounded-xl shadow-xl text-white">
-                                    <div className="flex flex-col justify-center items-center text-center">
-                                        <span className="text-base font-light uppercase opacity-90 mb-1">
-                                            Estimated Final Cost
-                                        </span>
-                                        <span className="text-5xl font-extrabold">{formatCurrency(computedPrice)}</span>
-                                        <span className="text-sm font-light opacity-80 mt-3 flex items-center">
-                                            <DollarSign className="w-4 h-4 inline-block mr-1" />
-                                            Calculated from {kilometer} km @ {formatCurrency(pricePerKm)}/km
-                                        </span>
-                                    </div>
-                                </div>
-                            </section>
+                        <div className="flex flex-col justify-between gap-3 flex-1 min-w-0">
+                            <div>
+                                <p className="text-[10px] text-gray-400 uppercase tracking-widest font-semibold mb-0.5">From</p>
+                                <p className="text-base font-extrabold text-gray-900 leading-tight">{source}</p>
+                            </div>
+                            <div>
+                                <p className="text-[10px] text-gray-400 uppercase tracking-widest font-semibold mb-0.5">To</p>
+                                <p className="text-base font-extrabold text-gray-900 leading-tight">{destination}</p>
+                            </div>
+                        </div>
+                        <div className="bg-violet-50 border border-violet-100 rounded-2xl px-3 py-3 text-center flex-shrink-0 min-w-[80px]">
+                            <p className="text-sm font-extrabold text-gray-900">{kilometer} km</p>
+                            <p className="text-xs text-gray-400 mt-0.5">₹{pricePerKm}/km</p>
+                            <p className="text-sm font-extrabold text-[#7C3AED] mt-1">{formatCurrency(computedPrice)}</p>
                         </div>
                     </div>
 
-                    {/* Action Buttons */}
-                    <footer className="mt-10 pt-4 border-t flex flex-wrap justify-end gap-4">
-                        {status === "Active" && (
-                            <>
-                                <button
-                                    disabled={isProcessing}
-                                    onClick={() => handleTripAction("complete")}
-                                    className="bg-gradient-to-tl from-green-500 to-blue-500 hover:from-blue-500 hover:to-green-500 text-white font-medium px-3 py-2 rounded-md transition duration-300 shadow-lg disabled:opacity-60 cursor-pointer"
-                                >
-                                    Trip Complete
-                                </button>
-                                <button
-                                    disabled={isProcessing}
-                                    onClick={() => handleTripAction("cancel")}
-                                    className="bg-gradient-to-tl from-red-500 to-pink-500 hover:from-pink-500 hover:to-red-500 text-white font-medium px-3 py-2 rounded-md transition duration-300 shadow-lg disabled:opacity-60 cursor-pointer"
-                                >
-                                    Cancel Trip
-                                </button>
-                            </>
+                    {/* Meta chips */}
+                    <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t border-gray-50">
+                        {date && (
+                            <span className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full">
+                                <Calendar size={11} className="text-violet-500" /> {formatDate(date)}
+                            </span>
                         )}
-                        <button
-                            onClick={() => router.back()}
-                            className="bg-gray-800 hover:bg-gray-900 text-white font-medium px-3 py-2 rounded-md transition duration-300 shadow-lg text-base cursor-pointer"
-                        >
-                            <ArrowLeft className="w-5 h-5 inline-block mr-2" />
-                            Go Back
-                        </button>
-                    </footer>
+                        {time && (
+                            <span className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full">
+                                <Clock size={11} className="text-violet-500" /> {time}
+                            </span>
+                        )}
+                        {seats && (
+                            <span className="flex items-center gap-1.5 bg-gray-50 border border-gray-100 text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full">
+                                <Users size={11} className="text-violet-500" /> {seats} seats
+                            </span>
+                        )}
+                    </div>
+                </div>
+
+                {/* ── NAVIGATOR BUTTON ── */}
+                {status === "Active" && (
+                <div className="bg-white rounded-2xl shadow-sm p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                        <div className="w-7 h-7 rounded-lg bg-violet-50 flex items-center justify-center">
+                            <Navigation size={14} className="text-[#7C3AED]" />
+                        </div>
+                        <span className="text-sm font-bold text-gray-900">Navigator</span>
+                        <span className="text-xs text-gray-400 ml-auto">{source?.split(",")[0]} → {destination?.split(",")[0]}</span>
+                    </div>
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="flex items-center gap-1.5">
+                            <Clock size={13} className="text-violet-500" />
+                            <span className="text-xs font-semibold text-gray-600">{time || "—"}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                            <Ruler size={13} className="text-violet-500" />
+                            <span className="text-xs font-semibold text-gray-600">{kilometer} km</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                            <Users size={13} className="text-violet-500" />
+                            <span className="text-xs font-semibold text-gray-600">{trip.bookedseats || 0} passengers</span>
+                        </div>
+                    </div>
+                    <button
+                        onClick={openNavigator}
+                        className="w-full h-12 bg-[#7C3AED] hover:bg-[#6D28D9] active:scale-[0.98] text-white rounded-full font-extrabold text-sm flex items-center justify-center gap-2 transition-all shadow-lg shadow-violet-200"
+                    >
+                        <Radio size={16} /> Start Trip
+                    </button>
+                </div>
+                )}
+
+                {/* ── TRIP INFO GRID ── */}
+                <div className="bg-white rounded-2xl shadow-sm p-4">
+                    <div className="grid grid-cols-2 gap-3">
+                        {[
+                            { icon: Calendar, label: "Date", value: formatDate(date) },
+                            { icon: Clock, label: "Time", value: time || "—" },
+                            { icon: Users, label: "Seats", value: `${trip.bookedseats || 0}/${seats} booked` },
+                            { icon: Car, label: "Vehicle", value: `${vehicle || "—"} · ${vehicleType || "—"}` },
+                            { icon: Ruler, label: "Distance", value: `${kilometer} km` },
+                            { icon: IndianRupee, label: "Price/seat", value: `₹${(kilometer || 0) * (pricePerKm || 8)}` },
+                        ].map(({ icon: Icon, label, value }) => (
+                            <div key={label} className="flex items-center gap-2.5">
+                                <div className="w-8 h-8 rounded-xl bg-violet-50 flex items-center justify-center flex-shrink-0">
+                                    <Icon size={15} className="text-[#7C3AED]" />
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-xs text-gray-400">{label}</p>
+                                    <p className="text-sm font-semibold text-gray-900 truncate">{value}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+
+                {/* ── PASSENGERS ── */}
+                <div className="bg-white rounded-2xl shadow-sm p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                        <div className="w-8 h-8 rounded-xl bg-violet-50 flex items-center justify-center">
+                            <Users size={15} className="text-[#7C3AED]" />
+                        </div>
+                        <h3 className="font-bold text-gray-900 text-sm">Passengers</h3>
+                    </div>
+                    <TripTraveler tripId={trip._id} />
+                </div>
+
+                {/* ── TRIP ACTIONS ── */}
+                {status === "Active" && (
+                    <div className="bg-white rounded-2xl shadow-sm p-4">
+                        <h3 className="font-bold text-gray-900 text-sm mb-3">Trip Actions</h3>
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <button
+                                disabled={isProcessing}
+                                onClick={() => handleTripAction("complete")}
+                                className="flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold py-3 transition shadow-md shadow-green-100 disabled:opacity-60 disabled:cursor-not-allowed text-sm"
+                            >
+                                {isProcessing ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle size={16} />}
+                                Mark as Completed
+                            </button>
+                            <button
+                                disabled={isProcessing}
+                                onClick={() => handleTripAction("cancel")}
+                                className="flex-1 flex items-center justify-center gap-2 border-2 border-red-400 text-red-600 rounded-xl font-bold py-3 hover:bg-red-50 transition disabled:opacity-60 disabled:cursor-not-allowed text-sm"
+                            >
+                                {isProcessing ? <Loader2 size={16} className="animate-spin" /> : <XCircle size={16} />}
+                                Cancel Trip
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 </div>
             </div>
         </ProtectedRoute>

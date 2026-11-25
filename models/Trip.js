@@ -87,6 +87,23 @@ const TripSchema = new mongoose.Schema({
         trim: true
     },
 
+    // Coordinates from Google Places
+    sourceCoords: {
+        lat: { type: Number },
+        lng: { type: Number },
+    },
+    destinationCoords: {
+        lat: { type: Number },
+        lng: { type: Number },
+    },
+
+    // Live tracking
+    liveLocation: {
+        lat: { type: Number },
+        lng: { type: Number },
+        updatedAt: { type: Date },
+    },
+
     // Optional: Metadata
     createdAt: {
         type: Date,

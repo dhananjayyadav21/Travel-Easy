@@ -1,32 +1,26 @@
-"use client";
+﻿"use client";
 import React from "react";
-import { TABS_CONFIG } from "./TabsConfig";
 
-const TabButton = ({ tabName, count, isActive, onClick }) => {
-    const config = TABS_CONFIG[tabName];
-
-    const activeClasses = `
-        font-semibold ${config.color} border-b-2 ${config.border} ${config.bgActive}
-    `;
-    const inactiveClasses = `
-        text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300
-    `;
-
+const TabButton = ({ label, active, onClick, count }) => {
     return (
         <button
             onClick={onClick}
-            className={`
-                cursor-pointer flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm sm:text-base 
-                transition-all duration-200 ${isActive ? activeClasses : inactiveClasses}
-            `}
+            className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-3.5 text-sm font-semibold transition-all whitespace-nowrap ${
+                active
+                    ? "text-sky-600 border-b-2 border-sky-600 bg-sky-50/50"
+                    : "text-gray-500 border-b-2 border-transparent hover:text-gray-800 hover:bg-gray-50"
+            }`}
         >
-            {React.createElement(config.icon, { size: 18 })}
-            <span className="hidden sm:inline whitespace-nowrap">{tabName} Journeys</span>
-            <span className="sm:hidden whitespace-nowrap">{tabName}</span>
-            <span className={`ml-2 text-xs font-bold px-2 py-0.5 rounded-full 
-                ${isActive ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700'}`}>
-                {count}
-            </span>
+            {label}
+            {count !== undefined && (
+                <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
+                    active
+                        ? "bg-sky-100 text-sky-700"
+                        : "bg-gray-100 text-gray-500"
+                }`}>
+                    {count}
+                </span>
+            )}
         </button>
     );
 };

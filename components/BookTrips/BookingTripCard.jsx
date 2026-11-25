@@ -1,154 +1,172 @@
-"use client";
+﻿"use client";
 import React, { useState } from "react";
-import {
-    Calendar,
-    IndianRupee,
-    Users,
-    ChevronRight,
-    Loader2,
-    MapPin,
-    ReceiptText,
-} from "lucide-react";
-import { TABS_CONFIG } from "./TabsConfig";
+import Link from "next/link";
+import { ArrowRight, Star, XCircle, Loader2, ReceiptText, Car, Hash, ChevronRight, MapPin } from "lucide-react";
+import RateTripModal from "@/components/RateTripModal";
 
-const TripCard = ({ trip, onCancelTrip }) => {
-    const config = TABS_CONFIG[trip.status];
-    const [isCancelling, setIsCancelling] = useState(false);
-    const [showReceipt, setShowReceipt] = useState(false);
+const STATUS_CONFIG = {
+    Active:    { label: "On Going",  bg: "bg-green-100",  text: "text-green-700"  },
+    Completed: { label: "Completed", bg: "bg-violet-100", text: "text-violet-700" },
+    Cancelled: { label: "Cancelled", bg: "bg-red-100",    text: "text-red-600"    },
+};
+
+const ReceiptRow = ({ label, value, highlight }) => (
+    <div className="flex justify-between items-center">
+        <span className="text-xs text-gray-500">{label}</span>
+        <span className={highlight ? "font-extrabold text-[#7C3AED] text-base" : "text-sm font-semibold text-gray-800"}>{value}</span>
+    </div>
+);
+
+export default function TripCard({ trip, onCancelTrip }) {
+    const [isCancelling, setIsCancelling]   = useState(false);
+    const [showReceipt, setShowReceipt]     = useState(false);
+    const [showRateModal, setShowRateModal] = useState(false);
+    const [hasRated, setHasRated]           = useState(trip.hasRated || false);
+
+    const isActive    = trip.status === "Active";
+    const isCompleted = trip.status === "Completed";
+    const isCancelled = trip.status === "Cancelled";
+    const cfg = STATUS_CONFIG[trip.status] || STATUS_CONFIG.Cancelled;
 
     const handleCancel = async () => {
         setIsCancelling(true);
+        try { await onCancelTrip(trip.id); } catch { }
+        finally { setIsCancelling(false); }
+    };
+
+    const formatDate = (d) => {
+        if (!d) return "—";
         try {
-            await onCancelTrip(trip.id);
-        } catch (error) {
-            console.error("Cancellation failed:", error);
-        } finally {
-            setIsCancelling(false);
-        }
+            const date = new Date(d);
+            const diff = Math.round((date - new Date()) / 86400000);
+            if (diff === 0) return "Today";
+            if (diff === -1) return "Yesterday";
+            if (diff === 1) return "Tomorrow";
+            return date.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+        } catch { return d; }
     };
 
     return (
-        <div
-            className={`relative bg-white rounded-2xl shadow-md hover:shadow-lg hover:scale-[1.01] transition-all duration-300 overflow-hidden group`}
-        >
-            {/* Left border gradient indicator */}
-            <div
-                className={`absolute left-0 top-0 h-full w-1 ${config.border} rounded-l-2xl`}
-            />
+        <div className={`bg-white rounded-2xl shadow-sm overflow-hidden transition-all ${isCancelled ? "opacity-70" : ""}`}
+             style={{ border: '1px solid #f3f4f6' }}>
+            <div className="p-4">
 
-            <div className="p-5 flex flex-col h-full">
-                {/* --- Header --- */}
-                <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 flex items-center gap-1">
-                        <MapPin size={18} className="text-indigo-500" />
-                        <span className="truncate">{trip.source}</span>
-                        <ChevronRight size={18} className="text-gray-400" />
-                        <span className="truncate">{trip.destination}</span>
-                    </h3>
-
-                    <div
-                        className={`hidden sm:flex items-center font-semibold px-3 py-1 rounded-full text-xs ${config.color} ${config.pillBg} shadow-sm`}
-                    >
-                        {React.createElement(config.icon, {
-                            size: 14,
-                            className: "mr-1",
-                        })}
-                        {trip.status}
+                {/* Row 1: Route + status */}
+                <div className="flex items-start justify-between gap-2 mb-1">
+                    <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-base font-extrabold text-gray-900 truncate">{trip.source}</span>
+                            <ArrowRight size={14} className="text-gray-400 flex-shrink-0" />
+                            <span className="text-base font-extrabold text-gray-900 truncate">{trip.destination}</span>
+                        </div>
                     </div>
+                    <span className={`text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap flex-shrink-0 ${cfg.bg} ${cfg.text}`}>
+                        {cfg.label}
+                    </span>
                 </div>
 
-                {/* --- Trip Details --- */}
-                <div className="space-y-3 text-sm text-gray-600 border-t border-gray-100 pt-4 flex-grow">
-                    <DetailRow icon={<Calendar size={15} />} label="Date" value={trip.date} />
-                    <DetailRow
-                        icon={<IndianRupee size={15} />}
-                        label="Fare"
-                        value={`₹${trip.price.toLocaleString("en-IN")}`}
-                        strong
-                        highlight
-                    />
-                    <DetailRow icon={<Users size={15} />} label="Contact" value={trip.contact} />
-                    {trip.status === "Cancelled" && (
-                        <DetailRow
-                            icon={<Users size={15} />}
-                            label="Cancelled By"
-                            value={trip.cancelledBy}
-                        />
-                    )}
-                </div>
+                {/* Date */}
+                <p className="text-sm text-gray-600 mb-0.5">
+                    {formatDate(trip.date)}{trip.time ? `, ${trip.time}` : ""}
+                </p>
 
-                {/* --- Footer Buttons --- */}
-                <div className="mt-5">
-                    {trip.status === "Active" && (
+                {/* Seats · price */}
+                <p className="text-sm text-gray-600 mb-4">
+                    {trip.seats} Seat{trip.seats > 1 ? "s" : ""} · ₹{trip.price?.toLocaleString("en-IN")}
+                </p>
+
+                {/* Action buttons */}
+                {isActive && (
+                    <div className="flex gap-2">
+                        <Link
+                            href={`/tracking/${trip.tripId || trip.id}`}
+                            className="h-11 bg-[#EDE9FE] hover:bg-[#DDD6FE] text-[#7C3AED] hover:text-[#6D28D9] font-bold rounded-xl text-sm transition-all flex items-center justify-center"
+                            style={{ flex: "0 0 90%" }}
+                        >
+                            Track Ride
+                        </Link>
                         <button
                             onClick={handleCancel}
                             disabled={isCancelling}
-                            className="cursor-pointer w-full py-2.5 text-sm font-medium rounded-xl text-white bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 transition-all shadow-md flex items-center justify-center"
+                            className="h-11 bg-red-50 text-red-400 rounded-xl hover:bg-red-100 transition disabled:opacity-60 flex items-center justify-center"
+                            style={{ flex: "0 0 calc(10% - 8px)" }}
                         >
-                            {isCancelling ? (
-                                <>
-                                    <Loader2 size={16} className="animate-spin mr-2" />
-                                    Cancelling...
-                                </>
-                            ) : (
-                                "Cancel Trip"
-                            )}
+                            {isCancelling ? <Loader2 size={14} className="animate-spin" /> : <XCircle size={16} />}
                         </button>
-                    )}
+                    </div>
+                )}
 
-                    {trip.status === "Completed" && (
-                        <button
-                            onClick={() => setShowReceipt(!showReceipt)}
-                            className="w-full py-2.5 text-sm font-medium rounded-xl text-gray-700 border border-gray-300 hover:bg-gray-50 transition-all shadow-sm flex items-center justify-center gap-2"
-                        >
-                            <ReceiptText size={16} />
-                            {showReceipt ? "Hide Receipt" : "View Receipt"}
-                        </button>
-                    )}
-                </div>
+                {isCompleted && !hasRated && (
+                    <button
+                        onClick={() => setShowRateModal(true)}
+                        className="w-full h-11 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold rounded-xl text-sm transition flex items-center justify-center gap-2 shadow-sm shadow-violet-200"
+                    >
+                        <Star size={13} className="fill-white" /> Rate Your Ride
+                    </button>
+                )}
 
-                {/* --- Inline Receipt (expands inside card) --- */}
-                {trip.status === "Completed" && showReceipt && (
-                    <div className="mt-5 border-t pt-4 bg-gray-50 rounded-xl p-4 animate-fadeIn">
-                        <h4 className="text-lg font-semibold text-indigo-700 mb-2 text-center">
-                            Trip Receipt
-                        </h4>
-                        <div className="space-y-2 text-sm text-gray-700">
-                            <DetailRow label="From" value={trip.source} />
-                            <DetailRow label="To" value={trip.destination} />
-                            <DetailRow label="Date" value={trip.date} />
-                            <DetailRow label="Contact" value={trip.contact} />
-                            <DetailRow
-                                label="Total Fare"
-                                value={`₹${trip.price.toLocaleString("en-IN")}`}
-                                strong
-                                highlight
-                            />
-                            <DetailRow label="Trip ID" value={trip.id} />
-                        </div>
-                        <p className="text-xs text-center text-gray-500 mt-3">
-                            Generated on {new Date().toLocaleString()}
-                        </p>
+                {isCompleted && hasRated && (
+                    <div className="flex items-center justify-center gap-1 py-2.5 bg-amber-50 rounded-xl border border-amber-100">
+                        {[1,2,3,4,5].map(s => <Star key={s} size={15} className="text-amber-400 fill-amber-400" />)}
+                        <span className="text-xs text-gray-500 ml-1 font-medium">Rated</span>
+                    </div>
+                )}
+
+                {isCancelled && (
+                    <div className="flex items-center justify-center gap-2 py-2.5 bg-red-50 rounded-xl">
+                        <XCircle size={13} className="text-red-400" />
+                        <span className="text-xs font-bold text-red-400">Booking Cancelled</span>
                     </div>
                 )}
             </div>
+
+            {/* Receipt toggle — only for completed */}
+            {isCompleted && (
+                <div className="border-t border-gray-50 px-4 py-2 flex items-center justify-between bg-gray-50/50">
+                    <span className="text-[10px] text-gray-400 font-mono flex items-center gap-1">
+                        <Hash size={9} />{String(trip.id).slice(-8).toUpperCase()}
+                    </span>
+                    <button onClick={() => setShowReceipt(!showReceipt)} className="text-xs text-[#7C3AED] font-semibold hover:underline flex items-center gap-1">
+                        <ReceiptText size={11} />
+                        {showReceipt ? "Hide" : "Receipt"}
+                        <ChevronRight size={11} className={`transition-transform ${showReceipt ? "rotate-90" : ""}`} />
+                    </button>
+                </div>
+            )}
+
+            {/* Receipt panel */}
+            {isCompleted && showReceipt && (
+                <div className="mx-4 mb-4 rounded-2xl border border-violet-100 overflow-hidden">
+                    <div className="bg-gradient-to-r from-[#2D1B69] to-[#7C3AED] px-5 py-4 text-center">
+                        <div className="flex items-center justify-center gap-2 mb-0.5">
+                            <Car size={15} className="text-violet-300" />
+                            <p className="text-white font-extrabold text-sm">Travel Easy Hai</p>
+                        </div>
+                        <p className="text-violet-200 text-xs font-medium tracking-widest">BOOKING RECEIPT</p>
+                    </div>
+                    <div className="relative bg-white">
+                        <div className="absolute -left-2.5 top-0 w-5 h-5 bg-gray-100 rounded-full" />
+                        <div className="absolute -right-2.5 top-0 w-5 h-5 bg-gray-100 rounded-full" />
+                        <div className="border-t-2 border-dashed border-violet-100 mx-4" />
+                    </div>
+                    <div className="bg-white px-5 py-4 space-y-2.5">
+                        <ReceiptRow label="From"  value={trip.source} />
+                        <ReceiptRow label="To"    value={trip.destination} />
+                        <ReceiptRow label="Date"  value={trip.date} />
+                        {trip.contact && <ReceiptRow label="Provider Contact" value={trip.contact} />}
+                        <div className="border-t border-dashed border-violet-100 pt-2.5 mt-2">
+                            <ReceiptRow label="Total Fare" value={`₹${trip.price?.toLocaleString("en-IN")}`} highlight />
+                        </div>
+                        <p className="text-center text-xs text-gray-400 pt-1 border-t border-violet-50">
+                            ID: ...{String(trip.id).slice(-8).toUpperCase()}
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            {showRateModal && (
+                <RateTripModal bookingId={trip.id} onClose={() => setShowRateModal(false)} onSuccess={() => setHasRated(true)} />
+            )}
         </div>
     );
-};
-
-/* --- Subcomponent for uniform row layout --- */
-const DetailRow = ({ icon, label, value, strong, highlight }) => (
-    <p className="flex justify-between items-center">
-        <span className="flex items-center gap-2 text-gray-500 font-medium">
-            {icon} {label}:
-        </span>
-        <span
-            className={`${strong ? "font-semibold" : ""
-                } ${highlight ? "text-indigo-700 font-bold text-base" : "text-gray-800"}`}
-        >
-            {value}
-        </span>
-    </p>
-);
-
-export default TripCard;
+}

@@ -89,6 +89,8 @@ export async function POST(req) {
             vehicle: body.vehicle.toUpperCase(),
             vehicleType: body.vehicleType,
             panCard: body.panCard.toUpperCase(),
+            sourceCoords: body.sourceCoords || null,
+            destinationCoords: body.destinationCoords || null,
         });
 
         return NextResponse.json({ message: "Trip added successfully!", trip }, { status: 201 });

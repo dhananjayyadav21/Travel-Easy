@@ -21,8 +21,19 @@ const bookingSchema = new mongoose.Schema(
 
         status: {
             type: String,
-            enum: ['Active', 'Completed', 'Cancelled'],
+            enum: ['Pending', 'Active', 'Completed', 'Cancelled'],
             default: "Active",
+        },
+
+        paymentMethod: {
+            type: String,
+            enum: ['cash', 'online'],
+            default: 'cash',
+        },
+        paymentStatus: {
+            type: String,
+            enum: ['pending', 'paid'],
+            default: 'pending',
         },
 
         bookedBy: {
@@ -37,4 +48,9 @@ const bookingSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-export default mongoose.models.Booking || mongoose.model("Booking", bookingSchema);
+// Delete cached model in dev so schema changes take effect without full restart
+if (process.env.NODE_ENV !== "production" && mongoose.models.Booking) {
+    delete mongoose.models.Booking;
+}
+
+export default mongoose.model("Booking", bookingSchema);

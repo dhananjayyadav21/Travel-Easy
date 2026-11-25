@@ -18,7 +18,11 @@ export default function ProtectedRoute({ children }) {
     }, [router]);
 
     if (!isAuthenticated) {
-        return null;
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#F5F3FF]">
+                <div className="w-8 h-8 border-2 border-t-transparent border-[#7C3AED] rounded-full animate-spin" />
+            </div>
+        );
     }
 
     return <>{children}</>;

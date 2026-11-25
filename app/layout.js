@@ -1,45 +1,44 @@
-import "@/style/globals.css";
+﻿import "@/style/globals.css";
 import Navbar from "./Navbar/page";
 import { Toaster } from "react-hot-toast";
-import { Github, Linkedin } from 'lucide-react';
+
+import GoogleMapsProvider from "@/components/GoogleMapsProvider";
+
+import PushNotificationSetup from "@/components/PushNotificationSetup";
 
 export const metadata = {
-  title: "Travel Easy",
-  description: "Generated for affordable travel",
+  title: "Travel Easy Hai | Affordable Seat Sharing",
+  description: "India's most affordable carpooling platform — share rides, save money, travel smart.",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className='antialiased bg-gradient-to-r from-green-50 to-red-50'>
-
-      <body
-        className='min-h-screen bg-gradient-to-r from-green-50 to-red-50'
-      >
-        <Navbar />
-        <main className="flex-1 pt-14">
-          {children}
-        </main>
-
-        <footer className="mt-auto py-6 border-t border-gray-200 text-center text-sm text-gray-500 bg-white shadow-inner w-full">
-          <p className="mb-3 font-semibold text-gray-700">Developed By <span className="text-purple-700">DHANANJAY SAMARJEET YADAV</span> </p>
-          <div className="flex justify-center space-x-6">
-            <a href="https://github.com/dhananjayyadav21" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-purple-700 transition flex items-center">
-              <Github size={20} className="mr-1" /> GitHub
-            </a>
-            <a href="https://www.linkedin.com/in/dhananjayyadav18/" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-purple-700 transition flex items-center">
-              <Linkedin size={20} className="mr-1" /> LinkedIn
-            </a>
-          </div>
-        </footer>
-
-        <Toaster
-          position="bottom-right"
-          toastOptions={{
-            style: { background: "#000000", color: "#fff" },
-            success: { iconTheme: { primary: "#4ade80", secondary: "#fff" } },
-            error: { iconTheme: { primary: "#ef4444", secondary: "#fff" } },
-          }}
+    <html lang="en" className="antialiased">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet"
         />
+      </head>
+      <body className="min-h-screen bg-white font-sans">
+        <GoogleMapsProvider>
+          <PushNotificationSetup />
+          <Navbar />
+          <main className="flex-1 pt-14">
+            {children}
+          </main>
+
+<Toaster
+            position="bottom-right"
+            toastOptions={{
+              style: { background: "#0C4A6E", color: "#fff", borderRadius: "12px", fontSize: "14px" },
+              success: { iconTheme: { primary: "#7DD3FC", secondary: "#fff" } },
+              error: { iconTheme: { primary: "#ef4444", secondary: "#fff" } },
+            }}
+          />
+        </GoogleMapsProvider>
       </body>
     </html>
   );

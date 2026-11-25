@@ -1,141 +1,125 @@
-"use client";
-import { Car, Calendar, Clock, Users, MapPin, ArrowRight, DollarSign, Tag, Info } from 'lucide-react';
-import Link from 'next/link';
+﻿"use client";
+import Link from "next/link";
+import { Calendar, Clock, Car, TrendingUp, ArrowRight } from "lucide-react";
 
-
-const getStatusBadge = (status) => {
+const getStatusConfig = (status) => {
     const s = String(status).toLowerCase();
     switch (s) {
         case "active":
         case "confirmed":
-            return { text: "Active", classes: "bg-green-100 text-green-800 border-green-300" };
+            return { pill: "bg-green-50 text-green-700 border border-green-200", strip: "bg-gradient-to-r from-green-400 to-emerald-500", label: "Active" };
         case "completed":
         case "finished":
-            return { text: "Completed", classes: "bg-gray-100 text-gray-700 border-gray-300" };
+            return { pill: "bg-violet-50 text-violet-700 border border-violet-200", strip: "bg-gradient-to-r from-[#7C3AED] to-[#8B5CF6]", label: "Completed" };
         case "cancelled":
         case "expired":
-            return { text: "Cancelled", classes: "bg-red-100 text-red-700 border-red-300" };
+            return { pill: "bg-red-50 text-red-600 border border-red-200", strip: "bg-gradient-to-r from-red-400 to-rose-500", label: "Cancelled" };
         default:
-            return { text: "Draft", classes: "bg-indigo-100 text-indigo-700 border-indigo-300" };
+            return { pill: "bg-gray-100 text-gray-500 border border-gray-200", strip: "bg-gray-300", label: "Draft" };
     }
 };
 
-const formatReadableDate = (dateString) => {
+const formatDate = (dateString) => {
     try {
-        if (!dateString) return 'N/A';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-IN', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-        });
-    } catch (e) {
-        return dateString || 'N/A';
+        if (!dateString) return "N/A";
+        return new Date(dateString).toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+    } catch {
+        return dateString || "N/A";
     }
 };
 
-// --- Sub-Component for a Single Detail Row ---
-const CardDetail = ({ icon: Icon, label, value }) => (
-    <div className="flex items-center gap-2 text-sm text-gray-600">
-        <Icon size={16} className="text-indigo-500 flex-shrink-0" />
-        <span className="font-medium">{label}:</span>
-        <span className="text-gray-800 truncate">{value}</span>
-    </div>
-);
-
-// --- Main TripCard Component ---
 export default function TripCard({ trip }) {
-    const { text: statusText, classes: statusClasses } = getStatusBadge(trip.status);
-
-    const isPriceAvailable = trip.kilometer && !isNaN(trip.kilometer);
-    const pricePerKm = process.env.NEXT_PUBLIC_PRICE_PER_KM_SINGLESEAT;
-    const estimatedPrice = isPriceAvailable ? trip.kilometer * pricePerKm : null;
+    const cfg = getStatusConfig(trip.status);
+    const pricePerKm = parseInt(process.env.NEXT_PUBLIC_PRICE_PER_KM_SINGLESEAT || "8");
+    const pricePerSeat = trip.kilometer ? parseInt(trip.kilometer) * pricePerKm : null;
+    const estimatedEarnings = pricePerSeat ? pricePerSeat * (trip.bookedseats || 0) : 0;
+    const seatsTotal = trip.seats || 0;
+    const seatsBooked = trip.bookedseats || 0;
+    const seatsProgress = seatsTotal > 0 ? Math.round((seatsBooked / seatsTotal) * 100) : 0;
     const detailsLink = `/providertrips/${trip._id}`;
 
+    const stripColor = trip.status?.toLowerCase() === "active" || trip.status?.toLowerCase() === "confirmed"
+        ? "bg-green-500"
+        : trip.status?.toLowerCase() === "completed" || trip.status?.toLowerCase() === "finished"
+        ? "bg-[#7C3AED]"
+        : "bg-red-400";
+
     return (
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 flex flex-col gap-5 hover:shadow-xl hover:ring-2 hover:ring-indigo-100 transition duration-300 transform hover:-translate-y-0.5">
+        <Link
+            href={detailsLink}
+            className="group block bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex"
+        >
+            {/* Left colored strip */}
+            <div className={`w-1 flex-shrink-0 ${stripColor}`} />
 
-            {/* Header: Title and Status Badge */}
-            <div className="flex justify-between items-start border-b pb-3">
-                <h3 className="text-xl font-bold text-gray-800 truncate pr-4">{trip.name || "Untitled Trip"}</h3>
-                <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${statusClasses}`}>
-                    {statusText}
-                </span>
+            <div className="flex-1 p-4">
+                {/* Route + status/earnings */}
+                <div className="flex items-stretch justify-between gap-3">
+                    {/* Vehicle icon + route */}
+                    <div className="flex items-stretch gap-3 flex-1 min-w-0">
+                        <div className="w-11 h-11 rounded-xl bg-violet-50 flex items-center justify-center flex-shrink-0 self-center">
+                            <Car size={20} className="text-[#7C3AED]" />
+                        </div>
+                        <div className="flex-1 min-w-0 py-0.5">
+                            <div className="flex items-center gap-2 mb-1">
+                                <div className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0" />
+                                <p className="text-sm font-bold text-gray-900 truncate">{trip.source || "—"}</p>
+                            </div>
+                            <div className="ml-[3px] w-px h-3 bg-gray-200" />
+                            <div className="flex items-center gap-2 mt-1">
+                                <div className="w-2 h-2 rounded-full bg-[#7C3AED] flex-shrink-0" />
+                                <p className="text-sm font-bold text-gray-900 truncate">{trip.destination || "—"}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Status + earnings */}
+                    <div className="flex flex-col items-end justify-between flex-shrink-0 gap-2">
+                        <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide ${cfg.pill}`}>
+                            {cfg.label}
+                        </span>
+                        <div className="bg-violet-50 border border-violet-100 rounded-xl px-2.5 py-1.5 text-right">
+                            <div className="flex items-center gap-1 justify-end">
+                                <TrendingUp size={9} className="text-[#7C3AED]" />
+                                <p className="text-sm font-extrabold text-[#7C3AED] leading-none">₹{estimatedEarnings.toLocaleString("en-IN")}</p>
+                            </div>
+                            <p className="text-[9px] text-gray-400 mt-0.5">earned</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Info chips */}
+                <div className="flex items-center gap-1.5 flex-wrap mt-3">
+                    <span className="inline-flex items-center gap-1 bg-violet-50 border border-violet-100 rounded-lg px-2 py-1 text-xs text-violet-600">
+                        <Calendar size={10} /> {formatDate(trip.date)}
+                    </span>
+                    <span className="inline-flex items-center gap-1 bg-gray-50 border border-gray-100 rounded-lg px-2 py-1 text-xs text-gray-500">
+                        <Clock size={10} className="text-violet-400" /> {trip.time || "—"}
+                    </span>
+                    <span className="inline-flex items-center gap-1 bg-gray-50 border border-gray-100 rounded-lg px-2 py-1 text-xs text-gray-500">
+                        <Car size={10} className="text-violet-400" /> {trip.vehicle || "Car"}
+                    </span>
+                    <span className="inline-flex items-center gap-1 bg-violet-50 border border-violet-100 rounded-lg px-2 py-1 text-xs font-semibold text-violet-700 ml-auto">
+                        {seatsBooked}/{seatsTotal} seats
+                    </span>
+                </div>
+
+                {/* Progress bar */}
+                <div className="mt-3 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div
+                        className="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-[#7C3AED] to-[#8B5CF6]"
+                        style={{ width: `${seatsProgress}%` }}
+                    />
+                </div>
+
+                {/* Footer */}
+                <div className="mt-3 pt-2.5 border-t border-gray-50 flex items-center justify-between">
+                    <span className="text-xs text-gray-400">{trip.kilometer} km · ₹{pricePerKm}/km</span>
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#7C3AED] group-hover:text-[#6D28D9] transition-colors">
+                        View Details <ArrowRight size={11} />
+                    </span>
+                </div>
             </div>
-
-            {/* Route Section */}
-            <div className="flex flex-col gap-1">
-                <div className="flex items-center text-sm font-medium text-gray-500">
-                    <MapPin size={16} className="text-red-500 mr-1.5" />
-                    Source: <span className="text-gray-800 font-semibold ml-1">{trip.source}</span>
-                </div>
-                <div className="flex items-center text-sm font-medium text-gray-500">
-                    <ArrowRight size={16} className="text-gray-400 mr-1.5 ml-0.5" />
-                    Destination: <span className="text-gray-800 font-semibold ml-1">{trip.destination}</span>
-                </div>
-            </div>
-
-            {/* Details Grid (2 Columns on All Screens) */}
-            <div className="grid grid-cols-2 gap-4 border-y py-4">
-
-                {/* Left Column: Date & Time */}
-                <div className="flex flex-col gap-2 border-r pr-4">
-                    <CardDetail
-                        icon={Calendar}
-                        label="Date"
-                        value={formatReadableDate(trip.date)}
-                    />
-                    <CardDetail
-                        icon={Clock}
-                        label="Time"
-                        value={trip.time}
-                    />
-                    <CardDetail
-                        icon={MapPin}
-                        label="Meeting Point"
-                        value={trip.meetPlace || 'N/A'}
-                    />
-                </div>
-
-                {/* Right Column: Capacity & Vehicle */}
-                <div className="flex flex-col gap-2 pl-4">
-                    <CardDetail
-                        icon={Users}
-                        label="Seats"
-                        value={`${trip.seats || 0} Available`}
-                    />
-                    <CardDetail
-                        icon={Car}
-                        label="Vehicle"
-                        value={trip.vehicle || 'N/A'}
-                    />
-                    <CardDetail
-                        icon={Tag}
-                        label="Type"
-                        value={trip.vehicleType || 'Car'}
-                    />
-                </div>
-            </div>
-
-            {/* Footer: Price and Action Button */}
-            <div className="flex justify-between items-center pt-1">
-                <div className="flex items-center text-lg font-bold text-gray-900">
-                    <DollarSign size={20} className="text-green-600 mr-1" />
-                    {estimatedPrice ? (
-                        <span className="text-xl">₹{estimatedPrice}</span>
-                    ) : (
-                        <span className="text-sm text-gray-500 font-normal">Price Est. N/A</span>
-                    )}
-                </div>
-
-                <Link
-                    href={detailsLink}
-                    className="flex items-center gap-1 text-white bg-indigo-600 px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition duration-300 shadow-md"
-                >
-                    <Info size={18} />
-                    View Details
-                </Link>
-            </div>
-        </div>
+        </Link>
     );
 }

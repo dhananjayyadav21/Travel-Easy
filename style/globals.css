@@ -1,28 +1,148 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
+:root {
+  --color-primary: #0284C7;
+  --color-primary-dark: #0369A1;
+  --color-primary-light: #E0F2FE;
+  --color-brand-dark: #0C4A6E;
+  --color-brand-mid: #075985;
+  --color-indigo: #6366F1;
+  --color-success: #0284C7;
+  --color-danger: #DC2626;
+  --color-warning: #D97706;
+  --color-bg: #FFFFFF;
+  --color-surface: #F0F9FF;
+  --color-card: #FFFFFF;
+  --color-text: #0F172A;
+  --color-muted: #64748B;
+  --color-border: #E2E8F0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
   box-sizing: border-box;
 }
 
+@layer base {
+  button, a, [role="button"], label[for], select {
+    cursor: pointer;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F0F9FF;
+}
+::-webkit-scrollbar-thumb {
+  background: #0284C7;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0369A1;
+}
+
+/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(-5px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.25s ease-in-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease both;
+}
+
+.animate-pulse-soft {
+  animation: pulseSoft 2s ease-in-out infinite;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.3s ease both;
+}
+
+/* Route line for trip cards */
+.route-line {
+  width: 2px;
+  border-left: 2px dashed #CBD5E1;
+  min-height: 32px;
+  margin-left: 7px;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Prevent tap highlight flicker on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth focus/hover transitions on interactive elements */
+input, select, textarea {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+button {
+  transition: background-color 0.15s ease, color 0.15s ease,
+              box-shadow 0.15s ease, transform 0.15s ease,
+              border-color 0.15s ease, opacity 0.15s ease;
 }

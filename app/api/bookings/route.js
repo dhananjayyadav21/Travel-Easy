@@ -29,10 +29,13 @@ export async function GET(req) {
         // Format bookings for frontend readability
         const formattedBookings = bookings.map((booking) => ({
             id: booking._id.toString(),
+            tripId: booking.trip?.toString(),
             source: booking.source,
             destination: booking.destination,
             date: booking.date,
             price: booking.totalPrice,
+            seats: booking.numberOfSeats,
+            kilometer: booking.kilometers,
             status: booking.status,
             contact: booking.contact,
             cancelledBy: booking.cancelledBy,

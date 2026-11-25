@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 import { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
+import { MailCheck, Loader2, CheckCircle, XCircle, Info } from "lucide-react";
 
 function VerifyEmailForm() {
     const router = useRouter();
@@ -57,7 +58,7 @@ function VerifyEmailForm() {
 
         const joined = code.join("");
         if (joined.length !== length)
-            return setMessage({ type: "error", text: "Please enter the full verification code." });
+            return setMessage({ type: "error", text: "Please enter the full 6-digit verification code." });
 
         setLoading(true);
         try {
@@ -74,23 +75,53 @@ function VerifyEmailForm() {
             } else {
                 setMessage({ type: "error", text: data.message });
             }
-        } catch (err) {
-            setMessage({ type: "error", text: "Verification failed. Try again." });
+        } catch {
+            setMessage({ type: "error", text: "Verification failed. Please try again." });
         } finally {
             setLoading(false);
         }
     }
 
-    return (
-        <div className="min-h-[80vh] flex items-center justify-center bg-gradient-to-r from-green-50 to-red-50 px-4">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md text-center">
-                <h2 className="text-2xl font-bold mb-2">Verify Your Email</h2>
-                <p className="text-gray-700 mb-6">
-                    We have sent a verification code to <strong>{email}</strong>. Enter the 6-digit code below.
-                </p>
+    async function handleResend() {
+        if (resendCooldown > 0 || !email) return;
+        setMessage(null);
+        try {
+            await fetch("/api/auth/resend-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            });
+            setResendCooldown(60);
+            setMessage({ type: "info", text: "Verification code resent to your email." });
+        } catch {
+            setMessage({ type: "error", text: "Failed to resend. Please try again." });
+        }
+    }
 
-                <form onSubmit={handleVerify} onPaste={handlePaste} className="space-y-4">
-                    <div className="flex justify-center gap-2">
+    const msgStyles = {
+        success: "bg-green-50 border border-green-100 text-green-700",
+        error: "bg-red-50 border border-red-100 text-red-600",
+        info: "bg-sky-50 border border-sky-100 text-sky-700",
+    };
+    const MsgIcon = { success: CheckCircle, error: XCircle, info: Info };
+
+    return (
+        <div className="min-h-[calc(100vh-56px)] bg-white flex items-center justify-center px-4">
+            <div className="w-full max-w-sm border border-gray-100 rounded-2xl p-8 text-center">
+
+                {/* Icon */}
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-sky-50 rounded-xl mb-5">
+                    <MailCheck size={22} className="text-sky-600" />
+                </div>
+
+                {/* Title */}
+                <h2 className="text-lg font-semibold text-gray-900 mb-1">Verify your email</h2>
+                <p className="text-sm text-gray-500 mb-1">We sent a 6-digit code to</p>
+                <p className="text-sm font-medium text-gray-900 mb-7">{email || "your email"}</p>
+
+                {/* OTP inputs */}
+                <form onSubmit={handleVerify} onPaste={handlePaste}>
+                    <div className="flex justify-center gap-2 mb-5">
                         {code.map((digit, idx) => (
                             <input
                                 key={idx}
@@ -98,59 +129,76 @@ function VerifyEmailForm() {
                                 value={digit}
                                 onChange={(e) => handleChange(e, idx)}
                                 onKeyDown={(e) => handleKeyDown(e, idx)}
-                                className="w-10 h-12 text-center border rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-black/30"
+                                className={`w-11 h-12 text-center text-lg font-semibold border rounded-lg focus:outline-none transition-colors bg-white
+                                    ${digit
+                                        ? "border-sky-400 bg-sky-50 text-sky-700"
+                                        : "border-gray-200 text-gray-900 focus:border-sky-500 focus:ring-1 focus:ring-sky-200"
+                                    }`}
                                 inputMode="numeric"
                                 autoComplete="one-time-code"
                             />
                         ))}
                     </div>
 
+                    {/* Message */}
+                    {message && (
+                        <div className={`flex items-center gap-2 rounded-lg px-3 py-2 mb-4 text-xs text-left ${msgStyles[message.type]}`}>
+                            {MsgIcon[message.type] && (() => {
+                                const Icon = MsgIcon[message.type];
+                                return <Icon size={13} className="flex-shrink-0" />;
+                            })()}
+                            <span>{message.text}</span>
+                        </div>
+                    )}
+
+                    {/* Submit */}
                     <button
                         type="submit"
-                        disabled={loading}
-                        className="w-full bg-black text-white py-2 rounded-lg font-medium hover:bg-gray-900 disabled:opacity-60"
+                        disabled={loading || code.join("").length !== length}
+                        className="w-full h-10 flex justify-center items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                     >
-                        {loading ? "Verifying..." : "Verify Email"}
+                        {loading
+                            ? <><Loader2 size={15} className="animate-spin" /> Verifying...</>
+                            : "Verify Email"
+                        }
                     </button>
                 </form>
 
-                {message && (
-                    <div
-                        className={`mt-4 p-2 rounded ${message.type === "success"
-                            ? "bg-green-100 text-green-800"
-                            : message.type === "error"
-                                ? "bg-red-100 text-red-800"
-                                : "bg-blue-100 text-blue-800"
-                            }`}
-                    >
-                        {message.text}
-                    </div>
-                )}
+                {/* Resend */}
+                <p className="mt-5 text-xs text-gray-500">
+                    {resendCooldown > 0
+                        ? <>Resend in <span className="font-medium text-gray-700">{resendCooldown}s</span></>
+                        : <>
+                            Didn&apos;t receive it?{" "}
+                            <button
+                                onClick={handleResend}
+                                className="text-sky-600 hover:underline font-medium"
+                            >
+                                Resend
+                            </button>
+                          </>
+                    }
+                </p>
 
-                <p className="mt-4 text-sm text-gray-600">
-                    Back to <Link href="/login" className="text-black hover:underline">Login</Link>
+                <p className="mt-3 text-xs text-gray-400">
+                    Back to{" "}
+                    <Link href="/login" className="text-sky-600 hover:underline font-medium">
+                        Login
+                    </Link>
                 </p>
             </div>
         </div>
     );
 }
 
-// Loading fallback component
 function LoadingFallback() {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-50 to-red-50 px-4">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md text-center">
-                <div className="flex flex-col items-center gap-4">
-                    <div className="w-8 h-8 border-4 border-t-transparent border-gray-900 rounded-full animate-spin"></div>
-                    <h2 className="text-xl font-semibold text-gray-700">Loading...</h2>
-                    <p className="text-gray-500 text-sm">Preparing email verification</p>
-                </div>
-            </div>
+        <div className="min-h-[calc(100vh-56px)] flex items-center justify-center bg-white px-4">
+            <div className="w-8 h-8 border-2 border-t-transparent border-sky-600 rounded-full animate-spin" />
         </div>
     );
 }
 
-// Main component with Suspense boundary
 export default function VerifyEmail() {
     return (
         <Suspense fallback={<LoadingFallback />}>

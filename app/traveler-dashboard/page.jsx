@@ -1,121 +1,163 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { Loader2, AlertTriangle, CheckCircle, Route } from 'lucide-react';
-import TripCard from "@/components/TravelerTripCard";
+﻿"use client";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Bell, ChevronDown } from "lucide-react";
+import TravelerBottomNav from "@/components/TravelerBottomNav";
+import RoleRoute from "@/utils/RoleRoute";
 
-export default function TravelerDashboard() {
-    const [bookings, setBookings] = useState([]);
-    const [filteredBookings, setFilteredBookings] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [searchSource, setSearchSource] = useState("");
-    const [searchDestination, setSearchDestination] = useState("");
+/* ── Shared flat car SVG — faces right, fits inside banner ── */
+function CarSVG() {
+    return (
+        <svg viewBox="0 0 320 160" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+            <ellipse cx="160" cy="150" rx="110" ry="7" fill="black" fillOpacity="0.15"/>
+            <rect x="20" y="88" width="280" height="50" rx="12" fill="white" fillOpacity="0.95"/>
+            <path d="M68 88 L90 44 Q102 28 122 26 L200 26 Q220 28 232 44 L254 88Z" fill="white"/>
+            <rect x="96" y="34" width="54" height="38" rx="5" fill="#C4B5FD" fillOpacity="0.6"/>
+            <rect x="160" y="34" width="54" height="38" rx="5" fill="#C4B5FD" fillOpacity="0.6"/>
+            <line x1="156" y1="34" x2="156" y2="72" stroke="white" strokeWidth="2.5" strokeOpacity="0.5"/>
+            <rect x="24" y="96" width="12" height="9" rx="3" fill="#FCA5A5" fillOpacity="0.95"/>
+            <rect x="284" y="96" width="12" height="9" rx="3" fill="#FDE68A" fillOpacity="0.95"/>
+            <line x1="160" y1="88" x2="160" y2="138" stroke="#E5E7EB" strokeWidth="1" strokeOpacity="0.3"/>
+            <circle cx="90"  cy="136" r="20" fill="#5B21B6"/>
+            <circle cx="90"  cy="136" r="12" fill="#7C3AED" fillOpacity="0.45"/>
+            <circle cx="90"  cy="136" r="5"  fill="white" fillOpacity="0.55"/>
+            <circle cx="232" cy="136" r="20" fill="#5B21B6"/>
+            <circle cx="232" cy="136" r="12" fill="#7C3AED" fillOpacity="0.45"/>
+            <circle cx="232" cy="136" r="5"  fill="white" fillOpacity="0.55"/>
+        </svg>
+    );
+}
+
+export default function TravelerHome() {
+    const router = useRouter();
+    const [from, setFrom] = useState("");
+    const [to,   setTo]   = useState("");
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const fetchTrips = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const token = localStorage.getItem("token");
-                const res = await fetch("/api/providertrips/all?status=Active", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.message || "Failed to fetch trips");
-
-                setBookings(data.trips || []);
-                setFilteredBookings(data.trips || []);
-            } catch (err) {
-                console.error(err);
-                setError("Failed to load your trips. Please try again.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchTrips();
+        try { const r = localStorage.getItem("user"); if (r) setUser(JSON.parse(r)); } catch {}
     }, []);
 
-    // Filter trips based on source & destination
-    useEffect(() => {
-        const filtered = bookings.filter((trip) => {
-            const sourceMatch = trip.source?.toLowerCase().includes(searchSource.toLowerCase());
-            const destinationMatch = trip.destination?.toLowerCase().includes(searchDestination.toLowerCase());
-            return sourceMatch && destinationMatch;
-        });
-        setFilteredBookings(filtered);
-    }, [searchSource, searchDestination, bookings]);
-
-    if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center p-4">
-                <div className="flex flex-col items-center p-10 bg-white rounded-xl shadow-lg">
-                    <Loader2 size={32} className="animate-spin text-indigo-500 mb-4" />
-                    <p className="text-lg font-medium text-gray-700">Loading your trips...</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="min-h-screen flex items-center justify-center p-4">
-                <div className="flex flex-col items-center p-10 bg-red-50 rounded-xl shadow-lg border border-red-300">
-                    <AlertTriangle size={32} className="text-red-500 mb-4" />
-                    <p className="text-lg font-medium text-red-700">{error}</p>
-                </div>
-            </div>
-        );
-    }
+    const handleSearch = () => {
+        const p = new URLSearchParams();
+        if (from.trim()) p.set("from", from.trim());
+        if (to.trim())   p.set("to",   to.trim());
+        router.push(`/available-rides?${p.toString()}`);
+    };
 
     return (
-        <div className="min-h-screen p-4 sm:p-8 font-inter">
-            {/* Header */}
-            <div className="max-w-7xl mx-auto my-4 sm:my-1">
-                <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3 border-b-2 border-indigo-200 pb-2">
-                    <Route size={20} className="text-indigo-600" />
-                    View & Book Trip
-                </h1>
-                <p className="text-gray-600 mt-2">Book seat according to your choice.</p>
+        <RoleRoute role="traveler">
+            <div className="flex flex-col bg-[#EDE9FE]" style={{ minHeight: 'calc(100vh - 56px)' }}>
+            <div className="flex-1 flex flex-col max-w-xl mx-auto w-full px-4 pt-5 pb-24">
 
-                {/* Search Bar */}
-                <div className="flex flex-col sm:flex-row gap-3 my-6">
-                    <input
-                        type="text"
-                        placeholder="Search by Source"
-                        className="p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 flex-1"
-                        value={searchSource}
-                        onChange={(e) => setSearchSource(e.target.value)}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Search by Destination"
-                        className="p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 flex-1"
-                        value={searchDestination}
-                        onChange={(e) => setSearchDestination(e.target.value)}
-                    />
+                {/* ── TOP BAR ── */}
+                <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm flex-shrink-0">
+                            {user?.profilePhoto ? (
+                                <img src={user.profilePhoto} className="w-full h-full object-cover rounded-full" alt="" />
+                            ) : (
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2">
+                                    <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                                </svg>
+                            )}
+                        </div>
+                        <button className="flex items-center gap-1">
+                            <span className="text-base font-bold text-gray-900">
+                                {user?.name?.split(" ")[0] || "Mumbai"}
+                            </span>
+                            <ChevronDown size={15} className="text-gray-500" strokeWidth={2.5}/>
+                        </button>
+                    </div>
+                    <button className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm relative">
+                        <Bell size={18} className="text-[#7C3AED]" strokeWidth={2}/>
+                        <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-[#EDE9FE]"/>
+                    </button>
                 </div>
-            </div>
 
-            {/* Trip Cards */}
-            <div className="max-w-7xl mx-auto">
-                {filteredBookings.length === 0 ? (
-                    <div className="p-10 bg-white rounded-xl shadow-lg border border-indigo-300 text-center">
-                        <CheckCircle size={32} className="text-indigo-500 mx-auto mb-4" />
-                        <p className="text-lg font-medium text-gray-700">No trips match your search.</p>
-                        <p className="text-sm text-gray-500">Try adjusting your source or destination.</p>
+                {/* ── HERO BANNER — grows to fill remaining space ── */}
+                <div
+                    className="relative overflow-hidden px-6 pt-7 mb-4 flex-1"
+                    style={{
+                        background: "linear-gradient(135deg,#5B21B6 0%,#7C3AED 55%,#8B5CF6 100%)",
+                        minHeight: "180px",
+                        borderRadius: "16px",
+                    }}
+                >
+                    <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none"/>
+                    <div className="relative z-10 max-w-[48%]">
+                        <p className="text-white font-extrabold text-[20px] leading-snug">
+                            Share Your Ride<br/>Save Up to 60%
+                        </p>
                     </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {filteredBookings.map((trip) => (
-                            <TripCard key={trip._id} booking={{ trip }} />
-                        ))}
+                    {/* Car — right half, bottom-aligned inside banner */}
+                    <div className="absolute right-0 bottom-0 w-[62%]">
+                        <CarSVG/>
                     </div>
-                )}
+                </div>
+
+                {/* ── SEARCH CARD ── */}
+                <div className="bg-white shadow-sm mb-4 overflow-hidden" style={{ borderRadius: "16px" }}>
+
+                    {/* FROM */}
+                    <div className="flex items-center gap-4 px-5 pt-5 pb-3">
+                        <div className="w-5 h-5 rounded-full border-2 border-[#7C3AED] bg-white flex items-center justify-center flex-shrink-0">
+                            <div className="w-2 h-2 rounded-full bg-[#7C3AED]"/>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-xs font-bold text-gray-400 mb-0.5">From</p>
+                            <input
+                                value={from}
+                                onChange={e => setFrom(e.target.value)}
+                                placeholder="Your Location"
+                                className="w-full text-sm font-semibold text-gray-800 placeholder-gray-400 focus:outline-none bg-transparent"
+                                onKeyDown={e => e.key === "Enter" && handleSearch()}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Dotted connector */}
+                    <div className="flex items-center gap-4 px-5 py-0.5">
+                        <div className="w-5 flex justify-center flex-shrink-0">
+                            <div className="flex flex-col gap-[4px]">
+                                <span className="block w-[2px] h-[4px] bg-[#7C3AED]/25 rounded-full mx-auto"/>
+                                <span className="block w-[2px] h-[4px] bg-[#7C3AED]/25 rounded-full mx-auto"/>
+                                <span className="block w-[2px] h-[4px] bg-[#7C3AED]/25 rounded-full mx-auto"/>
+                            </div>
+                        </div>
+                        <div className="flex-1 h-px bg-gray-100"/>
+                    </div>
+
+                    {/* TO */}
+                    <div className="flex items-center gap-4 px-5 pt-3 pb-5">
+                        <div className="w-5 h-5 rounded-full border-2 border-[#7C3AED] bg-[#7C3AED] flex items-center justify-center flex-shrink-0">
+                            <div className="w-2 h-2 rounded-full bg-white"/>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-xs font-bold text-gray-400 mb-0.5">To</p>
+                            <input
+                                value={to}
+                                onChange={e => setTo(e.target.value)}
+                                placeholder="Destination"
+                                className="w-full text-sm font-semibold text-gray-800 placeholder-gray-400 focus:outline-none bg-transparent"
+                                onKeyDown={e => e.key === "Enter" && handleSearch()}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* ── SEARCH BUTTON ── */}
+                <button
+                    onClick={handleSearch}
+                    className="w-full bg-[#5B21B6] hover:bg-[#4C1D95] active:scale-[0.98] text-white font-bold text-base transition-all"
+                    style={{ height: "56px", letterSpacing: "0.01em", borderRadius: "16px" }}
+                >
+                    Search Rides
+                </button>
+
             </div>
-        </div>
+            <TravelerBottomNav/>
+            </div>
+        </RoleRoute>
     );
 }

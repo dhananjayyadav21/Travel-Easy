@@ -4,6 +4,7 @@ import { verifyAuth } from "@/utils/verifyAuth";
 import Trip from "@/models/Trip";
 import Booking from "@/models/Booking";
 import User from "@/models/User";
+import { sendPushNotification, sendNotificationEmail } from "@/lib/pushNotification";
 
 export async function POST(req) {
     await connectDB();
@@ -48,19 +49,21 @@ export async function POST(req) {
             return NextResponse.json({ error: "All required fields must be filled." }, { status: 400 });
         }
 
-        // Validate travelerName (letters and spaces only, min 2 chars)
-        const nameRegex = /^[a-zA-Z\s]{2,50}$/;
+        // Validate travelerName (letters, spaces, dots — min 2 chars)
+        const nameRegex = /^[a-zA-Z\s.]{2,50}$/;
         if (!nameRegex.test(travelerName)) {
             return NextResponse.json({ error: "Invalid traveler name." }, { status: 400 });
         }
 
-        // Validate travelerNumber & contact (10-15 digits)
+        // Validate travelerNumber (strip non-digits, then check 10-15 digits)
         const phoneRegex = /^\d{10,15}$/;
-        if (!phoneRegex.test(travelerNumber)) {
+        const cleanTravelerNumber = travelerNumber.replace(/\D/g, "");
+        if (!phoneRegex.test(cleanTravelerNumber)) {
             return NextResponse.json({ error: "Invalid traveler number. Must be 10-15 digits." }, { status: 400 });
         }
-        if (!phoneRegex.test(contact)) {
-            return NextResponse.json({ error: "Invalid provider contact. Must be 10-15 digits." }, { status: 400 });
+        const cleanContact = contact.replace(/\D/g, "");
+        if (cleanContact.length < 10) {
+            return NextResponse.json({ error: "Invalid provider contact number." }, { status: 400 });
         }
 
         // Check trip existence
@@ -69,22 +72,21 @@ export async function POST(req) {
             return NextResponse.json({ error: "Trip not found" }, { status: 404 });
         }
 
-        // Validate kilometers against trip's actual distance
-        if (parseFloat(kilometers) !== parseFloat(tripExists.kilometer)) {
+        // Validate kilometers against trip's actual distance (round to avoid float drift)
+        if (Math.round(parseFloat(kilometers)) !== Math.round(parseFloat(tripExists.kilometer))) {
             return NextResponse.json({
-                error: `Entered kilometers (${kilometers}) do not match the trip's distance (${tripExists.kilometer}).`
+                error: `Kilometer mismatch: booking says ${kilometers} km but trip is ${tripExists.kilometer} km.`
             }, { status: 400 });
         }
 
-        // Update booked seats
-        tripExists.bookedseats = (tripExists.bookedseats || 0) + numberOfSeats;
-
-        // If all seats are booked
-        if (tripExists.bookedseats > tripExists.seats) {
+        // Check seat availability before updating
+        const currentBooked = tripExists.bookedseats || 0;
+        if (currentBooked + numberOfSeats > tripExists.seats) {
             return NextResponse.json({ message: "All seats are already booked." }, { status: 400 });
         }
 
-        await tripExists.save();
+        // Update only bookedseats — avoids full-document validation on save()
+        await Trip.findByIdAndUpdate(trip, { $inc: { bookedseats: numberOfSeats } });
 
         // Create new booking
         const newBooking = new Booking({
@@ -101,8 +103,27 @@ export async function POST(req) {
             totalPrice,
             ratePerKm,
             bookedBy: userId,
+            paymentMethod: body.paymentMethod === "cash" ? "cash" : "online",
         });
         await newBooking.save();
+
+        // Notify the provider (push + email)
+        const provider = await User.findById(tripExists.creator).select("pushSubscription email name").lean();
+        const notifPayload = {
+            title: "New Booking!",
+            body: `${travelerName} booked ${numberOfSeats} seat(s) on your trip ${source} → ${destination}.`,
+            url: `/providertrips/${tripExists._id}`,
+        };
+        if (provider?.pushSubscription) {
+            sendPushNotification(provider.pushSubscription, notifPayload);
+        }
+        if (provider?.email) {
+            sendNotificationEmail(
+                provider.email,
+                `New Booking on your trip — Travel Easy Hai`,
+                `Hi ${provider.name},<br><br><b>${travelerName}</b> has booked <b>${numberOfSeats} seat(s)</b> on your trip from <b>${source}</b> to <b>${destination}</b> on <b>${date}</b>.<br><br>Total fare: ₹${totalPrice}`
+            );
+        }
 
         return NextResponse.json({ success: true, message: "Booking confirmed!", booking: newBooking }, { status: 201 });
 

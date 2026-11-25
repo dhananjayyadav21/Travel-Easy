@@ -1,17 +1,17 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import TripCard from "@/components/ProviderTripCard";
-import { Loader2, AlertTriangle, BusFront, CalendarCheck, Clock, XCircle, Filter } from "lucide-react";
+import { AlertTriangle, BusFront, XCircle, Plus, RefreshCw, Clock, ArrowLeft } from "lucide-react";
 import ProtectedRoute from "@/utils/ProtectedRoute";
+import ProviderBottomNav from "@/components/ProviderBottomNav";
+import Link from "next/link";
 
-// Define the available trip statuses
 const tripStatuses = [
     { key: "Active", label: "Active", icon: BusFront },
     { key: "Completed", label: "Completed", icon: Clock },
     { key: "Cancelled", label: "Cancelled", icon: XCircle },
 ];
-
 
 const useFetchProviderTrips = (status) => {
     const [data, setData] = useState([]);
@@ -28,29 +28,17 @@ const useFetchProviderTrips = (status) => {
                 setIsLoading(false);
                 return;
             }
-
-            // Using the current status in the API call
             const res = await fetch(`/api/providertrips/my?status=${currentStatus}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` },
             });
-
             const responseData = await res.json();
-
-            if (!res.ok) {
-                // API returns a standard error format
-                throw new Error(responseData.message || `Failed to fetch ${currentStatus} trips.`);
-            }
-
-            // Store all fetched data in local storage for details page access
+            if (!res.ok) throw new Error(responseData.message || `Failed to fetch ${currentStatus} trips.`);
             if (responseData.trips && Array.isArray(responseData.trips)) {
-                localStorage.setItem('trips', JSON.stringify(responseData.trips));
+                localStorage.setItem("trips", JSON.stringify(responseData.trips));
                 setData(responseData.trips);
             } else {
                 setData([]);
             }
-
         } catch (err) {
             console.error("Fetch error:", err);
             setError(err.message || "An unknown error occurred while loading trips.");
@@ -60,115 +48,170 @@ const useFetchProviderTrips = (status) => {
         }
     };
 
-    useEffect(() => {
-        fetchTrips(status);
-    }, [status]);
-
-    // Allows manual refresh if needed
+    useEffect(() => { fetchTrips(status); }, [status]);
     const refetch = () => fetchTrips(status);
-
     return { data, isLoading, error, refetch };
 };
 
-// --- ProviderTrips Page Component ---
+const SkeletonCard = () => (
+    <div className="bg-white rounded-2xl border border-violet-50 p-4 animate-pulse">
+        <div className="flex justify-between gap-3 mb-3">
+            <div className="flex items-center gap-2.5 flex-1">
+                <div className="flex flex-col gap-1 items-center">
+                    <div className="w-2 h-2 rounded-full bg-violet-100" />
+                    <div className="w-px h-4 bg-violet-50" />
+                    <div className="w-2 h-2 rounded-full bg-violet-100" />
+                </div>
+                <div className="space-y-2 flex-1">
+                    <div className="h-3.5 w-28 bg-gray-100 rounded" />
+                    <div className="h-3 w-16 bg-gray-100 rounded" />
+                    <div className="h-3.5 w-24 bg-gray-100 rounded" />
+                </div>
+            </div>
+            <div className="text-right space-y-1.5">
+                <div className="h-5 w-16 bg-violet-100 rounded-full ml-auto" />
+                <div className="h-5 w-14 bg-gray-100 rounded ml-auto" />
+            </div>
+        </div>
+        <div className="flex gap-3 pt-2 border-t border-gray-50">
+            <div className="h-3 w-16 bg-gray-100 rounded" />
+            <div className="h-3 w-14 bg-gray-100 rounded" />
+            <div className="h-3 w-10 bg-violet-100 rounded ml-auto" />
+        </div>
+        <div className="mt-2 h-1 bg-violet-50 rounded-full" />
+    </div>
+);
+
+import { useRouter } from "next/navigation";
 
 export default function ProviderTrips() {
-    // State to manage which status tab is currently active
+    const router = useRouter();
     const [activeStatus, setActiveStatus] = useState(tripStatuses[0].key);
-
-    // Fetch data using the custom hook based on the active status
     const { data: trips, isLoading, error, refetch } = useFetchProviderTrips(activeStatus);
-
-    // --- Tab Component ---
-    const TabButton = ({ statusKey, label, Icon }) => {
-        const isActive = statusKey === activeStatus;
-        return (
-            <button
-                onClick={() => setActiveStatus(statusKey)}
-                className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition duration-200 
-                    ${isActive
-                        ? "bg-indigo-600 text-white shadow-md"
-                        : "text-gray-600 hover:bg-gray-100"
-                    }`
-                }
-            >
-                <Icon size={18} className="mr-2" />
-                {label}
-            </button>
-        );
-    };
-
-    // --- Render Logic ---
-    // 1. Loading State
-    if (isLoading) {
-        return (
-            <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50 p-6">
-                <Loader2 className="w-10 h-10 text-indigo-500 animate-spin mb-4" />
-                <p className="text-lg font-medium text-gray-600">Loading {activeStatus} trips...</p>
-            </div>
-        );
-    }
 
     return (
         <ProtectedRoute>
-            <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-7xl mx-auto">
+            <div className="min-h-screen bg-[#F5F3FF]">
 
-                    {/* Header Section */}
-                    <header className="mb-8">
-                        <h1 className="text-2xl sm:text-4xl font-extrabold text-gray-900 mb-2">My Offered Rides</h1>
-                        <p className="text-gray-500 text-md sm:text-lg">Manage all trips you've published for ride-sharing.</p>
-                    </header>
+                {/* ── Header ── */}
+                <div className="bg-white sticky top-14 z-30 border-b border-gray-100 shadow-sm">
+                    <div className="max-w-2xl mx-auto px-4">
 
-                    {/* Status Tabs/Filters */}
-                    <div className="flex flex-wrap gap-3 mb-8 p-3 bg-white rounded-xl shadow-sm border border-gray-200">
-                        <Filter size={20} className="text-indigo-600 self-center mr-2 hidden sm:block" />
-                        {tripStatuses.map((status) => (
-                            <TabButton
-                                key={status.key}
-                                statusKey={status.key}
-                                label={status.label}
-                                Icon={status.icon}
-                            />
-                        ))}
+                        {/* Title row */}
+                        <div className="flex items-center justify-between py-3.5">
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={() => router.back()}
+                                    className="w-9 h-9 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center hover:bg-violet-50 hover:border-violet-200 transition"
+                                >
+                                    <ArrowLeft size={16} className="text-gray-600" />
+                                </button>
+                                <h1 className="text-base font-extrabold text-gray-900">My Trips</h1>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={refetch}
+                                    disabled={isLoading}
+                                    className="w-9 h-9 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition disabled:opacity-50"
+                                >
+                                    <RefreshCw size={14} className={`text-gray-500 ${isLoading ? "animate-spin" : ""}`} />
+                                </button>
+                                <Link
+                                    href="/provider-dashboard/create"
+                                    className="h-9 px-4 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold text-sm rounded-xl flex items-center gap-1.5 transition shadow-sm shadow-violet-200"
+                                >
+                                    <Plus size={14} /> New Ride
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* Tabs */}
+                        <div className="flex -mb-px">
+                            {tripStatuses.map(({ key, label }) => (
+                                <button
+                                    key={key}
+                                    onClick={() => setActiveStatus(key)}
+                                    className={`flex-1 pb-3 pt-1 text-sm font-semibold transition-all border-b-2 flex items-center justify-center gap-1.5 ${
+                                        activeStatus === key
+                                            ? "border-[#7C3AED] text-[#7C3AED]"
+                                            : "border-transparent text-gray-400 hover:text-gray-600"
+                                    }`}
+                                >
+                                    {label}
+                                    {!isLoading && (
+                                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                                            activeStatus === key ? "bg-violet-100 text-violet-700" : "bg-gray-100 text-gray-500"
+                                        }`}>
+                                            {trips.length}
+                                        </span>
+                                    )}
+                                </button>
+                            ))}
+                        </div>
                     </div>
+                </div>
 
-                    {/* Error State */}
-                    {error && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md mb-6 flex items-center justify-between shadow-sm">
-                            <div className="flex items-center">
-                                <AlertTriangle className="w-5 h-5 mr-3" />
-                                <span className="block sm:inline">{error}</span>
+                {/* ── Content ── */}
+                <div className="max-w-2xl mx-auto px-4 py-4 space-y-3 pb-24">
+
+                    {isLoading && (
+                        <div className="space-y-3">
+                            <SkeletonCard />
+                            <SkeletonCard />
+                            <SkeletonCard />
+                        </div>
+                    )}
+
+                    {!isLoading && error && (
+                        <div className="bg-red-50 border border-red-100 rounded-2xl p-4 flex items-center justify-between">
+                            <div className="flex items-center gap-2.5">
+                                <AlertTriangle size={16} className="text-red-500 flex-shrink-0" />
+                                <p className="text-sm text-red-600">{error}</p>
                             </div>
                             <button
                                 onClick={refetch}
-                                className="text-sm font-semibold text-red-700 hover:text-red-900 underline"
+                                className="flex items-center gap-1 text-xs font-semibold text-red-500 hover:underline flex-shrink-0 ml-3"
                             >
-                                Retry
+                                <RefreshCw size={12} /> Retry
                             </button>
                         </div>
                     )}
 
-                    {/* Empty State */}
-                    {!error && trips.length === 0 && (
-                        <div className="text-center p-12 border-4 border-dashed border-gray-300 rounded-xl mt-10 bg-white">
-                            <XCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                            <h2 className="text-2xl font-semibold text-gray-700">No {activeStatus} Trips Found</h2>
-                            <p className="text-gray-500 mt-2">It looks like you haven't created any rides under this status yet.</p>
+                    {!isLoading && !error && trips.length === 0 && (
+                        <div className="flex flex-col items-center justify-center py-16 text-center">
+                            <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center mb-4">
+                                <BusFront size={26} className="text-violet-500" />
+                            </div>
+                            <p className="text-sm font-bold text-gray-700 mb-1">No {activeStatus.toLowerCase()} trips</p>
+                            <p className="text-xs text-gray-400 mb-5">
+                                {activeStatus === "Active" ? "Post a ride to start earning" : `No ${activeStatus.toLowerCase()} trips found`}
+                            </p>
+                            {activeStatus === "Active" && (
+                                <Link
+                                    href="/provider-dashboard"
+                                    className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#7C3AED] hover:bg-[#6D28D9] text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-violet-200"
+                                >
+                                    <Plus size={13} /> Post Your First Ride
+                                </Link>
+                            )}
                         </div>
                     )}
 
-                    {/* Trips Grid */}
-                    {!error && trips.length > 0 && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {trips.map((trip) => (
-                                <TripCard key={trip._id} trip={trip} />
-                            ))}
-                        </div>
+                    {!isLoading && !error && trips.length > 0 && (
+                        <>
+                            <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-3">
+                                {trips.length} {activeStatus.toLowerCase()} {trips.length === 1 ? "trip" : "trips"}
+                            </p>
+                            <div className="space-y-3">
+                                {trips.map((trip) => (
+                                    <TripCard key={trip._id} trip={trip} />
+                                ))}
+                            </div>
+                        </>
                     )}
-
                 </div>
             </div>
+            <ProviderBottomNav />
         </ProtectedRoute>
     );
 }
