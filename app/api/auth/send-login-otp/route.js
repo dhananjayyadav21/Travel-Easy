@@ -42,15 +42,28 @@ export async function POST(req) {
     user.loginOtpExpiry = expiry;
     await user.save();
 
-    await sendLoginOtpEmail(user.email, otp, user.name);
+    // Send email non-blocking — OTP is saved regardless of email delivery
+    let emailSent = false;
+    try {
+      await sendLoginOtpEmail(user.email, otp, user.name);
+      emailSent = true;
+    } catch (emailErr) {
+      console.error("OTP email delivery failed:", emailErr.message);
+    }
+
+    // In dev, expose OTP in response if email failed (never in production)
+    const devOtp = !emailSent && process.env.NODE_ENV !== "production" ? otp : undefined;
 
     return NextResponse.json({
       success: true,
       maskedEmail: maskEmail(user.email),
-      message: "OTP sent to your registered email address",
+      message: emailSent
+        ? "OTP sent to your registered email address"
+        : "OTP generated. Email delivery failed — check server logs.",
+      ...(devOtp ? { devOtp } : {}),
     });
   } catch (err) {
-    console.error("send-login-otp error:", err);
+    console.error("send-login-otp error:", err.message);
     return NextResponse.json({ error: "Failed to send OTP. Please try again." }, { status: 500 });
   }
 }
