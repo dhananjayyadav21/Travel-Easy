@@ -1,7 +1,9 @@
 ﻿"use client";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Bell, ChevronDown } from 'lucide-react';
+import Footer from '@/components/Footer';
 
 export default function Homepage() {
     const router = useRouter();
@@ -163,5 +165,6 @@ export default function Homepage() {
 
             </div>
         </div>
+        <Footer />
     );
 }
