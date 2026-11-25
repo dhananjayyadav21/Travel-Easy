@@ -327,7 +327,10 @@ export default function BookTripPage() {
                                         {seatCount} Seat{seatCount > 1 ? "s" : ""} Selected
                                     </p>
                                     <p className="text-2xl font-extrabold text-[#6C2BD9]">
-                                        ₹{totalFare.toLocaleString("en-IN")}
+                                        ₹{grandTotal.toLocaleString("en-IN")}
+                                    </p>
+                                    <p className="text-xs text-gray-400 mt-0.5">
+                                        ₹{totalFare.toLocaleString("en-IN")} to driver + ₹{PLATFORM_FEE} platform fee
                                     </p>
                                 </div>
                             )}
@@ -394,17 +397,41 @@ export default function BookTripPage() {
 
                         {/* Fare rows */}
                         <div className="flex-shrink-0">
-                            <div className="flex justify-between py-2">
-                                <span className="text-sm text-gray-500">Fare ({seatCount} × ₹{pricePerSeat.toLocaleString("en-IN")})</span>
-                                <span className="text-sm font-medium text-gray-800">₹{totalFare.toLocaleString("en-IN")}</span>
+                            {/* Fare breakdown header */}
+                            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Price Breakdown</p>
+
+                            <div className="flex justify-between py-2 items-start">
+                                <div>
+                                    <span className="text-sm text-gray-700 font-medium">Ride Fare</span>
+                                    <span className="block text-xs text-gray-400">{seatCount} seat{seatCount > 1 ? "s" : ""} × {kilometers} km × ₹{PRICE_PER_KM}/km → Driver</span>
+                                </div>
+                                <span className="text-sm font-semibold text-gray-800">₹{totalFare.toLocaleString("en-IN")}</span>
                             </div>
-                            <div className="flex justify-between py-2">
-                                <span className="text-sm text-gray-500">Platform Fee</span>
-                                <span className="text-sm font-medium text-gray-800">₹{PLATFORM_FEE}</span>
+
+                            <div className="flex justify-between py-2 items-start">
+                                <div>
+                                    <span className="text-sm text-gray-700 font-medium">Platform Fee</span>
+                                    <span className="block text-xs text-gray-400">One-time fee → TravelEasyHai</span>
+                                </div>
+                                <span className="text-sm font-semibold text-gray-800">₹{PLATFORM_FEE}</span>
                             </div>
-                            <div className="border-t border-gray-100 mt-1 pt-3 flex justify-between items-center mb-6">
+
+                            {/* Driver gets / Platform gets info bar */}
+                            <div className="mt-1 mb-3 bg-violet-50 border border-violet-100 rounded-xl px-3.5 py-2.5 flex items-center justify-between gap-3">
+                                <div className="text-center flex-1">
+                                    <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Driver gets</p>
+                                    <p className="text-sm font-extrabold text-gray-900">₹{totalFare.toLocaleString("en-IN")}</p>
+                                </div>
+                                <div className="w-px h-8 bg-violet-200" />
+                                <div className="text-center flex-1">
+                                    <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Platform gets</p>
+                                    <p className="text-sm font-extrabold text-gray-900">₹{PLATFORM_FEE}</p>
+                                </div>
+                            </div>
+
+                            <div className="border-t border-gray-100 pt-3 flex justify-between items-center mb-6">
                                 <span className="text-base font-bold text-gray-900">Total</span>
-                                <span className="text-base font-extrabold text-gray-900">₹{grandTotal.toLocaleString("en-IN")}</span>
+                                <span className="text-base font-extrabold text-[#6C2BD9]">₹{grandTotal.toLocaleString("en-IN")}</span>
                             </div>
 
                             <button
