@@ -4,8 +4,8 @@ import {
     MapPin, Clock, Users, ChevronLeft,
     ChevronRight, Star, User, ArrowRight, XCircle, Loader2,
 } from "lucide-react";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import InlineAlert from "@/components/InlineAlert";
 import ProtectedRoute from "@/utils/ProtectedRoute";
 
 const PRICE_PER_KM  = process.env.NEXT_PUBLIC_PRICE_PER_KM_SINGLESEAT || "8";
@@ -171,6 +171,7 @@ export default function BookTripPage() {
     const [paymentMethod, setPay]       = useState("upi");
     const [submitting, setSubmitting]   = useState(false);
     const [bookingId, setBookingId]     = useState(null);
+    const [bookError, setBookError]     = useState("");
 
     const seatCount   = selectedSeats.length;
     const pricePerSeat = parseFloat(kilometers) * parseFloat(PRICE_PER_KM);
@@ -226,6 +227,7 @@ export default function BookTripPage() {
         setSel(prev => prev.includes(label) ? prev.filter(s => s !== label) : [...prev, label]);
 
     const submit = async () => {
+        setBookError("");
         setSubmitting(true);
         try {
             const token = localStorage.getItem("token");
@@ -242,8 +244,8 @@ export default function BookTripPage() {
             });
             const data = await res.json();
             if (res.ok) { setBookingId(data.booking?._id || null); setStep(4); }
-            else toast.error(data.error || data.message || "Booking failed");
-        } catch { toast.error("Something went wrong."); }
+            else setBookError(data.error || data.message || "Booking failed. Please try again.");
+        } catch { setBookError("Network error. Please check your connection and try again."); }
         finally { setSubmitting(false); }
     };
 
@@ -318,6 +320,7 @@ export default function BookTripPage() {
 
                         {/* CTA */}
                         <div className="flex-shrink-0 pb-4 text-center">
+                            {bookError && <div className="mb-3 text-left"><InlineAlert message={bookError} onDismiss={() => setBookError("")} /></div>}
                             {seatCount > 0 && (
                                 <div className="mb-3">
                                     <p className="text-sm font-bold text-gray-700">
@@ -330,7 +333,8 @@ export default function BookTripPage() {
                             )}
                             <button
                                 onClick={() => {
-                                    if (!seatCount) { toast.error("Select at least one seat."); return; }
+                                    if (!seatCount) { setBookError("Select at least one seat to continue."); return; }
+                                    setBookError("");
                                     setStep(2);
                                 }}
                                 disabled={totalSeats === 0}
@@ -470,6 +474,7 @@ export default function BookTripPage() {
 
                         {/* Pay button + secure */}
                         <div className="flex-shrink-0 pt-4">
+                            {bookError && <div className="mb-3"><InlineAlert message={bookError} onDismiss={() => setBookError("")} /></div>}
                             <button
                                 onClick={submit}
                                 disabled={submitting}

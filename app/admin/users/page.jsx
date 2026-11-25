@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Bell, ArrowLeft, MoreVertical, RefreshCw, Search, UserX, UserCheck, Briefcase, Trash2, Mail, Phone, Calendar, ShieldCheck, ChevronDown } from "lucide-react";
 import AdminRoute from "@/utils/AdminRoute";
 import AdminBottomNav from "@/components/AdminBottomNav";
+import InlineAlert from "@/components/InlineAlert";
 
 const TABS = ["All", "Active", "Blocked"];
 
@@ -53,6 +54,7 @@ export default function AdminUsers() {
     const [openMenu, setOpenMenu] = useState(null);
     const [expandedUser, setExpandedUser] = useState(null);
     const [actionLoading, setActionLoading] = useState(null);
+    const [actionError, setActionError] = useState("");
 
     const fetchUsers = async (tab = activeTab) => {
         setLoading(true);
@@ -82,7 +84,7 @@ export default function AdminUsers() {
 
     const handleAction = async (userId, action) => {
         setOpenMenu(null);
-        if (action === "delete" && !confirm("Delete this user? This cannot be undone.")) return;
+        setActionError("");
         setActionLoading(userId);
         try {
             const token = localStorage.getItem("token");
@@ -91,10 +93,10 @@ export default function AdminUsers() {
                 headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
                 body: JSON.stringify({ userId, action }),
             });
-            if (!res.ok) throw new Error("Action failed");
+            if (!res.ok) throw new Error("Action failed. Please try again.");
             fetchUsers(activeTab);
         } catch (err) {
-            alert(err.message);
+            setActionError(err.message);
         } finally {
             setActionLoading(null);
         }
@@ -170,6 +172,12 @@ export default function AdminUsers() {
                             className="w-full h-11 pl-9 pr-4 bg-white border border-gray-100 rounded-2xl text-sm text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:border-[#7C3AED] focus:ring-2 focus:ring-violet-100 transition"
                         />
                     </div>
+
+                    {actionError && (
+                        <div className="mb-3">
+                            <InlineAlert message={actionError} onDismiss={() => setActionError("")} />
+                        </div>
+                    )}
 
                     {/* ── USER LIST ── */}
                     {loading ? (
@@ -314,8 +322,9 @@ export default function AdminUsers() {
                                                         </button>
                                                     )}
                                                     <button
-                                                        onClick={() => { if (confirm("Delete this user?")) handleAction(user.id, "delete"); }}
+                                                        onClick={() => handleAction(user._id || user.id, "delete")}
                                                         className="w-9 h-9 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl flex items-center justify-center transition flex-shrink-0"
+                                                        title="Delete user"
                                                     >
                                                         <Trash2 size={13} />
                                                     </button>

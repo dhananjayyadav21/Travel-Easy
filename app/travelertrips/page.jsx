@@ -4,7 +4,6 @@ import { AlertTriangle, ArrowRight, RefreshCw, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import TravelerBottomNav from "@/components/TravelerBottomNav";
 import ProtectedRoute from "@/utils/ProtectedRoute";
-import toast from "react-hot-toast";
 import TripCard from "@/components/BookTrips/BookingTripCard";
 
 const TAB_LABELS = ["Upcoming", "Completed", "Cancelled"];
@@ -29,6 +28,7 @@ const TravelerTripsPage = () => {
     const [allTrips, setAllTrips] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [cancelMsg, setCancelMsg] = useState({ id: null, type: "", text: "" });
 
     const fetchTrips = useCallback(async () => {
         setIsLoading(true);
@@ -51,16 +51,25 @@ const TravelerTripsPage = () => {
     useEffect(() => { fetchTrips(); }, [fetchTrips]);
 
     const cancelTrip = async (bookingId) => {
-        const response = await fetch(`/api/bookings/${bookingId}/cancel`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-        });
-        if (!response.ok) toast.error("Failed to cancel trip.");
-        else toast.success("Ride cancelled successfully.");
-        setAllTrips(prev => prev.map(t => t.id === bookingId ? { ...t, status: "Cancelled" } : t));
+        setCancelMsg({ id: bookingId, type: "loading", text: "Cancelling..." });
+        try {
+            const response = await fetch(`/api/bookings/${bookingId}/cancel`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            if (!response.ok) {
+                setCancelMsg({ id: bookingId, type: "error", text: "Failed to cancel. Please try again." });
+            } else {
+                setCancelMsg({ id: bookingId, type: "success", text: "Ride cancelled successfully." });
+                setAllTrips(prev => prev.map(t => t._id === bookingId ? { ...t, status: "Cancelled" } : t));
+                setTimeout(() => setCancelMsg({ id: null, type: "", text: "" }), 3000);
+            }
+        } catch {
+            setCancelMsg({ id: bookingId, type: "error", text: "Network error. Please try again." });
+        }
     };
 
     const groupedTrips = useMemo(() => allTrips.reduce((acc, t) => {
@@ -119,6 +128,16 @@ const TravelerTripsPage = () => {
 
                 {/* ── Content ── */}
                 <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 py-4 space-y-3 pb-24">
+
+                    {cancelMsg.text && (
+                        <div className={`flex items-center gap-2.5 rounded-xl border px-3.5 py-3 text-sm font-medium ${
+                            cancelMsg.type === "success" ? "bg-green-50 border-green-200 text-green-700"
+                            : cancelMsg.type === "error"   ? "bg-red-50 border-red-200 text-red-700"
+                            : "bg-violet-50 border-violet-200 text-violet-600"
+                        }`}>
+                            {cancelMsg.type === "success" ? "✓" : cancelMsg.type === "error" ? "✗" : "⋯"} {cancelMsg.text}
+                        </div>
+                    )}
 
                     {isLoading && [1, 2, 3].map(i => <SkeletonCard key={i} />)}
 

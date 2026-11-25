@@ -31,11 +31,11 @@ export default function RootLayout({ children }) {
           </main>
 
 <Toaster
-            position="bottom-right"
+            position="top-center"
             toastOptions={{
-              style: { background: "#0C4A6E", color: "#fff", borderRadius: "12px", fontSize: "14px" },
-              success: { iconTheme: { primary: "#7DD3FC", secondary: "#fff" } },
-              error: { iconTheme: { primary: "#ef4444", secondary: "#fff" } },
+              style: { background: "#1e1b4b", color: "#fff", borderRadius: "12px", fontSize: "14px", fontWeight: "600" },
+              success: { iconTheme: { primary: "#4ade80", secondary: "#fff" }, duration: 2500 },
+              error:   { iconTheme: { primary: "#f87171", secondary: "#fff" }, duration: 3000 },
             }}
           />
         </GoogleMapsProvider>

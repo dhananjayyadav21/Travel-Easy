@@ -6,7 +6,6 @@ import TripCard from "@/components/ProviderTripCard";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Bell, Car, TrendingUp, Plus, ChevronRight, FlaskConical } from "lucide-react";
-import toast from "react-hot-toast";
 
 function getInitials(name) {
     if (!name) return "P";
@@ -128,9 +127,8 @@ export default function ProviderDashboard() {
                                                 const token = localStorage.getItem("token");
                                                 const res = await fetch("/api/seed-trips", { method: "POST", headers: { Authorization: `Bearer ${token}` } });
                                                 const data = await res.json();
-                                                if (data.success) { toast.success(data.message); window.location.reload(); }
-                                                else toast.error(data.message);
-                                            } catch { toast.error("Seed failed"); }
+                                                if (data.success) { window.location.reload(); }
+                                            } catch { /* seed failed silently */ }
                                         }}
                                         className="flex items-center gap-1 text-xs text-gray-300 hover:text-[#7C3AED] transition"
                                         title="Re-seed sample data"
@@ -192,13 +190,8 @@ export default function ProviderDashboard() {
                                             headers: { Authorization: `Bearer ${token}` },
                                         });
                                         const data = await res.json();
-                                        if (data.success) {
-                                            toast.success(data.message);
-                                            window.location.reload();
-                                        } else {
-                                            toast.error(data.message);
-                                        }
-                                    } catch { toast.error("Seed failed"); }
+                                        if (data.success) { window.location.reload(); }
+                                    } catch { /* seed failed silently */ }
                                 }}
                                 className="text-xs text-gray-400 hover:text-[#7C3AED] font-medium flex items-center gap-1.5 transition"
                             >

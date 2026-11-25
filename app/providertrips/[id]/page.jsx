@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import ProtectedRoute from "@/utils/ProtectedRoute";
 import TripTraveler from "@/components/TripTravelers/TripTraveler";
-import toast from "react-hot-toast";
+import InlineAlert from "@/components/InlineAlert";
 import {
     Calendar, Users, Clock, Ruler, IndianRupee, Car,
     AlertTriangle, Loader2, ArrowLeft, CheckCircle, XCircle, Navigation, Radio,
@@ -35,6 +35,8 @@ export default function TripDetailsPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [actionMsg, setActionMsg] = useState({ type: "", text: "" });
+    const [confirmAction, setConfirmAction] = useState(null); // "complete" | "cancel"
 
     const fetchTrip = useCallback(async () => {
         if (!id) return;
@@ -61,8 +63,8 @@ export default function TripDetailsPage() {
 
     const handleTripAction = async (action) => {
         if (!trip) return;
-        const confirmed = confirm(`Are you sure you want to ${action} this trip?`);
-        if (!confirmed) return;
+        setConfirmAction(null);
+        setActionMsg({ type: "", text: "" });
         setIsProcessing(true);
         try {
             const token = localStorage.getItem("token");
@@ -72,13 +74,13 @@ export default function TripDetailsPage() {
             });
             const data = await res.json();
             if (data.success) {
-                toast.success(data.message);
+                setActionMsg({ type: "success", text: data.message || (action === "complete" ? "Ride marked as completed." : "Ride cancelled.") });
                 setTrip((prev) => ({ ...prev, status: action === "complete" ? "Completed" : "Cancelled" }));
             } else {
-                toast.error(data.message || "Something went wrong");
+                setActionMsg({ type: "error", text: data.message || "Something went wrong. Please try again." });
             }
         } catch {
-            toast.error("An error occurred. Please try again.");
+            setActionMsg({ type: "error", text: "Network error. Please check your connection." });
         } finally {
             setIsProcessing(false);
         }
@@ -263,24 +265,64 @@ export default function TripDetailsPage() {
                 {status === "Active" && (
                     <div className="bg-white rounded-2xl shadow-sm p-4">
                         <h3 className="font-bold text-gray-900 text-sm mb-3">Ride Actions</h3>
-                        <div className="flex flex-col sm:flex-row gap-3">
-                            <button
-                                disabled={isProcessing}
-                                onClick={() => handleTripAction("complete")}
-                                className="flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold py-3 transition shadow-md shadow-green-100 disabled:opacity-60 disabled:cursor-not-allowed text-sm"
-                            >
-                                {isProcessing ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle size={16} />}
-                                Mark as Completed
-                            </button>
-                            <button
-                                disabled={isProcessing}
-                                onClick={() => handleTripAction("cancel")}
-                                className="flex-1 flex items-center justify-center gap-2 border-2 border-red-400 text-red-600 rounded-xl font-bold py-3 hover:bg-red-50 transition disabled:opacity-60 disabled:cursor-not-allowed text-sm"
-                            >
-                                {isProcessing ? <Loader2 size={16} className="animate-spin" /> : <XCircle size={16} />}
-                                Cancel Ride
-                            </button>
-                        </div>
+
+                        {actionMsg.text && (
+                            <div className="mb-3">
+                                <InlineAlert
+                                    message={actionMsg.text}
+                                    type={actionMsg.type === "success" ? "success" : "error"}
+                                    onDismiss={() => setActionMsg({ type: "", text: "" })}
+                                />
+                            </div>
+                        )}
+
+                        {/* Inline confirm prompt */}
+                        {confirmAction && (
+                            <div className="mb-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+                                <p className="text-sm font-semibold text-amber-800 mb-3">
+                                    {confirmAction === "complete"
+                                        ? "Mark this ride as completed? This cannot be undone."
+                                        : "Cancel this ride? All passengers will be notified."}
+                                </p>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => handleTripAction(confirmAction)}
+                                        disabled={isProcessing}
+                                        className={`flex-1 h-9 rounded-lg text-sm font-bold text-white transition disabled:opacity-60 flex items-center justify-center gap-1.5 ${
+                                            confirmAction === "complete" ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"
+                                        }`}
+                                    >
+                                        {isProcessing ? <Loader2 size={14} className="animate-spin" /> : null}
+                                        {confirmAction === "complete" ? "Yes, Complete" : "Yes, Cancel"}
+                                    </button>
+                                    <button
+                                        onClick={() => setConfirmAction(null)}
+                                        className="flex-1 h-9 rounded-lg text-sm font-bold border-2 border-gray-200 text-gray-600 hover:bg-gray-50 transition"
+                                    >
+                                        Go Back
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {!confirmAction && (
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <button
+                                    disabled={isProcessing}
+                                    onClick={() => setConfirmAction("complete")}
+                                    className="flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold py-3 transition shadow-md shadow-green-100 disabled:opacity-60 disabled:cursor-not-allowed text-sm"
+                                >
+                                    <CheckCircle size={16} /> Mark as Completed
+                                </button>
+                                <button
+                                    disabled={isProcessing}
+                                    onClick={() => setConfirmAction("cancel")}
+                                    className="flex-1 flex items-center justify-center gap-2 border-2 border-red-400 text-red-600 rounded-xl font-bold py-3 hover:bg-red-50 transition disabled:opacity-60 disabled:cursor-not-allowed text-sm"
+                                >
+                                    <XCircle size={16} /> Cancel Ride
+                                </button>
+                            </div>
+                        )}
                     </div>
                 )}
 

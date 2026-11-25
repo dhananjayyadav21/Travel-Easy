@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Loader2, RefreshCw, X } from "lucide-react";
 import ProtectedRoute from "@/utils/ProtectedRoute";
 import ProviderBottomNav from "@/components/ProviderBottomNav";
-import toast from "react-hot-toast";
+import InlineAlert from "@/components/InlineAlert";
 
 function CarIllustration() {
     return (
@@ -72,12 +72,16 @@ export default function ProviderBookingRequestsPage() {
     const router = useRouter();
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [fetchError, setFetchError] = useState("");
     const [processing, setProcessing] = useState({});
+    const [actionMsg, setActionMsg] = useState({ type: "", text: "" });
     const [rejectModal, setRejectModal] = useState(null); // { bookingId }
     const [rejectReason, setRejectReason] = useState("");
+    const [rejectError, setRejectError] = useState("");
 
     const fetchBookings = useCallback(async () => {
         setLoading(true);
+        setFetchError("");
         try {
             const token = localStorage.getItem("token");
             const res = await fetch("/api/provider-bookings", {
@@ -87,7 +91,7 @@ export default function ProviderBookingRequestsPage() {
             if (data.success) setBookings(data.data);
             else throw new Error(data.message);
         } catch {
-            toast.error("Could not load booking requests.");
+            setFetchError("Could not load booking requests. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -97,6 +101,7 @@ export default function ProviderBookingRequestsPage() {
 
     const handleAction = async (bookingId, action, reason = "") => {
         setProcessing(p => ({ ...p, [bookingId]: action }));
+        setActionMsg({ type: "", text: "" });
         try {
             const token = localStorage.getItem("token");
             const url = action === "accept"
@@ -109,17 +114,21 @@ export default function ProviderBookingRequestsPage() {
             });
             const data = await res.json();
             if (res.ok && data.success) {
-                toast.success(action === "accept" ? "Booking accepted! Ride is now active." : "Booking cancelled.");
+                setActionMsg({
+                    type: "success",
+                    text: action === "accept" ? "Booking accepted! Ride is now active." : "Booking cancelled.",
+                });
                 setBookings(prev => prev.map(b =>
                     b._id === bookingId
                         ? { ...b, status: action === "accept" ? "Active" : "Cancelled" }
                         : b
                 ));
+                setTimeout(() => setActionMsg({ type: "", text: "" }), 4000);
             } else {
-                toast.error(data.message || "Action failed.");
+                setActionMsg({ type: "error", text: data.message || "Action failed. Please try again." });
             }
         } catch {
-            toast.error("Something went wrong.");
+            setActionMsg({ type: "error", text: "Network error. Please check your connection." });
         } finally {
             setProcessing(p => ({ ...p, [bookingId]: null }));
         }
@@ -131,7 +140,8 @@ export default function ProviderBookingRequestsPage() {
     };
 
     const confirmReject = async () => {
-        if (!rejectReason) { toast.error("Please select a reason"); return; }
+        if (!rejectReason) { setRejectError("Please select a reason to cancel."); return; }
+        setRejectError("");
         const { bookingId } = rejectModal;
         setRejectModal(null);
         await handleAction(bookingId, "reject", rejectReason);
@@ -160,6 +170,15 @@ export default function ProviderBookingRequestsPage() {
                 </div>
 
                 <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pt-5 pb-28 space-y-4">
+
+                    {fetchError && <InlineAlert message={fetchError} onDismiss={() => setFetchError("")} />}
+                    {actionMsg.text && (
+                        <InlineAlert
+                            message={actionMsg.text}
+                            type={actionMsg.type === "success" ? "success" : "error"}
+                            onDismiss={() => setActionMsg({ type: "", text: "" })}
+                        />
+                    )}
 
                     {loading && [1, 2].map(i => <SkeletonCard key={i} />)}
 
@@ -216,6 +235,7 @@ export default function ProviderBookingRequestsPage() {
                                 <X size={16} className="text-gray-500" />
                             </button>
                         </div>
+                        {rejectError && <div className="mb-3"><InlineAlert message={rejectError} onDismiss={() => setRejectError("")} /></div>}
                         <div className="space-y-2 mb-5">
                             {REJECT_REASONS.map(r => (
                                 <button

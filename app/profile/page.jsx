@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/utils/ProtectedRoute";
-import toast from "react-hot-toast";
+import InlineAlert from "@/components/InlineAlert";
 import TravelerBottomNav from "@/components/TravelerBottomNav";
 
 export default function ProfilePage() {
@@ -16,6 +16,7 @@ export default function ProfilePage() {
     const [dbUser, setDbUser] = useState(null);
     const [pageLoading, setPageLoading] = useState(true);
     const [photoUploading, setPhotoUploading] = useState(false);
+    const [photoMsg, setPhotoMsg] = useState({ type: "", text: "" });
     const [reviews, setReviews] = useState([]);
     const fileInputRef = useRef(null);
     const router = useRouter();
@@ -63,8 +64,15 @@ export default function ProfilePage() {
     const handlePhotoChange = async (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        if (!file.type.startsWith("image/")) { toast.error("Please select an image file."); return; }
-        if (file.size > 5 * 1024 * 1024) { toast.error("Image must be under 5MB."); return; }
+        setPhotoMsg({ type: "", text: "" });
+        if (!file.type.startsWith("image/")) {
+            setPhotoMsg({ type: "error", text: "Please select an image file." });
+            return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            setPhotoMsg({ type: "error", text: "Image must be under 5MB." });
+            return;
+        }
         setPhotoUploading(true);
         try {
             const formData = new FormData();
@@ -77,15 +85,16 @@ export default function ProfilePage() {
             });
             const data = await res.json();
             if (res.ok) {
-                toast.success("Profile photo updated!");
+                setPhotoMsg({ type: "success", text: "Profile photo updated!" });
                 setDbUser(prev => ({ ...prev, profilePhoto: data.url }));
                 const stored = JSON.parse(localStorage.getItem("user") || "{}");
                 localStorage.setItem("user", JSON.stringify({ ...stored, profilePhoto: data.url }));
+                setTimeout(() => setPhotoMsg({ type: "", text: "" }), 3000);
             } else {
-                toast.error(data.message || "Upload failed");
+                setPhotoMsg({ type: "error", text: data.message || "Upload failed. Please try again." });
             }
         } catch {
-            toast.error("Upload failed. Please try again.");
+            setPhotoMsg({ type: "error", text: "Upload failed. Please check your connection." });
         } finally {
             setPhotoUploading(false);
         }
@@ -185,6 +194,16 @@ export default function ProfilePage() {
                         </div>
                         <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
 
+                        {photoMsg.text && (
+                            <div className="w-full mt-2 mb-1">
+                                <InlineAlert
+                                    message={photoMsg.text}
+                                    type={photoMsg.type === "success" ? "success" : "error"}
+                                    onDismiss={() => setPhotoMsg({ type: "", text: "" })}
+                                />
+                            </div>
+                        )}
+
                         <h2 className="text-xl font-extrabold text-gray-900">{displayUser.name || "User"}</h2>
                         <p className="text-sm text-gray-400 mt-1">
                             {displayUser.phone ? `+91 ${displayUser.phone}` : displayUser.email}
@@ -192,7 +211,7 @@ export default function ProfilePage() {
 
                         {/* Edit Profile — outline button */}
                         <button
-                            onClick={() => toast("Profile editing coming soon!")}
+                            onClick={() => setPhotoMsg({ type: "info", text: "Profile editing coming soon!" })}
                             className="mt-4 px-10 py-2.5 border-2 border-[#7C3AED] text-[#7C3AED] font-bold rounded-full text-sm hover:bg-violet-50 transition"
                         >
                             Edit Profile

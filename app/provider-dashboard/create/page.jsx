@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/utils/ProtectedRoute";
 import GoogleMapsProvider from "@/components/GoogleMapsProvider";
 import PlacesAutocomplete from "@/components/PlacesAutocomplete";
-import toast from "react-hot-toast";
 import { ArrowLeft, Check, Loader2 } from "lucide-react";
+import InlineAlert from "@/components/InlineAlert";
 
 const EMPTY_TRIP = {
     name: "", date: "", time: "", seats: 1,
@@ -21,6 +21,7 @@ export default function CreateRidePage() {
     const [calcLoading, setCalcLoading] = useState(false);
     const [loading, setLoading] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [error, setError] = useState("");
 
     const pricePerSeat = trip.kilometer ? Math.round(parseInt(trip.kilometer) * 8) : null;
 
@@ -63,12 +64,13 @@ export default function CreateRidePage() {
     };
 
     const handleSubmit = async () => {
-        if (!trip.source) return toast.error("Select a starting point");
-        if (!trip.destination) return toast.error("Select a destination");
-        if (!trip.date) return toast.error("Select a travel date");
-        if (!trip.time) return toast.error("Select a departure time");
-        if (!trip.vehicle) return toast.error("Enter vehicle number");
-        if (!trip.contact) return toast.error("Enter contact number");
+        setError("");
+        if (!trip.source) return setError("Select a starting point");
+        if (!trip.destination) return setError("Select a destination");
+        if (!trip.date) return setError("Select a travel date");
+        if (!trip.time) return setError("Select a departure time");
+        if (!trip.vehicle) return setError("Enter vehicle number");
+        if (!trip.contact) return setError("Enter contact number");
 
         setLoading(true);
         try {
@@ -86,10 +88,9 @@ export default function CreateRidePage() {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Failed to publish ride");
-            toast.success("Ride published!");
             setSubmitted(true);
         } catch (err) {
-            toast.error(err.message);
+            setError(err.message);
         } finally {
             setLoading(false);
         }
@@ -297,7 +298,8 @@ export default function CreateRidePage() {
 
                     {/* Fixed Publish button */}
                     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-5 py-4 z-30">
-                        <div className="w-full md:w-3/5 lg:w-2/5 mx-auto">
+                        <div className="w-full md:w-3/5 lg:w-2/5 mx-auto space-y-3">
+                            {error && <InlineAlert message={error} onDismiss={() => setError("")} />}
                             <button
                                 onClick={handleSubmit}
                                 disabled={loading}
