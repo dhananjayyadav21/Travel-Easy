@@ -137,7 +137,7 @@ export default function CreateRidePage() {
                 <div className="min-h-screen bg-[#F5F3FF]">
 
                     {/* Header */}
-                    <div className="bg-white sticky top-14 z-20 px-5 h-14 flex items-center gap-3 border-b border-gray-100">
+                    <div className="bg-white sticky top-0 md:top-14 z-20 px-5 h-14 flex items-center gap-3 border-b border-gray-100">
                         <button
                             onClick={() => router.back()}
                             className="w-8 h-8 flex items-center justify-center"

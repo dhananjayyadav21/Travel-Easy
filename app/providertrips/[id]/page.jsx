@@ -92,7 +92,7 @@ export default function TripDetailsPage() {
 
     if (isLoading) {
         return (
-            <div className="flex flex-col justify-center items-center min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
+            <div className="flex flex-col justify-center items-center min-h-screen md:min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#7C3AED] to-[#8B5CF6] flex items-center justify-center mb-4 shadow-lg shadow-violet-200 animate-pulse">
                     <Car size={24} className="text-white" />
                 </div>
@@ -103,7 +103,7 @@ export default function TripDetailsPage() {
 
     if (error || !trip) {
         return (
-            <div className="flex flex-col justify-center items-center min-h-[calc(100vh-56px)] bg-[#F5F3FF] p-6 text-center">
+            <div className="flex flex-col justify-center items-center min-h-screen md:min-h-[calc(100vh-56px)] bg-[#F5F3FF] p-6 text-center">
                 <div className="bg-white rounded-2xl border border-violet-100 p-8 max-w-sm w-full shadow-xl shadow-violet-100">
                     <AlertTriangle size={36} className="text-red-500 mx-auto mb-3" />
                     <h2 className="text-lg font-bold text-gray-900 mb-2">Ride Not Found</h2>
@@ -124,10 +124,10 @@ export default function TripDetailsPage() {
 
     return (
         <ProtectedRoute>
-            <div className="min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
+            <div className="min-h-screen md:min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
 
                 {/* ── WHITE STICKY HEADER ── */}
-                <div className="bg-white sticky top-14 z-30 border-b border-gray-100 shadow-sm">
+                <div className="bg-white sticky top-0 md:top-14 z-30 border-b border-gray-100 shadow-sm">
                     <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 h-14 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <button

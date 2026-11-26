@@ -84,7 +84,7 @@ export default function AdminDashboard() {
             <div className="min-h-screen bg-[#F5F3FF] pb-24">
 
                 {/* ── WHITE STICKY HEADER ── */}
-                <div className="bg-white border-b border-gray-100 shadow-sm sticky top-14 z-20">
+                <div className="bg-white border-b border-gray-100 shadow-sm sticky top-0 md:top-14 z-20">
                     <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 h-14 flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
                             <div className="w-8 h-8 rounded-xl bg-[#7C3AED] flex items-center justify-center">

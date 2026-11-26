@@ -19,7 +19,7 @@ export default function PrivacyPage() {
         <div className="min-h-screen bg-[#F5F3FF]">
 
             {/* Header */}
-            <div className="bg-white sticky top-14 z-20 border-b border-gray-100">
+            <div className="bg-white sticky top-0 md:top-14 z-20 border-b border-gray-100">
                 <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 h-14 flex items-center gap-3">
                     <Link href="/" className="w-9 h-9 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center hover:bg-violet-50 hover:border-violet-200 transition flex-shrink-0">
                         <ArrowLeft size={16} className="text-gray-600" />

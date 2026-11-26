@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, SlidersHorizontal, ChevronDown, Search, X } from "lucide-react";
 import RoleRoute from "@/utils/RoleRoute";
 import TravelerBottomNav from "@/components/TravelerBottomNav";
 
-/* ── Trip card (inline, no booking context needed) ── */
+/* â”€â”€ Trip card (inline, no booking context needed) â”€â”€ */
 import { Star, Clock, MapPin } from "lucide-react";
 
 function RideCard({ trip }) {
@@ -29,7 +29,7 @@ function RideCard({ trip }) {
             if (diff === 0) return "Today";
             if (diff === 1) return "Tomorrow";
             return date.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
-        } catch { return d || "—"; }
+        } catch { return d || "â€”"; }
     };
 
     const handleClick = () => {
@@ -63,12 +63,12 @@ function RideCard({ trip }) {
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1.5">
                                 <div className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0" />
-                                <p className="text-sm font-bold text-gray-900 truncate">{trip.source || "—"}</p>
+                                <p className="text-sm font-bold text-gray-900 truncate">{trip.source || "â€”"}</p>
                             </div>
                             <div className="ml-[3px] w-px h-3.5 bg-gray-200 my-0.5" />
                             <div className="flex items-center gap-1.5">
                                 <div className="w-2 h-2 rounded-full bg-[#7C3AED] flex-shrink-0" />
-                                <p className="text-sm font-bold text-gray-900 truncate">{trip.destination || "—"}</p>
+                                <p className="text-sm font-bold text-gray-900 truncate">{trip.destination || "â€”"}</p>
                             </div>
                         </div>
                         <span className="bg-[#7C3AED] text-white text-[10px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap flex-shrink-0">
@@ -79,7 +79,7 @@ function RideCard({ trip }) {
                     {/* Price */}
                     <div className="mb-1">
                         <span className="text-[22px] font-extrabold text-[#7C3AED] leading-none">
-                            ₹{totalPrice.toLocaleString("en-IN")}
+                            â‚¹{totalPrice.toLocaleString("en-IN")}
                         </span>
                         <span className="text-xs text-gray-400 ml-0.5">/seat</span>
                     </div>
@@ -88,10 +88,10 @@ function RideCard({ trip }) {
                     <div className="flex items-center gap-1.5 mb-2">
                         <Clock size={11} className="text-gray-400 flex-shrink-0" />
                         <span className="text-xs text-gray-500">
-                            {trip.time || "—"} • {formatDate(trip.date)}
+                            {trip.time || "â€”"} â€¢ {formatDate(trip.date)}
                         </span>
                         {trip.kilometer && (
-                            <span className="text-xs text-gray-400">• {trip.kilometer} km</span>
+                            <span className="text-xs text-gray-400">â€¢ {trip.kilometer} km</span>
                         )}
                     </div>
 
@@ -132,7 +132,7 @@ function RideCard({ trip }) {
     );
 }
 
-/* ── Sort options ── */
+/* â”€â”€ Sort options â”€â”€ */
 const SORT_OPTIONS = [
     { label: "Earliest",   value: "earliest" },
     { label: "Cheapest",   value: "cheapest" },
@@ -148,7 +148,7 @@ function sortTrips(trips, sort) {
     if (sort === "seats") {
         return copy.sort((a, b) => ((b.seats || 0) - (b.bookedseats || 0)) - ((a.seats || 0) - (a.bookedseats || 0)));
     }
-    // earliest — by date + time
+    // earliest â€” by date + time
     return copy.sort((a, b) => {
         const da = new Date(`${a.date || ""}T${a.time || "00:00"}`);
         const db = new Date(`${b.date || ""}T${b.time || "00:00"}`);
@@ -156,7 +156,7 @@ function sortTrips(trips, sort) {
     });
 }
 
-/* ── Main page content ── */
+/* â”€â”€ Main page content â”€â”€ */
 function AvailableRidesContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -210,10 +210,10 @@ function AvailableRidesContent() {
 
     return (
         <RoleRoute role="traveler">
-            <div className="min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
+            <div className="min-h-screen md:min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
 
-                {/* ── HEADER ── */}
-                <div className="w-full bg-white border-b border-gray-100 sticky top-14 z-20 shadow-sm overflow-hidden">
+                {/* â”€â”€ HEADER â”€â”€ */}
+                <div className="w-full bg-white border-b border-gray-100 sticky top-0 md:top-14 z-20 shadow-sm overflow-hidden">
                     <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 py-3 flex items-center gap-3">
                         <button
                             onClick={() => router.push("/traveler-dashboard")}
@@ -299,7 +299,7 @@ function AvailableRidesContent() {
                     </div>
                 </div>
 
-                {/* ── RIDE LIST ── */}
+                {/* â”€â”€ RIDE LIST â”€â”€ */}
                 <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pt-4 pb-24 flex flex-col gap-3">
                     {loading ? (
                         /* skeleton */
@@ -341,11 +341,11 @@ function AvailableRidesContent() {
     );
 }
 
-/* ── Wrap in Suspense for useSearchParams ── */
+/* â”€â”€ Wrap in Suspense for useSearchParams â”€â”€ */
 export default function AvailableRides() {
     return (
         <Suspense fallback={
-            <div className="min-h-[calc(100vh-56px)] bg-[#F5F3FF] flex items-center justify-center">
+            <div className="min-h-screen md:min-h-[calc(100vh-56px)] bg-[#F5F3FF] flex items-center justify-center">
                 <div className="w-8 h-8 border-2 border-[#7C3AED] border-t-transparent rounded-full animate-spin" />
             </div>
         }>

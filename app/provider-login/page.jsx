@@ -1,10 +1,10 @@
-"use client";
+﻿"use client";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, X, Eye, EyeOff } from "lucide-react";
 
-// ── Driver character illustration ─────────────────────────────────────────────
+// â”€â”€ Driver character illustration â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function DriverIllustration() {
     return (
         <svg viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-44 drop-shadow-2xl mx-auto">
@@ -163,7 +163,7 @@ export default function DriverLogin() {
         }
     };
 
-    // ── Password login ──
+    // â”€â”€ Password login â”€â”€
     const handlePasswordLogin = async () => {
         setError("");
         if (!email.trim()) return setError("Email is required");
@@ -203,7 +203,7 @@ export default function DriverLogin() {
 
     return (
         <div
-            className="min-h-[calc(100vh-56px)] flex flex-col items-center justify-between relative overflow-hidden px-6 py-10"
+            className="min-h-screen md:min-h-[calc(100vh-56px)] flex flex-col items-center justify-between relative overflow-hidden px-6 py-10"
             style={{ background: "linear-gradient(170deg, #1E0A44 0%, #4C1D95 35%, #7C3AED 70%, #8B5CF6 100%)" }}
         >
             {/* Background blobs */}
@@ -237,7 +237,7 @@ export default function DriverLogin() {
             {/* Form card */}
             <div className="relative z-10 w-full max-w-sm md:max-w-md lg:max-w-lg">
 
-                {/* ══ OTP: STEP 1 ══ */}
+                {/* â•â• OTP: STEP 1 â•â• */}
                 {mode === "otp" && step === 1 && (
                     <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-2xl">
                         <h1 className="text-2xl font-extrabold text-white mb-1">Driver Sign In</h1>
@@ -246,7 +246,7 @@ export default function DriverLogin() {
                         {/* Phone input */}
                         <div className="flex items-center h-14 bg-white/15 border border-white/25 rounded-2xl overflow-hidden focus-within:border-white focus-within:bg-white/20 transition-all mb-4">
                             <div className="flex items-center gap-1.5 pl-4 pr-3 border-r border-white/25 h-full flex-shrink-0">
-                                <span className="text-lg leading-none">🇮🇳</span>
+                                <span className="text-lg leading-none">ðŸ‡®ðŸ‡³</span>
                                 <span className="text-sm font-bold text-white">+91</span>
                             </div>
                             <input
@@ -272,7 +272,7 @@ export default function DriverLogin() {
                             disabled={loading || !phone.trim()}
                             className="w-full h-14 bg-white hover:bg-gray-50 disabled:opacity-50 text-[#7C3AED] font-extrabold rounded-xl text-base transition-all shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
                         >
-                            {loading ? <><Loader2 size={18} className="animate-spin text-[#7C3AED]" /> Sending...</> : "Continue →"}
+                            {loading ? <><Loader2 size={18} className="animate-spin text-[#7C3AED]" /> Sending...</> : "Continue â†’"}
                         </button>
 
                         <div className="flex items-center gap-3 mt-5 mb-4">
@@ -300,7 +300,7 @@ export default function DriverLogin() {
                     </div>
                 )}
 
-                {/* ══ OTP: STEP 2 ══ */}
+                {/* â•â• OTP: STEP 2 â•â• */}
                 {mode === "otp" && step === 2 && (
                     <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-2xl text-center">
                         <div className="w-14 h-14 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center mx-auto mb-4">
@@ -359,11 +359,11 @@ export default function DriverLogin() {
                             disabled={loading || otp.join("").length < 6}
                             className="w-full h-14 bg-white hover:bg-gray-50 disabled:opacity-50 text-[#7C3AED] font-extrabold rounded-xl text-base transition-all shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
                         >
-                            {loading ? <><Loader2 size={18} className="animate-spin text-[#7C3AED]" /> Verifying...</> : "Verify & Sign In →"}
+                            {loading ? <><Loader2 size={18} className="animate-spin text-[#7C3AED]" /> Verifying...</> : "Verify & Sign In â†’"}
                         </button>
                     </div>
                 )}
-                {/* ══ PASSWORD MODE ══ */}
+                {/* â•â• PASSWORD MODE â•â• */}
                 {mode === "password" && (
                     <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-2xl">
                         <h1 className="text-2xl font-extrabold text-white mb-1">Sign In</h1>
@@ -402,7 +402,7 @@ export default function DriverLogin() {
 
                         <button onClick={handlePasswordLogin} disabled={loading || !email.trim() || !password}
                             className="w-full h-14 bg-white hover:bg-gray-50 disabled:opacity-50 text-[#7C3AED] font-extrabold rounded-xl text-base transition-all shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-4 mb-4">
-                            {loading ? <><Loader2 size={18} className="animate-spin text-[#7C3AED]" /> Signing in...</> : "Sign In →"}
+                            {loading ? <><Loader2 size={18} className="animate-spin text-[#7C3AED]" /> Signing in...</> : "Sign In â†’"}
                         </button>
 
                         <div className="flex items-center gap-3 mb-4">

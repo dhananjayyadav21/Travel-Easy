@@ -162,7 +162,7 @@ export default function PassengerLogin() {
 
     return (
         <div
-            className="min-h-[calc(100vh-56px)] flex flex-col items-center justify-between relative overflow-hidden px-6 py-10"
+            className="min-h-screen md:min-h-[calc(100vh-56px)] flex flex-col items-center justify-between relative overflow-hidden px-6 py-10"
             style={{ background: "linear-gradient(170deg, #1E0A44 0%, #4C1D95 35%, #7C3AED 70%, #8B5CF6 100%)" }}
         >
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-violet-400/15 rounded-full blur-3xl pointer-events-none" />

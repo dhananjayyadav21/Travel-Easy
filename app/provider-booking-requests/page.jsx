@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -152,10 +152,10 @@ export default function ProviderBookingRequestsPage() {
 
     return (
         <ProtectedRoute>
-            <div className="min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
+            <div className="min-h-screen md:min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
 
                 {/* Header */}
-                <div className="bg-white sticky top-14 z-20 border-b border-gray-100">
+                <div className="bg-white sticky top-0 md:top-14 z-20 border-b border-gray-100">
                     <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 h-14 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <button onClick={() => router.back()} className="w-8 h-8 flex items-center justify-center">
@@ -282,11 +282,11 @@ function BookingRequestCard({ booking, processing, onAccept, onReject, past }) {
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
             <div className="px-5 pt-5 pb-4">
 
-                {/* Car + seats·price */}
+                {/* Car + seatsÂ·price */}
                 <div className="mb-4">
                     <CarIllustration />
                     <p className="text-center text-base font-extrabold text-gray-900 mt-3">
-                        {booking.seatsBooked?.length || booking.numberOfSeats || 1} Seat{(booking.seatsBooked?.length || booking.numberOfSeats || 1) > 1 ? "s" : ""} · ₹{booking.totalPrice?.toLocaleString("en-IN") || "—"}
+                        {booking.seatsBooked?.length || booking.numberOfSeats || 1} Seat{(booking.seatsBooked?.length || booking.numberOfSeats || 1) > 1 ? "s" : ""} Â· â‚¹{booking.totalPrice?.toLocaleString("en-IN") || "â€”"}
                     </p>
                 </div>
 
@@ -298,7 +298,7 @@ function BookingRequestCard({ booking, processing, onAccept, onReject, past }) {
                         </div>
                         <p className="text-sm text-gray-600">
                             <span className="text-gray-400 font-medium">Pickup: </span>
-                            <span className="font-semibold text-gray-800">{booking.tripSource?.split(",")[0] || "—"}</span>
+                            <span className="font-semibold text-gray-800">{booking.tripSource?.split(",")[0] || "â€”"}</span>
                         </p>
                     </div>
                     <div className="flex items-center gap-2.5">
@@ -307,7 +307,7 @@ function BookingRequestCard({ booking, processing, onAccept, onReject, past }) {
                         </div>
                         <p className="text-sm text-gray-600">
                             <span className="text-gray-400 font-medium">Drop-off: </span>
-                            <span className="font-semibold text-gray-800">{booking.tripDestination?.split(",")[0] || "—"}</span>
+                            <span className="font-semibold text-gray-800">{booking.tripDestination?.split(",")[0] || "â€”"}</span>
                         </p>
                     </div>
                 </div>
@@ -337,11 +337,11 @@ function BookingRequestCard({ booking, processing, onAccept, onReject, past }) {
                     </div>
                 )}
 
-                {/* Past active — accepted badge + cancel side by side */}
+                {/* Past active â€” accepted badge + cancel side by side */}
                 {past && isActive && (
                     <div className="flex gap-3">
                         <div className="flex-1 h-12 rounded-xl bg-green-100 text-green-600 text-xs font-bold flex items-center justify-center shadow-sm">
-                            Accepted · Active
+                            Accepted Â· Active
                         </div>
                         <button
                             onClick={onReject}

@@ -47,7 +47,7 @@ export default function TravelerHome() {
 
     return (
         <RoleRoute role="traveler">
-            <div className="flex flex-col bg-[#EDE9FE]" style={{ minHeight: 'calc(100vh - 56px)' }}>
+            <div className="flex flex-col bg-[#EDE9FE] min-h-screen md:min-h-[calc(100vh-56px)]">
             <div className="flex-1 flex flex-col w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pt-5 pb-24">
 
                 {/* ── TOP BAR ── */}

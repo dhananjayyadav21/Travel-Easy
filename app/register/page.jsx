@@ -79,7 +79,7 @@ export default function Register() {
 
     return (
         <div
-            className="min-h-[calc(100vh-56px)] flex flex-col items-center justify-start relative overflow-hidden px-4 py-8"
+            className="min-h-screen md:min-h-[calc(100vh-56px)] flex flex-col items-center justify-start relative overflow-hidden px-4 py-8"
             style={{ background: "linear-gradient(170deg, #1E0A44 0%, #4C1D95 35%, #7C3AED 70%, #8B5CF6 100%)" }}
         >
             {/* Background blobs */}

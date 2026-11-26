@@ -113,7 +113,7 @@ export default function ProfilePage() {
     if (!displayUser) {
         return (
             <ProtectedRoute>
-                <div className="min-h-[calc(100vh-56px)] bg-[#F5F3FF] flex items-center justify-center p-4">
+                <div className="min-h-screen md:min-h-[calc(100vh-56px)] bg-[#F5F3FF] flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl shadow-sm border border-violet-100 p-8 text-center max-w-sm w-full">
                         <div className="w-14 h-14 bg-violet-50 rounded-full flex items-center justify-center mx-auto mb-4">
                             <User size={24} className="text-[#7C3AED]" />
@@ -140,27 +140,27 @@ export default function ProfilePage() {
     const memberYear = displayUser.createdAt ? new Date(displayUser.createdAt).getFullYear() : new Date().getFullYear();
 
     const travelerMenuItems = [
-        { icon: <Wallet size={19} className="text-[#7C3AED]" />, label: "Wallet", href: "#", value: "₹1,250", bg: "bg-violet-100" },
+        { icon: <Wallet size={19} className="text-[#7C3AED]" />, label: "Wallet", href: "/wallet", value: "₹1,250", bg: "bg-violet-100" },
         { icon: <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2"><rect x="2" y="8" width="20" height="10" rx="2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><path d="M2 11l3-5h14l3 5"/></svg>, label: "My Bookings", href: "/travelertrips", bg: "bg-violet-100" },
-        { icon: <Bell size={19} className="text-[#7C3AED]" />, label: "Notifications", href: "#", bg: "bg-violet-100" },
-        { icon: <Tag size={19} className="text-[#7C3AED]" />, label: "Offers & Coupons", href: "#", bg: "bg-violet-100" },
-        { icon: <HelpCircle size={19} className="text-[#7C3AED]" />, label: "Help & Support", href: "#", bg: "bg-violet-100" },
-        { icon: <Settings size={19} className="text-[#7C3AED]" />, label: "Settings", href: "#", bg: "bg-violet-100" },
+        { icon: <Bell size={19} className="text-[#7C3AED]" />, label: "Notifications", href: "/notifications", bg: "bg-violet-100" },
+        { icon: <Tag size={19} className="text-[#7C3AED]" />, label: "Offers & Coupons", href: "/offers", bg: "bg-violet-100" },
+        { icon: <HelpCircle size={19} className="text-[#7C3AED]" />, label: "Help & Support", href: "/help", bg: "bg-violet-100" },
+        { icon: <Settings size={19} className="text-[#7C3AED]" />, label: "Settings", href: "/settings", bg: "bg-violet-100" },
     ];
 
     const providerMenuItems = [
         { icon: <Wallet size={19} className="text-[#7C3AED]" />, label: "Earnings", href: "/provider-earnings", value: "₹0", bg: "bg-violet-100" },
         { icon: <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2"><rect x="2" y="8" width="20" height="10" rx="2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><path d="M2 11l3-5h14l3 5"/></svg>, label: "My Rides", href: "/providertrips", bg: "bg-violet-100" },
-        { icon: <Bell size={19} className="text-[#7C3AED]" />, label: "Notifications", href: "#", bg: "bg-violet-100" },
-        { icon: <HelpCircle size={19} className="text-[#7C3AED]" />, label: "Help & Support", href: "#", bg: "bg-violet-100" },
-        { icon: <Settings size={19} className="text-[#7C3AED]" />, label: "Settings", href: "#", bg: "bg-violet-100" },
+        { icon: <Bell size={19} className="text-[#7C3AED]" />, label: "Notifications", href: "/notifications", bg: "bg-violet-100" },
+        { icon: <HelpCircle size={19} className="text-[#7C3AED]" />, label: "Help & Support", href: "/help", bg: "bg-violet-100" },
+        { icon: <Settings size={19} className="text-[#7C3AED]" />, label: "Settings", href: "/settings", bg: "bg-violet-100" },
     ];
 
     const menuItems = isProvider ? providerMenuItems : travelerMenuItems;
 
     return (
         <ProtectedRoute>
-            <div className="min-h-[calc(100vh-56px)] bg-white">
+            <div className="min-h-screen md:min-h-[calc(100vh-56px)] bg-white">
 
                 {/* Header */}
                 <div className="px-5 pt-5 pb-2 flex items-center gap-3">

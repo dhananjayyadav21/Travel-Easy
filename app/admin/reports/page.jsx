@@ -115,7 +115,7 @@ export default function AdminReports() {
             <div className="min-h-screen bg-[#F5F3FF] pb-24">
 
                 {/* ── HEADER ── */}
-                <div className="bg-white border-b border-gray-100 sticky top-14 z-20">
+                <div className="bg-white border-b border-gray-100 sticky top-0 md:top-14 z-20">
                     <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 h-14 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <button

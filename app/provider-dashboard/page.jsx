@@ -54,7 +54,7 @@ export default function ProviderDashboard() {
 
     return (
         <RoleRoute role="provider">
-            <div className="min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
+            <div className="min-h-screen md:min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
 
                 <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pt-6 pb-28">
 

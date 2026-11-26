@@ -254,7 +254,7 @@ export default function BookTripPage() {
     return (
         <ProtectedRoute>
         {/* Full-viewport, no scroll */}
-        <div className="h-[calc(100vh-56px)] flex flex-col bg-[#F5F3FF] overflow-hidden">
+        <div className="h-screen md:h-[calc(100vh-56px)] flex flex-col bg-[#F5F3FF] overflow-hidden">
 
             {/* ── STICKY HEADER ── */}
             {step < 4 && (

@@ -95,7 +95,7 @@ export default function ProviderEarningsPage() {
             <div className="min-h-screen bg-[#F5F3FF]">
 
                 {/* Header */}
-                <div className="bg-white border-b border-violet-100 sticky top-14 z-20">
+                <div className="bg-white border-b border-violet-100 sticky top-0 md:top-14 z-20">
                     <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 h-14 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <button

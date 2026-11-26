@@ -94,7 +94,7 @@ export default function ProviderTrips() {
             <div className="min-h-screen bg-[#F5F3FF]">
 
                 {/* ── Header ── */}
-                <div className="bg-white sticky top-14 z-30 border-b border-gray-100 shadow-sm">
+                <div className="bg-white sticky top-0 md:top-14 z-30 border-b border-gray-100 shadow-sm">
                     <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4">
 
                         {/* Title row */}

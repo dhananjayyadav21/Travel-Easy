@@ -83,10 +83,10 @@ const TravelerTripsPage = () => {
 
     return (
         <ProtectedRoute>
-            <div className="min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
+            <div className="min-h-screen md:min-h-[calc(100vh-56px)] bg-[#F5F3FF]">
 
                 {/* ── Header ── */}
-                <div className="bg-white sticky top-14 z-20" style={{ borderBottom: '1px solid #f3f4f6' }}>
+                <div className="bg-white sticky top-0 md:top-14 z-20" style={{ borderBottom: '1px solid #f3f4f6' }}>
                     <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4">
 
                         {/* Title row */}

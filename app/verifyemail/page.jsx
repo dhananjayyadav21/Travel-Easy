@@ -106,7 +106,7 @@ function VerifyEmailForm() {
     const MsgIcon = { success: CheckCircle, error: XCircle, info: Info };
 
     return (
-        <div className="min-h-[calc(100vh-56px)] bg-white flex items-center justify-center px-4">
+        <div className="min-h-screen md:min-h-[calc(100vh-56px)] bg-white flex items-center justify-center px-4">
             <div className="w-full max-w-sm md:max-w-md lg:max-w-lg border border-gray-100 rounded-2xl p-8 text-center">
 
                 {/* Icon */}
@@ -193,7 +193,7 @@ function VerifyEmailForm() {
 
 function LoadingFallback() {
     return (
-        <div className="min-h-[calc(100vh-56px)] flex items-center justify-center bg-white px-4">
+        <div className="min-h-screen md:min-h-[calc(100vh-56px)] flex items-center justify-center bg-white px-4">
             <div className="w-8 h-8 border-2 border-t-transparent border-sky-600 rounded-full animate-spin" />
         </div>
     );

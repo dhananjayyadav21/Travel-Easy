@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Shield, Mail, Lock, Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
@@ -38,7 +38,7 @@ export default function AdminLogin() {
     };
 
     return (
-        <div className="min-h-[calc(100vh-56px)] bg-slate-900 flex items-center justify-center px-4">
+        <div className="min-h-screen md:min-h-[calc(100vh-56px)] bg-slate-900 flex items-center justify-center px-4">
 
             {/* Background grid pattern */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{
@@ -134,7 +134,7 @@ export default function AdminLogin() {
 
                 {/* Bottom label */}
                 <p className="text-center text-xs text-slate-600 mt-4">
-                    TravelEasyHai · Admin Console · v1.0
+                    TravelEasyHai Â· Admin Console Â· v1.0
                 </p>
             </div>
         </div>
