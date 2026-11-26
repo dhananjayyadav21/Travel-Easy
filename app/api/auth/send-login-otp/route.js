@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import { sendLoginOtpEmail } from "@/lib/mailer";
@@ -34,8 +35,8 @@ export async function POST(req) {
       return NextResponse.json({ error: "No account found with this email or phone" }, { status: 404 });
     }
 
-    // Generate 6-digit OTP
-    const otp = String(Math.floor(100000 + Math.random() * 900000));
+    // Generate cryptographically secure 6-digit OTP
+    const otp = String(crypto.randomInt(100000, 1000000));
     const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
     user.loginOtp = otp;

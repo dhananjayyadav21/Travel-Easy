@@ -54,6 +54,9 @@ const SAMPLE_TRIPS = [
 ];
 
 export async function POST(req) {
+    if (process.env.NODE_ENV === "production") {
+        return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
     const authResult = verifyAuth(req);
     if (authResult.response) return authResult.response;
     const userId = authResult.userId;

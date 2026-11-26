@@ -1,7 +1,7 @@
 ﻿"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Bell, ChevronDown } from "lucide-react";
+import { User } from "lucide-react";
 import TravelerBottomNav from "@/components/TravelerBottomNav";
 import RoleRoute from "@/utils/RoleRoute";
 
@@ -53,26 +53,18 @@ export default function TravelerHome() {
                 {/* ── TOP BAR ── */}
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2.5">
-                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm flex-shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm flex-shrink-0 overflow-hidden">
                             {user?.profilePhoto ? (
-                                <img src={user.profilePhoto} className="w-full h-full object-cover rounded-full" alt="" />
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img src={user.profilePhoto} className="w-full h-full object-cover" alt="" referrerPolicy="no-referrer" />
                             ) : (
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2">
-                                    <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-                                </svg>
+                                <User size={18} className="text-[#7C3AED]" strokeWidth={2} />
                             )}
                         </div>
-                        <button className="flex items-center gap-1">
-                            <span className="text-base font-bold text-gray-900">
-                                {user?.name?.split(" ")[0] || "Mumbai"}
-                            </span>
-                            <ChevronDown size={15} className="text-gray-500" strokeWidth={2.5}/>
-                        </button>
+                        <span className="text-base font-bold text-gray-900">
+                            {user?.name?.split(" ")[0] || "Hi there"}
+                        </span>
                     </div>
-                    <button className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm relative">
-                        <Bell size={18} className="text-[#7C3AED]" strokeWidth={2}/>
-                        <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-[#EDE9FE]"/>
-                    </button>
                 </div>
 
                 {/* ── HERO BANNER — grows to fill remaining space ── */}

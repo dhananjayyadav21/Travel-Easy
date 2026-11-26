@@ -104,7 +104,7 @@ export default function TripDetailsPage() {
     if (error || !trip) {
         return (
             <div className="flex flex-col justify-center items-center min-h-[calc(100vh-56px)] bg-[#F5F3FF] p-6 text-center">
-                <div className="bg-white rounded-3xl border border-violet-100 p-8 max-w-sm w-full shadow-xl shadow-violet-100">
+                <div className="bg-white rounded-2xl border border-violet-100 p-8 max-w-sm w-full shadow-xl shadow-violet-100">
                     <AlertTriangle size={36} className="text-red-500 mx-auto mb-3" />
                     <h2 className="text-lg font-bold text-gray-900 mb-2">Ride Not Found</h2>
                     <p className="text-sm text-gray-500 mb-5">{error || "The requested ride could not be loaded."}</p>

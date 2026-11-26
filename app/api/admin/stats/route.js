@@ -4,7 +4,6 @@ import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import Trip from "@/models/Trip";
 import Booking from "@/models/Booking";
-import jwt from "jsonwebtoken";
 
 export async function GET(req) {
     const auth = verifyAuth(req);
@@ -31,21 +30,25 @@ export async function GET(req) {
     ]);
     const totalRevenue = revenueResult[0]?.total || 0;
 
-    // Daily revenue for last 7 days
-    const dailyRevenue = [];
-    for (let i = 6; i >= 0; i--) {
+    // Daily revenue for last 7 days — parallel queries
+    const dayRanges = Array.from({ length: 7 }, (_, idx) => {
         const start = new Date();
-        start.setDate(start.getDate() - i);
+        start.setDate(start.getDate() - (6 - idx));
         start.setHours(0, 0, 0, 0);
         const end = new Date(start);
         end.setHours(23, 59, 59, 999);
+        return { start, end };
+    });
 
-        const result = await Booking.aggregate([
-            { $match: { status: "Completed", createdAt: { $gte: start, $lte: end } } },
-            { $group: { _id: null, total: { $sum: "$totalPrice" } } },
-        ]);
-        dailyRevenue.push(result[0]?.total || 0);
-    }
+    const dailyResults = await Promise.all(
+        dayRanges.map(({ start, end }) =>
+            Booking.aggregate([
+                { $match: { status: "Completed", createdAt: { $gte: start, $lte: end } } },
+                { $group: { _id: null, total: { $sum: "$totalPrice" } } },
+            ])
+        )
+    );
+    const dailyRevenue = dailyResults.map(r => r[0]?.total || 0);
 
     return NextResponse.json({ totalUsers, totalRides, totalRevenue, activeDrivers, dailyRevenue });
 }

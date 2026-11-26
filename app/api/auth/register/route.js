@@ -70,27 +70,25 @@ export async function POST(req) {
         await newUser.save();
 
         // send verification email
-        let result = null;
         try {
-            result = await sendVerificationEmail(newUser.email, verificationCode, name);
+            await sendVerificationEmail(newUser.email, verificationCode, name);
         } catch (e) {
             console.warn('Mailer invocation failed', e);
             throw e;
         }
 
-        // Return success response
+        // Return success response — never expose verificationCode to the client
         return NextResponse.json(
             {
                 message: "User registered successfully. Please verify your email.",
                 userId: newUser._id,
-                verificationCode,
             },
             { status: 201 }
         );
     } catch (error) {
         console.error(" Register API error:", error);
         return NextResponse.json(
-            { error: error },
+            { error: error.message || "Server error" },
             { status: 500 }
         );
     }

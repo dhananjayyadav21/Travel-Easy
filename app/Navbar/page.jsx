@@ -43,7 +43,6 @@ export default function Navbar() {
 
     useEffect(() => {
         setMobileOpen(false);
-        checkAuth();
     }, [pathname]);
 
     const handleLogout = () => {
@@ -181,7 +180,8 @@ export default function Navbar() {
                             <div className="flex items-center gap-3 p-3 mb-4 bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-100 rounded-2xl">
                                 <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-violet-200 flex items-center justify-center bg-gradient-to-br from-violet-500 to-purple-600 text-white text-sm font-bold flex-shrink-0">
                                     {currentUser?.profilePhoto ? (
-                                        <img src={currentUser.profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+                                        // eslint-disable-next-line @next/next/no-img-element
+                                        <img src={currentUser.profilePhoto} alt="Profile" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                                     ) : (
                                         <span>{getInitials(currentUser?.name)}</span>
                                     )}

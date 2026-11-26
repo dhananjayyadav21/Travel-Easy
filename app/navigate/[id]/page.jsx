@@ -16,9 +16,11 @@ export default function NavigatePage({ params }) {
     const [loading, setLoading] = useState(true);
     const watchIdRef = useRef(null);
 
-    // Suppress Google Maps auth error popup
     useEffect(() => {
-        window.gm_authFailure = () => {};
+        window.gm_authFailure = () => {
+            setLoading(false);
+            console.error("Google Maps API key is invalid or missing");
+        };
     }, []);
 
     useEffect(() => {
@@ -112,7 +114,7 @@ export default function NavigatePage({ params }) {
 
                     {/* ── TOP NAV CARD (reference style) ── */}
                     <div className="absolute top-4 left-4 right-4 z-10">
-                        <div className="bg-white rounded-3xl shadow-xl flex items-center gap-3 px-4 py-3.5">
+                        <div className="bg-white rounded-2xl shadow-xl flex items-center gap-3 px-4 py-3.5">
                             {/* Direction icon box */}
                             <div className="w-12 h-12 rounded-2xl bg-[#7C3AED] flex items-center justify-center flex-shrink-0 shadow-md shadow-violet-300">
                                 <Navigation size={22} className="text-white" />

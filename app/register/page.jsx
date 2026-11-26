@@ -75,7 +75,7 @@ export default function Register() {
 
     /* ── shared input class for glass inputs ── */
     const glassInput = "flex-1 h-full px-4 text-base text-white placeholder-white/40 bg-transparent focus:outline-none";
-    const glassWrap  = "flex items-center h-13 bg-white/15 border border-white/25 rounded-2xl overflow-hidden focus-within:border-white focus-within:bg-white/20 transition-all";
+    const glassWrap  = "flex items-center h-13 bg-white/15 border border-white/25 rounded-xl overflow-hidden focus-within:border-white focus-within:bg-white/20 transition-all";
 
     return (
         <div
@@ -123,7 +123,7 @@ export default function Register() {
                                 key={value}
                                 type="button"
                                 onClick={() => setRole(value)}
-                                className={`flex-1 rounded-2xl border-2 p-3 transition-all text-center ${
+                                className={`flex-1 rounded-xl border-2 p-3 transition-all text-center ${
                                     role === value
                                         ? "border-white bg-white/20 shadow-lg"
                                         : "border-white/20 bg-white/10 hover:border-white/40"
@@ -227,7 +227,7 @@ export default function Register() {
 
                         {/* Provider extra fields */}
                         {role === "provider" && (
-                            <div className="border border-white/20 rounded-2xl p-4 space-y-3 bg-white/5">
+                            <div className="border border-white/20 rounded-xl p-4 space-y-3 bg-white/5">
                                 <p className="text-xs font-bold text-white/80 uppercase tracking-wide flex items-center gap-1.5">
                                     <Car size={12}/> Driver Details
                                 </p>
@@ -249,7 +249,7 @@ export default function Register() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full h-14 bg-white hover:bg-gray-50 disabled:opacity-50 text-[#7C3AED] font-extrabold rounded-2xl text-base transition-all shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                            className="w-full h-14 bg-white hover:bg-gray-50 disabled:opacity-50 text-[#7C3AED] font-extrabold rounded-xl text-base transition-all shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
                         >
                             {loading ? (
                                 <><Loader2 size={18} className="animate-spin text-[#7C3AED]"/> Creating account...</>

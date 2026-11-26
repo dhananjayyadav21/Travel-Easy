@@ -13,9 +13,9 @@ const pusher = new Pusher({
 });
 
 export async function PUT(req) {
-    await connectDB();
     const authResult = verifyAuth(req);
     if (authResult.response) return authResult.response;
+    await connectDB();
 
     try {
         const { tripId, lat, lng } = await req.json();

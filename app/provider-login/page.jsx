@@ -270,7 +270,7 @@ export default function DriverLogin() {
                         <button
                             onClick={handleContinue}
                             disabled={loading || !phone.trim()}
-                            className="w-full h-14 bg-white hover:bg-gray-50 disabled:opacity-50 text-[#7C3AED] font-extrabold rounded-2xl text-base transition-all shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                            className="w-full h-14 bg-white hover:bg-gray-50 disabled:opacity-50 text-[#7C3AED] font-extrabold rounded-xl text-base transition-all shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
                         >
                             {loading ? <><Loader2 size={18} className="animate-spin text-[#7C3AED]" /> Sending...</> : "Continue →"}
                         </button>
@@ -282,7 +282,7 @@ export default function DriverLogin() {
                         </div>
 
                         <button onClick={() => switchMode("password")}
-                            className="w-full h-11 bg-white/15 border border-white/25 rounded-2xl flex items-center justify-center gap-2 text-sm font-semibold text-white hover:bg-white/25 transition mb-5">
+                            className="w-full h-11 bg-white/15 border border-white/25 rounded-xl flex items-center justify-center gap-2 text-sm font-semibold text-white hover:bg-white/25 transition mb-5">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                             </svg>
@@ -357,7 +357,7 @@ export default function DriverLogin() {
                         <button
                             onClick={handleVerifyOtp}
                             disabled={loading || otp.join("").length < 6}
-                            className="w-full h-14 bg-white hover:bg-gray-50 disabled:opacity-50 text-[#7C3AED] font-extrabold rounded-2xl text-base transition-all shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                            className="w-full h-14 bg-white hover:bg-gray-50 disabled:opacity-50 text-[#7C3AED] font-extrabold rounded-xl text-base transition-all shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
                         >
                             {loading ? <><Loader2 size={18} className="animate-spin text-[#7C3AED]" /> Verifying...</> : "Verify & Sign In →"}
                         </button>
@@ -369,7 +369,7 @@ export default function DriverLogin() {
                         <h1 className="text-2xl font-extrabold text-white mb-1">Sign In</h1>
                         <p className="text-violet-200 text-sm mb-5">Sign in with email &amp; password</p>
 
-                        <div className="flex items-center h-14 bg-white/15 border border-white/25 rounded-2xl overflow-hidden focus-within:border-white focus-within:bg-white/20 transition-all mb-3">
+                        <div className="flex items-center h-14 bg-white/15 border border-white/25 rounded-xl overflow-hidden focus-within:border-white focus-within:bg-white/20 transition-all mb-3">
                             <div className="pl-4 pr-3 border-r border-white/25 h-full flex items-center flex-shrink-0">
                                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2">
                                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
@@ -382,7 +382,7 @@ export default function DriverLogin() {
                             />
                         </div>
 
-                        <div className="flex items-center h-14 bg-white/15 border border-white/25 rounded-2xl overflow-hidden focus-within:border-white focus-within:bg-white/20 transition-all mb-1">
+                        <div className="flex items-center h-14 bg-white/15 border border-white/25 rounded-xl overflow-hidden focus-within:border-white focus-within:bg-white/20 transition-all mb-1">
                             <div className="pl-4 pr-3 border-r border-white/25 h-full flex items-center flex-shrink-0">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
@@ -401,7 +401,7 @@ export default function DriverLogin() {
                         {error && <div className="flex items-center gap-2 bg-red-900/30 border border-red-400/30 text-red-300 rounded-xl px-3 py-2.5 text-xs mb-3 mt-2"><X size={12}/><span>{error}</span></div>}
 
                         <button onClick={handlePasswordLogin} disabled={loading || !email.trim() || !password}
-                            className="w-full h-14 bg-white hover:bg-gray-50 disabled:opacity-50 text-[#7C3AED] font-extrabold rounded-2xl text-base transition-all shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-4 mb-4">
+                            className="w-full h-14 bg-white hover:bg-gray-50 disabled:opacity-50 text-[#7C3AED] font-extrabold rounded-xl text-base transition-all shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-4 mb-4">
                             {loading ? <><Loader2 size={18} className="animate-spin text-[#7C3AED]" /> Signing in...</> : "Sign In →"}
                         </button>
 
@@ -412,7 +412,7 @@ export default function DriverLogin() {
                         </div>
 
                         <button onClick={() => switchMode("otp")}
-                            className="w-full h-11 bg-white/15 border border-white/25 rounded-2xl flex items-center justify-center gap-2 text-sm font-semibold text-white hover:bg-white/25 transition">
+                            className="w-full h-11 bg-white/15 border border-white/25 rounded-xl flex items-center justify-center gap-2 text-sm font-semibold text-white hover:bg-white/25 transition">
                             Sign In with OTP instead
                         </button>
                     </div>

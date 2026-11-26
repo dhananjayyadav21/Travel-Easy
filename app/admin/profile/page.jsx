@@ -67,7 +67,7 @@ export default function AdminProfile() {
                 <div className="w-full md:w-3/5 lg:w-2/5 mx-auto px-4 pt-5 space-y-4">
 
                     {/* ── PROFILE CARD ── */}
-                    <div className="bg-white rounded-3xl shadow-sm p-6 flex flex-col items-center text-center">
+                    <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col items-center text-center">
                         {/* Avatar */}
                         <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-200 mb-4">
                             <span className="text-2xl font-black text-white">{initials}</span>
@@ -136,7 +136,7 @@ export default function AdminProfile() {
             {showLogout && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center px-4"
                      style={{ background: "rgba(0,0,0,0.3)", backdropFilter: "blur(2px)" }}>
-                    <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
                         <div className="flex flex-col items-center text-center mb-5">
                             <div className="w-14 h-14 rounded-2xl bg-red-50 flex items-center justify-center mb-3">
                                 <AlertTriangle size={26} className="text-red-500" />
@@ -147,13 +147,13 @@ export default function AdminProfile() {
                         <div className="flex gap-3">
                             <button
                                 onClick={() => setShowLogout(false)}
-                                className="flex-1 h-12 rounded-2xl border border-gray-200 text-sm font-bold text-gray-700 hover:bg-gray-50 transition"
+                                className="flex-1 h-12 rounded-xl border border-gray-200 text-sm font-bold text-gray-700 hover:bg-gray-50 transition"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleLogout}
-                                className="flex-1 h-12 rounded-2xl bg-red-500 hover:bg-red-600 text-white text-sm font-bold transition shadow-lg shadow-red-100"
+                                className="flex-1 h-12 rounded-xl bg-red-500 hover:bg-red-600 text-white text-sm font-bold transition shadow-lg shadow-red-100"
                             >
                                 Yes, Sign Out
                             </button>

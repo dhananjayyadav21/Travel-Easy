@@ -136,7 +136,7 @@ export default function TrackingPage({ params }) {
 
                     {/* ── TOP NAV CARD ── */}
                     <div className="absolute top-4 left-4 right-4 z-10">
-                        <div className="bg-white rounded-3xl shadow-xl flex items-center gap-3 px-4 py-3.5">
+                        <div className="bg-white rounded-2xl shadow-xl flex items-center gap-3 px-4 py-3.5">
                             {/* Provider avatar */}
                             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#7C3AED] to-[#8B5CF6] flex items-center justify-center text-white font-extrabold text-sm flex-shrink-0 shadow-md shadow-violet-300">
                                 {getInitials(providerName)}
