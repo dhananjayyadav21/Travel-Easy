@@ -9,6 +9,10 @@ import PushNotificationSetup from "@/components/PushNotificationSetup";
 export const metadata = {
   title: "Travel Easy Hai | Affordable Seat Sharing",
   description: "India's most affordable carpooling platform — share rides, save money, travel smart.",
+  icons: {
+    icon: "/images/logo.png",
+    apple: "/images/logo.png",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -26,7 +30,7 @@ export default function RootLayout({ children }) {
         <GoogleMapsProvider>
           <PushNotificationSetup />
           <Navbar />
-          <main className="flex-1 pt-14">
+          <main className="flex-1 md:pt-14">
             {children}
           </main>
 

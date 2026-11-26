@@ -121,7 +121,7 @@ function VerifyEmailForm() {
 
                 {/* OTP inputs */}
                 <form onSubmit={handleVerify} onPaste={handlePaste}>
-                    <div className="flex justify-center gap-2 mb-5">
+                    <div className="flex justify-center gap-1.5 sm:gap-2 mb-5">
                         {code.map((digit, idx) => (
                             <input
                                 key={idx}
@@ -129,7 +129,7 @@ function VerifyEmailForm() {
                                 value={digit}
                                 onChange={(e) => handleChange(e, idx)}
                                 onKeyDown={(e) => handleKeyDown(e, idx)}
-                                className={`w-11 h-12 text-center text-lg font-semibold border rounded-lg focus:outline-none transition-colors bg-white
+                                className={`w-10 h-11 sm:w-11 sm:h-12 text-center text-base sm:text-lg font-semibold border rounded-lg focus:outline-none transition-colors bg-white flex-shrink-0
                                     ${digit
                                         ? "border-sky-400 bg-sky-50 text-sky-700"
                                         : "border-gray-200 text-gray-900 focus:border-sky-500 focus:ring-1 focus:ring-sky-200"
